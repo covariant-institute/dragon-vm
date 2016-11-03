@@ -4,15 +4,21 @@
 #include <utility>
 #include <list>
 namespace cov {
-	using byte=uint8_t;
-	using size_t=uint64_t;
 	class heap final {
+	public:
+		using byte=uint8_t;
+		using size_t=uint64_t;
+		enum class allocate_policy {
+			first_fit,best_fit,worst_fit
+		};
+	private:
 		// Heap Start
 		void* hs=nullptr;
 		// Heap Pointer
 		byte* hp=nullptr;
 		// Heap Limit
 		byte* hl=nullptr;
+		allocate_policy policy=allocate_policy::best_fit;
 		std::list<byte*> free_list;
 		inline size_t& get_size(byte* ptr)
 		{
@@ -22,6 +28,12 @@ namespace cov {
 		{
 			free_list.sort([this](byte* lhs,byte* rhs) {
 				return get_size(lhs)<get_size(rhs);
+			});
+		}
+		inline void sort_by_size_reverse()
+		{
+			free_list.sort([this](byte* lhs,byte* rhs) {
+				return get_size(lhs)>get_size(rhs);
 			});
 		}
 		inline void sort_by_addr()
@@ -61,8 +73,16 @@ namespace cov {
 		void* find_in_free_list(size_t size)
 		{
 			if(!free_list.empty()) {
-				// Sort the spaces by size.
-				sort_by_size();
+				switch(policy) {
+				case allocate_policy::first_fit:
+					break;
+				case allocate_policy::best_fit:
+					sort_by_size();
+					break;
+				case allocate_policy::worst_fit:
+					sort_by_size_reverse();
+					break;
+				}
 				// Find the first fit space.
 				auto it=free_list.begin();
 				for(; it!=free_list.end(); ++it)
@@ -80,7 +100,7 @@ namespace cov {
 	public:
 		heap()=delete;
 		heap(const heap&)=delete;
-		explicit heap(size_t size):hs(::malloc(size))
+		explicit heap(size_t size,allocate_policy p=allocate_policy::best_fit):hs(::malloc(size)),policy(p)
 		{
 			hp=reinterpret_cast<byte*>(hs);
 			hl=hp+size;
@@ -116,6 +136,10 @@ namespace cov {
 		void free(void* ptr)
 		{
 			free_list.push_back(reinterpret_cast<byte*>(ptr)-sizeof(size_t));
+		}
+		size_t size_of(void* ptr)
+		{
+			return get_size(reinterpret_cast<byte*>(ptr));
 		}
 	};
 	template<typename T,typename...ArgsT>

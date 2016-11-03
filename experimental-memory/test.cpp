@@ -3,8 +3,8 @@
 #include "memory.hpp"
 int main()
 {
-	constexpr cov::size_t heap_size=32;
-	cov::heap mem(heap_size);
+	constexpr cov::heap::size_t heap_size=32;
+	cov::heap mem(heap_size,cov::heap::allocate_policy::first_fit);
 	int* ptr0=static_cast<int*>(mem.malloc(sizeof(int)));
 	cov::construct(ptr0,10);
 	std::cout<<*ptr0<<std::endl;
@@ -15,7 +15,7 @@ int main()
 	std::cout<<*ptr1<<std::endl;
 	cov::destroy(ptr1);
 	mem.free(ptr1);
-	void* ptr3=mem.malloc(heap_size-sizeof(cov::size_t));
+	void* ptr3=mem.malloc(heap_size-sizeof(cov::heap::size_t));
 	mem.free(ptr3);
 	return 0;
 }
