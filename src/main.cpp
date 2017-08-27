@@ -2,9 +2,10 @@
 #include <iostream>
 #include "stack.hpp"
 #include "utils.hpp"
+#include "config.hpp"
 
 int main() {
-    dvm::stack s(32);
+    dvm::stack s(dvm::config::STACK_DEFAULT_SIZE);
     auto a = static_cast<dvm::Int>('A');
 
     dvm::Float b[] = { 3.14, 6.28 };
@@ -17,10 +18,10 @@ int main() {
 
     auto *pb = static_cast<dvm::Float *>(s.top());
     std::cout << pb[0] + pb[1] << std::endl;
-    s.pop_memory();
+    s.pop();
 
     auto *pa = static_cast<dvm::Char *>(s.top());
     std::cout << *pa << std::endl;
-    s.pop_memory();
+    s.pop();
     return 0;
 }

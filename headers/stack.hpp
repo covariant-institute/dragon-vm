@@ -6,7 +6,10 @@
 #include <cassert>
 
 namespace dvm {
-    struct mem_blck_info final {
+    class stack;
+    struct mem_block_info;
+
+    struct mem_block_info final {
         type_identifier type_id;
         Addr data_size;
     };
@@ -27,9 +30,11 @@ namespace dvm {
     public:
         stack() = delete;
 
-        explicit stack(ULong s) : allocated_start(malloc(s)) {
+        explicit stack(ULong stack_size) : allocated_start(malloc(stack_size)) {
             // TODO: Handle this error
             assert(allocated_start != nullptr);
+
+            memset(allocated_start, '\0', stack_size);
             stack_pointer = static_cast<Byte *>(allocated_start);
         }
 
@@ -41,23 +46,23 @@ namespace dvm {
             }
         }
 
-        void push_memory(const mem_blck_info &mbi, const void *dat) {
+        void push_memory(const mem_block_info &mbi, const void *dat) {
             memcpy(stack_pointer, dat, mbi.data_size);
             move_forward(mbi.data_size);
-            memcpy(stack_pointer, (void *) &mbi, sizeof(mem_blck_info));
-            move_forward(sizeof(mem_blck_info));
+            memcpy(stack_pointer, (void *) &mbi, sizeof(mem_block_info));
+            move_forward(sizeof(mem_block_info));
         }
 
-        void pop_memory() {
-            move_backward(sizeof(mem_blck_info));
-            mem_blck_info *mbi = reinterpret_cast<mem_blck_info *>(stack_pointer);
+        void pop() {
+            move_backward(sizeof(mem_block_info));
+            mem_block_info *mbi = reinterpret_cast<mem_block_info *>(stack_pointer);
             move_backward(mbi->data_size);
         }
 
         void *top() {
-            void *target_addr = stack_pointer - sizeof(mem_blck_info);
-            mem_blck_info *mbi = reinterpret_cast<mem_blck_info *>(target_addr);
-            return stack_pointer - sizeof(mem_blck_info) - mbi->data_size;
+            void *target_addr = stack_pointer - sizeof(mem_block_info);
+            mem_block_info *mbi = reinterpret_cast<mem_block_info *>(target_addr);
+            return stack_pointer - sizeof(mem_block_info) - mbi->data_size;
         }
 
         template <typename T>
@@ -67,7 +72,7 @@ namespace dvm {
             // TODO: Support non-primitive type
             assert(type_id != type_identifier::TYPE_ID_UNSPECIFIC);
 
-            mem_blck_info block_info = { type_id, sizeof(T) };
+            mem_block_info block_info = { type_id, sizeof(T) };
             push_memory(block_info, &t);
         }
 
@@ -78,7 +83,7 @@ namespace dvm {
             // TODO: Support non-primitive type
             assert(type_id != type_identifier::TYPE_ID_UNSPECIFIC);
 
-            mem_blck_info block_info = { type_id, static_cast<Addr>(sizeof(T) * length) };
+            mem_block_info block_info = { type_id, static_cast<Addr>(sizeof(T) * length) };
             push_memory(block_info, array);
         }
     };
