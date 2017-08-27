@@ -3,10 +3,11 @@
 #include "type.hpp"
 #include <cstring>
 #include <cstdlib>
+#include <cassert>
 
 namespace dvm {
     struct mem_blck_info final {
-        UInt type_code;
+        type_identifier type_id;
         Addr data_size;
     };
 
@@ -27,23 +28,27 @@ namespace dvm {
         stack() = delete;
 
         explicit stack(ULong s) : allocated_start(malloc(s)) {
+            // TODO: Handle this error
+            assert(allocated_start != nullptr);
             stack_pointer = static_cast<Byte *>(allocated_start);
         }
 
         stack(const stack &) = delete;
 
         ~stack() {
-            free(allocated_start);
+            if (allocated_start != nullptr) {
+                free(allocated_start);
+            }
         }
 
-        void push(const mem_blck_info &mbi, void *dat) {
+        void push_memory(const mem_blck_info &mbi, const void *dat) {
             memcpy(stack_pointer, dat, mbi.data_size);
             move_forward(mbi.data_size);
             memcpy(stack_pointer, (void *) &mbi, sizeof(mem_blck_info));
             move_forward(sizeof(mem_blck_info));
         }
 
-        void pop() {
+        void pop_memory() {
             move_backward(sizeof(mem_blck_info));
             mem_blck_info *mbi = reinterpret_cast<mem_blck_info *>(stack_pointer);
             move_backward(mbi->data_size);
@@ -53,6 +58,28 @@ namespace dvm {
             void *target_addr = stack_pointer - sizeof(mem_blck_info);
             mem_blck_info *mbi = reinterpret_cast<mem_blck_info *>(target_addr);
             return stack_pointer - sizeof(mem_blck_info) - mbi->data_size;
+        }
+
+        template <typename T>
+        void push(const T &t) {
+            type_identifier type_id = type_id_converter<T>::get_type_id();
+
+            // TODO: Support non-primitive type
+            assert(type_id != type_identifier::TYPE_ID_UNSPECIFIC);
+
+            mem_blck_info block_info = { type_id, sizeof(T) };
+            push_memory(block_info, &t);
+        }
+
+        template <typename T>
+        void pushArray(const T *array, size_t length) {
+            type_identifier type_id = type_id_converter<T>::get_type_id();
+
+            // TODO: Support non-primitive type
+            assert(type_id != type_identifier::TYPE_ID_UNSPECIFIC);
+
+            mem_blck_info block_info = { type_id, static_cast<Addr>(sizeof(T) * length) };
+            push_memory(block_info, array);
         }
     };
 }
