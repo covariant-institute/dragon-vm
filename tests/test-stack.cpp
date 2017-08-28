@@ -2,9 +2,9 @@
 // Created by kiva on 2017/8/28.
 //
 
-#include <stack.hpp>
-#include <utils.hpp>
-#include <config.hpp>
+#include <core/stack.hpp>
+#include <core/utils.hpp>
+#include <core/config.hpp>
 #include <iostream>
 
 int main() {
