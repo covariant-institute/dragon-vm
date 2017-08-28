@@ -21,7 +21,10 @@ add_library(dragon_vm_core SHARED
         include/core/type.hpp
         include/core/utils.hpp
         include/core/dvm.hpp
-        include/core/interpreter.hpp include/core/opcodes.hpp)
+        include/core/interpreter.hpp
+        include/core/opcodes.hpp
+        include/core/exceptions.hpp
+        include/core/errorcodes.hpp)
 
 target_link_libraries(dragon_vm_core dragon_vm_gc)
 
