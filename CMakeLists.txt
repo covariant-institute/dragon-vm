@@ -24,7 +24,7 @@ add_library(dragon_vm_core SHARED
         include/core/interpreter.hpp
         include/core/opcodes.hpp
         include/core/exceptions.hpp
-        include/core/errorcodes.hpp)
+        include/core/errorcodes.hpp src/core/config.cpp)
 
 target_link_libraries(dragon_vm_core dragon_vm_gc)
 
