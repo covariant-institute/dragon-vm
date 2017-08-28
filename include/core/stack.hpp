@@ -1,6 +1,8 @@
 #pragma once
 
 #include "type.hpp"
+#include "exceptions.hpp"
+#include "errorcodes.hpp"
 #include <cstring>
 #include <cstdlib>
 #include <cassert>
@@ -33,8 +35,8 @@ namespace dvm {
             stack() = delete;
 
             explicit stack(ULong stack_size) : allocated_start(malloc(stack_size)) {
-                // TODO: Handle this error
-                assert(allocated_start != nullptr);
+                if(allocated_start==nullptr)
+                    throw dvm::core::exception(DVM_BAD_ALLOC);
 
                 memset(allocated_start, '\0', stack_size);
                 stack_pointer = static_cast<Byte *>(allocated_start);
