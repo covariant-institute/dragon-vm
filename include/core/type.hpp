@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace dvm {
+namespace dvm::core {
     using Char = int8_t;
     using Int = int32_t;
     using Long = int64_t;

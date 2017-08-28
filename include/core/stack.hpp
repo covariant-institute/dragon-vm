@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <cassert>
 
-namespace dvm {
+namespace dvm::core {
     class stack;
     struct mem_block_info;
 

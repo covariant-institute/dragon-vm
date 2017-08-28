@@ -8,22 +8,20 @@
 #include <iostream>
 
 int main() {
-    dvm::stack s(dvm::config::STACK_DEFAULT_SIZE);
-    auto a = static_cast<dvm::Int>('A');
+    using dvm::core::config::STACK_DEFAULT_SIZE;
 
-    dvm::Float b[] = { 3.14, 6.28 };
+    dvm::core::stack s(STACK_DEFAULT_SIZE);
 
-//    s.push_memory({ dvm::type_id_converter<dvm::Int>::get_type_id(), sizeof(dvm::Int) }, &a);
-    s.push(a);
+    s.push(dvm::core::Int('A'));
 
-//    s.push_memory({ dvm::type_id_converter<dvm::Float>::get_type_id(), sizeof(dvm::Float[2]) }, b);
+    dvm::core::Float b[] = { 3.14, 6.28 };
     s.pushArray(b, array_length(b));
 
-    auto *pb = static_cast<dvm::Float *>(s.top());
+    auto *pb = static_cast<dvm::core::Float *>(s.top());
     std::cout << pb[0] + pb[1] << std::endl;
     s.pop();
 
-    auto *pa = static_cast<dvm::Char *>(s.top());
+    auto *pa = static_cast<dvm::core::Char *>(s.top());
     std::cout << *pa << std::endl;
     s.pop();
     return 0;
