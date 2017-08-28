@@ -5,86 +5,89 @@
 #include <cstdlib>
 #include <cassert>
 
-namespace dvm::core {
-    class stack;
-    struct mem_block_info;
+namespace dvm {
+    namespace core {
+        class stack;
 
-    struct mem_block_info final {
-        type_identifier type_id;
-        Addr data_size;
-    };
+        struct mem_block_info;
 
-    class stack final {
-        void *allocated_start = nullptr;
-        Byte *stack_pointer = nullptr;
+        struct mem_block_info final {
+            type_identifier type_id;
+            Addr data_size;
+        };
 
-    private:
-        inline void move_forward(size_t forward_size) {
-            stack_pointer += forward_size;
-        }
+        class stack final {
+            void *allocated_start = nullptr;
+            Byte *stack_pointer = nullptr;
 
-        inline void move_backward(size_t backward_size) {
-            stack_pointer -= backward_size;
-        }
-
-    public:
-        stack() = delete;
-
-        explicit stack(ULong stack_size) : allocated_start(malloc(stack_size)) {
-            // TODO: Handle this error
-            assert(allocated_start != nullptr);
-
-            memset(allocated_start, '\0', stack_size);
-            stack_pointer = static_cast<Byte *>(allocated_start);
-        }
-
-        stack(const stack &) = delete;
-
-        ~stack() {
-            if (allocated_start != nullptr) {
-                free(allocated_start);
+        private:
+            inline void move_forward(size_t forward_size) {
+                stack_pointer += forward_size;
             }
-        }
 
-        void push_memory(const mem_block_info &mbi, const void *dat) {
-            memcpy(stack_pointer, dat, mbi.data_size);
-            move_forward(mbi.data_size);
-            memcpy(stack_pointer, (void *) &mbi, sizeof(mem_block_info));
-            move_forward(sizeof(mem_block_info));
-        }
+            inline void move_backward(size_t backward_size) {
+                stack_pointer -= backward_size;
+            }
 
-        void pop() {
-            move_backward(sizeof(mem_block_info));
-            mem_block_info *mbi = reinterpret_cast<mem_block_info *>(stack_pointer);
-            move_backward(mbi->data_size);
-        }
+        public:
+            stack() = delete;
 
-        void *top() {
-            void *target_addr = stack_pointer - sizeof(mem_block_info);
-            mem_block_info *mbi = reinterpret_cast<mem_block_info *>(target_addr);
-            return stack_pointer - sizeof(mem_block_info) - mbi->data_size;
-        }
+            explicit stack(ULong stack_size) : allocated_start(malloc(stack_size)) {
+                // TODO: Handle this error
+                assert(allocated_start != nullptr);
 
-        template <typename T>
-        void push(const T &t) {
-            type_identifier type_id = type_id_converter<T>::get_type_id();
+                memset(allocated_start, '\0', stack_size);
+                stack_pointer = static_cast<Byte *>(allocated_start);
+            }
 
-            // TODO: Support non-primitive type
-            assert(type_id != type_identifier::TYPE_ID_UNSPECIFIC);
+            stack(const stack &) = delete;
 
-            mem_block_info block_info = { type_id, sizeof(T) };
-            push_memory(block_info, &t);
-        }
+            ~stack() {
+                if (allocated_start != nullptr) {
+                    free(allocated_start);
+                }
+            }
 
-        template <typename T>
-        void pushArray(const T *array, size_t length) {
-            type_identifier type_id = type_id_converter<T>::get_type_id();
+            void push_memory(const mem_block_info &mbi, const void *dat) {
+                memcpy(stack_pointer, dat, mbi.data_size);
+                move_forward(mbi.data_size);
+                memcpy(stack_pointer, (void *) &mbi, sizeof(mem_block_info));
+                move_forward(sizeof(mem_block_info));
+            }
 
-            // TODO: Support non-primitive type
-            assert(type_id != type_identifier::TYPE_ID_UNSPECIFIC);
+            void pop() {
+                move_backward(sizeof(mem_block_info));
+                mem_block_info *mbi = reinterpret_cast<mem_block_info *>(stack_pointer);
+                move_backward(mbi->data_size);
+            }
 
-            mem_block_info block_info = { type_id, static_cast<Addr>(sizeof(T) * length) };
-            push_memory(block_info, array);
-        }
-    };
+            void *top() {
+                void *target_addr = stack_pointer - sizeof(mem_block_info);
+                mem_block_info *mbi = reinterpret_cast<mem_block_info *>(target_addr);
+                return stack_pointer - sizeof(mem_block_info) - mbi->data_size;
+            }
+
+            template <typename T>
+            void push(const T &t) {
+                type_identifier type_id = type_id_converter<T>::get_type_id();
+
+                // TODO: Support non-primitive type
+                assert(type_id != type_identifier::TYPE_ID_UNSPECIFIC);
+
+                mem_block_info block_info = { type_id, sizeof(T) };
+                push_memory(block_info, &t);
+            }
+
+            template <typename T>
+            void pushArray(const T *array, size_t length) {
+                type_identifier type_id = type_id_converter<T>::get_type_id();
+
+                // TODO: Support non-primitive type
+                assert(type_id != type_identifier::TYPE_ID_UNSPECIFIC);
+
+                mem_block_info block_info = { type_id, static_cast<Addr>(sizeof(T) * length) };
+                push_memory(block_info, array);
+            }
+        };
+    }
 }

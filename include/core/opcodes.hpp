@@ -2,8 +2,12 @@
 
 #include "type.hpp"
 
-namespace dvm::core::vm {
-    enum class vm_opcode : UChar  {
-        VM_OP_NOP = 0,
-    };
+namespace dvm {
+    namespace core {
+        namespace vm {
+            enum class vm_opcode : UChar  {
+                VM_OP_NOP = 0,
+            };
+        }
+    }
 }
