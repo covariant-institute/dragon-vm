@@ -1,18 +1,20 @@
 #include "gc/gc.hpp"
 #include <cstdio>
 
-struct test {
-    struct test *next;
+struct linked_list {
+    struct linked_list *next;
+    int data;
 };
 
 static void log_ptr(void *p) {
-    printf("free %p\n", p);
+    printf("free %p, data: %d\n", p, ((linked_list *) p)->data);
 }
 
-static struct test *new_test(struct test *parent) {
-    struct test *ret = (struct test *) gc_malloc(sizeof(struct test), parent, log_ptr);
+static struct linked_list *new_node(struct linked_list *parent) {
+    auto *ret = (struct linked_list *) gc_malloc(sizeof(struct linked_list), parent, log_ptr);
     printf("new %p\n", ret);
-    if (parent) {
+
+    if (parent != nullptr) {
         ret->next = parent->next;
         parent->next = ret;
     } else {
@@ -21,48 +23,18 @@ static struct test *new_test(struct test *parent) {
     return ret;
 }
 
-static void *test(struct gc_weak_table *weak) {
-    struct test *p;
-    int i;
-
-    gc_enter();
-
-    gc_enter();
-    for (i = 0; i < 4; i++) {
-        p = new_test(0);
-        gc_link(weak, 0, p);
-    }
-
-    /* after gc_leave , only last p leave in the stack */
-    gc_leave(p, 0);
-
-    /* p will not be collected */
-    gc_collect();
-
-    p->next = new_test(p);
-
-    /* one node can be linked to parent more than once */
-    gc_link(p, 0, p->next);
-
-    gc_debug_print_nodes();
-
-    gc_link(p, p->next, 0);
-
-    gc_debug_print_nodes();
-
-    /* p will not be exist on the stack after gc_leave , it can be collected. */
-    gc_leave(p->next, 0);
-
-    gc_link(weak, 0, p->next);
-
-    return p->next;
-}
-
 int main() {
     gc_init();
+    gc_enter();
 
-    test(gc_weak_table(nullptr));
+    linked_list *ll = new_node(nullptr);
 
+    for (int i = 0; i < 10; ++i) {
+        linked_list *item = new_node(ll);
+        item->data = i;
+    }
+
+    gc_leave(nullptr);
     gc_exit();
     return 0;
 }
