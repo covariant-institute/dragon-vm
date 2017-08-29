@@ -21,7 +21,7 @@ static struct linked_list *new_node(struct linked_list *parent)
 		parent->next = ret;
 	}
 	else {
-		ret->next = 0;
+		ret->next = nullptr;
 	}
 	return ret;
 }
@@ -33,7 +33,7 @@ int main()
 
 	linked_list *ll = new_node(nullptr);
 
-	for (int i = 0; i < 10; ++i) {
+	for (int i = 0; i < 3; ++i) {
 		linked_list *item = new_node(ll);
 		item->data = i;
 	}

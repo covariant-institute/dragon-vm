@@ -1,5 +1,4 @@
 #include "gc/gc.hpp"
-#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <cstdint>
@@ -473,22 +472,22 @@ void gc_enter() {
  * @param ...
  */
 void gc_leave(void *p, ...) {
-    void **head;
     if (E.stack.current >= E.stack.bottom) {
         E.stack.top = E.stack.current;
         E.stack.current -= E.stack.data[E.stack.current].number;
     } else {
-        int parent, child;
         --E.stack.bottom;
-        parent = E.stack.data[E.stack.bottom - 1].stack;
-        child = E.stack.data[E.stack.bottom].stack;
+        int parent = E.stack.data[E.stack.bottom - 1].stack;
+        int child = E.stack.data[E.stack.bottom].stack;
+
         node_add(parent, child | UNSET_MASK);
         node_free(child);
         E.stack.current = E.stack.bottom - 1;
         E.stack.top = E.stack.current + 1;
     }
 
-    head = &p;
+    // TODO: Fix double free
+    void **head = &p;
 
     while (*head != nullptr) {
         stack_push(map_id(*head));
@@ -748,7 +747,7 @@ struct gc_weak_table {
  * @return
  */
 struct gc_weak_table *gc_weak_table(void *parent) {
-    struct gc_weak_table * ret = (struct gc_weak_table *) my_malloc(sizeof(*ret));
+    struct gc_weak_table *ret = (struct gc_weak_table *) my_malloc(sizeof(*ret));
     ret->node_id = map_id(ret);
     E.pool[ret->node_id].u.c.weak = WEAK_CONTAINER;
     if (parent != nullptr) {
