@@ -73,7 +73,7 @@ namespace dvm {
 				type_identifier type_id = type_id_converter<T>::get_type_id();
 
 				// TODO: Support non-primitive type
-				if(type_id != type_identifier::TYPE_ID_UNSPECIFIC))
+				if(type_id != type_identifier::TYPE_ID_UNSPECIFIC)
 					throw dvm::core::exception(DVM_TYPE_ID_UNSPECIFIC);
 
 					mem_block_info block_info = { type_id, sizeof(T) };
@@ -86,7 +86,7 @@ namespace dvm {
 				type_identifier type_id = type_id_converter<T>::get_type_id();
 
 				// TODO: Support non-primitive type
-				if(type_id != type_identifier::TYPE_ID_UNSPECIFIC))
+				if(type_id != type_identifier::TYPE_ID_UNSPECIFIC)
 					throw dvm::core::exception(DVM_TYPE_ID_UNSPECIFIC);
 
 					mem_block_info block_info = { type_id, static_cast<Addr>(sizeof(T) * length) };
