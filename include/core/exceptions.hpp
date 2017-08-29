@@ -5,27 +5,28 @@
 #include <string>
 
 namespace dvm {
-    namespace core {
-        class exception final : public std::exception {
-            std::string mWhat;
-        public:
-            exception() = delete;
+	namespace core {
+		class exception final : public std::exception {
+			std::string mWhat;
+		public:
+			exception() = delete;
 
-            exception(const std::string &what) : mWhat(what) { }
+			exception(const std::string &what) : mWhat(what) { }
 
-            exception(const exception &) = default;
+			exception(const exception &) = default;
 
-            exception(exception &&) = default;
+			exception(exception &&) = default;
 
-            virtual ~exception() = default;
+			virtual ~exception() = default;
 
-            exception &operator=(const exception &)= default;
+			exception &operator=(const exception &)= default;
 
-            exception &operator=(exception &&)= default;
+			exception &operator=(exception &&)= default;
 
-            virtual const char *what() const noexcept override {
-                return this->mWhat.c_str();
-            }
-        };
-    }
+			virtual const char *what() const noexcept override
+			{
+				return this->mWhat.c_str();
+			}
+		};
+	}
 }
