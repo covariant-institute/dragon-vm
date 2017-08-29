@@ -7,6 +7,7 @@ namespace dvm {
 		struct mem_block_info final {
 			type_identifier type_id;
 			Addr data_size;
+			Byte reachable;
 		};
 	}
 }

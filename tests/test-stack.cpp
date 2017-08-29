@@ -15,7 +15,7 @@ int main()
 
 	s.push(dvm::core::Int('A'));
 
-	dvm::core::Float b[] = { 3.14, 6.28 };
+	dvm::core::Float b[] = {3.14, 6.28};
 	s.pushArray(b, array_length(b));
 
 	auto *pb = static_cast<dvm::core::Float *>(s.top());

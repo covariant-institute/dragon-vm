@@ -11,7 +11,7 @@ namespace dvm {
 		public:
 			exception() = delete;
 
-			exception(const std::string &what) : mWhat(what) { }
+			exception(const std::string &what) : mWhat(what) {}
 
 			exception(const exception &) = default;
 

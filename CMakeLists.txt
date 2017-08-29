@@ -16,9 +16,7 @@ add_library(dragon_vm_gc SHARED
 
 # Dragon VM Core
 add_library(dragon_vm_core SHARED
-        src/core/vm-main.cpp
-        src/core/interpreter.cpp
-
+        include/core/debug.hpp
         include/core/config.hpp
         include/core/memory.hpp
         include/core/stack.hpp
@@ -29,10 +27,13 @@ add_library(dragon_vm_core SHARED
         include/core/interpreter.hpp
         include/core/opcodes.hpp
         include/core/exceptions.hpp
-        include/core/errorcodes.hpp src/core/config.cpp)
+        include/core/errorcodes.hpp
 
-target_link_libraries(dragon_vm_core dragon_vm_gc)
-
+        src/core/vm-main.cpp
+        src/core/heap.cpp
+        src/core/interpreter.cpp
+        src/core/config.cpp
+        src/core/heap.cpp)
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)
@@ -43,6 +44,7 @@ add_executable(test-stack tests/test-stack.cpp)
 target_link_libraries(test-stack dragon_vm_core)
 
 add_executable(test-heap tests/test-heap.cpp)
+target_link_libraries(test-heap dragon_vm_core)
 
 add_executable(test-gc tests/test-gc.cpp)
 target_link_libraries(test-gc dragon_vm_gc)
