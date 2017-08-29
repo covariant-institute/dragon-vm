@@ -11,6 +11,7 @@ namespace dvm {
 	namespace core {
 		class stack final {
 			friend class heap;
+
 			void *allocated_start = nullptr;
 			Byte *stack_pointer = nullptr;
 
@@ -30,7 +31,7 @@ namespace dvm {
 
 			explicit stack(ULong stack_size) : allocated_start(malloc(stack_size))
 			{
-				if(allocated_start==nullptr)
+				if (allocated_start == nullptr)
 					throw dvm::core::exception(DVM_BAD_ALLOC);
 
 				memset(allocated_start, '\0', stack_size);
@@ -68,29 +69,29 @@ namespace dvm {
 				return stack_pointer - sizeof(mem_block_info) - mbi->data_size;
 			}
 
-			template <typename T>
+			template<typename T>
 			void push(const T &t)
 			{
 				type_identifier type_id = type_id_converter<T>::get_type_id();
 
 				// TODO: Support non-primitive type
-				if(type_id == type_identifier::TYPE_ID_UNSPECIFIC)
+				if (type_id == type_identifier::TYPE_ID_UNSPECIFIC)
 					throw dvm::core::exception(DVM_TYPE_ID_UNSPECIFIC);
 
-				mem_block_info block_info = { type_id, sizeof(T) ,False};
+				mem_block_info block_info = {type_id, sizeof(T), False};
 				push_memory(block_info, &t);
 			}
 
-			template <typename T>
+			template<typename T>
 			void pushArray(const T *array, size_t length)
 			{
 				type_identifier type_id = type_id_converter<T>::get_type_id();
 
 				// TODO: Support non-primitive type
-				if(type_id == type_identifier::TYPE_ID_UNSPECIFIC)
+				if (type_id == type_identifier::TYPE_ID_UNSPECIFIC)
 					throw dvm::core::exception(DVM_TYPE_ID_UNSPECIFIC);
 
-				mem_block_info block_info = { type_id, static_cast<Addr>(sizeof(T) * length), False};
+				mem_block_info block_info = {type_id, static_cast<Addr>(sizeof(T) * length), False};
 				push_memory(block_info, array);
 			}
 		};
