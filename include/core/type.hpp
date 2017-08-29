@@ -16,8 +16,15 @@ namespace dvm {
 
 		using Byte = UChar;
 
+		using Bool = Byte;
+
 		using Float = float;
 		using Double = double;
+
+		using Link=Byte *;
+
+		constexpr Bool True = static_cast<Bool>(1);
+		constexpr Bool False = static_cast<Bool>(0);
 
 		enum class type_identifier : UInt {
 			TYPE_ID_UNSPECIFIC = 0,
@@ -28,10 +35,11 @@ namespace dvm {
 			TYPE_ID_UINT = 5,
 			TYPE_ID_ULONG = 6,
 			TYPE_ID_FLOAT = 7,
-			TYPE_ID_DOUBLE = 8
+			TYPE_ID_DOUBLE = 8,
+			TYPE_ID_LINK = 9
 		};
 
-		template <typename T>
+		template<typename T>
 		struct type_id_converter {
 			constexpr static type_identifier get_type_id()
 			{
@@ -39,7 +47,7 @@ namespace dvm {
 			}
 		};
 
-		template <>
+		template<>
 		struct type_id_converter<Char> {
 			constexpr static type_identifier get_type_id()
 			{
@@ -47,7 +55,7 @@ namespace dvm {
 			}
 		};
 
-		template <>
+		template<>
 		struct type_id_converter<Int> {
 			constexpr static type_identifier get_type_id()
 			{
@@ -55,7 +63,7 @@ namespace dvm {
 			}
 		};
 
-		template <>
+		template<>
 		struct type_id_converter<Long> {
 			constexpr static type_identifier get_type_id()
 			{
@@ -63,7 +71,7 @@ namespace dvm {
 			}
 		};
 
-		template <>
+		template<>
 		struct type_id_converter<UChar> {
 			constexpr static type_identifier get_type_id()
 			{
@@ -71,7 +79,7 @@ namespace dvm {
 			}
 		};
 
-		template <>
+		template<>
 		struct type_id_converter<UInt> {
 			constexpr static type_identifier get_type_id()
 			{
@@ -79,7 +87,7 @@ namespace dvm {
 			}
 		};
 
-		template <>
+		template<>
 		struct type_id_converter<ULong> {
 			constexpr static type_identifier get_type_id()
 			{
@@ -87,7 +95,7 @@ namespace dvm {
 			}
 		};
 
-		template <>
+		template<>
 		struct type_id_converter<Float> {
 			constexpr static type_identifier get_type_id()
 			{
@@ -95,11 +103,19 @@ namespace dvm {
 			}
 		};
 
-		template <>
+		template<>
 		struct type_id_converter<Double> {
 			constexpr static type_identifier get_type_id()
 			{
 				return type_identifier::TYPE_ID_DOUBLE;
+			}
+		};
+
+		template<>
+		struct type_id_converter<Link> {
+			constexpr static type_identifier get_type_id()
+			{
+				return type_identifier::TYPE_ID_LINK;
 			}
 		};
 	}

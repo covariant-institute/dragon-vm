@@ -6,6 +6,7 @@ namespace dvm {
 	namespace core {
 		namespace vm {
 			class opcode_provider;
+
 			class interpreter;
 
 			class opcode_provider {
