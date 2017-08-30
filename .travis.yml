@@ -1,9 +1,18 @@
+language: cpp
+sudo: required
+dist: trusty
+compiler:
+  - gcc
+
 addons:
   apt:
     sources:
       - george-edison55-precise-backports
+      - ubuntu-toolchain-r-test
     packages:
       - cmake-data
       - cmake
-      
-script: cmake . && make all
+      - g++-6
+
+
+script: export CC=gcc-6 && export CXX=g++-6 && cmake . && make all
