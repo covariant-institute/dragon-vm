@@ -20,8 +20,8 @@ namespace dvm {
         using Double = double;
 
         /**
-         * 我们用了 UInt 作为 stack 和 heap 大小的类型
-         * 与虚拟机中寻址保持一致，Addr 也用 UInt
+         * 我们用了 ULong 作为 stack 和 heap 大小的类型
+         * 与虚拟机中寻址保持一致，Addr 也用 ULong
          */
         using Addr = ULong;
 
