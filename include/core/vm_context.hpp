@@ -1,15 +1,10 @@
 #pragma once
 
+#include <core/vm_register.hpp>
 namespace dvm {
     namespace core {
         namespace vm {
-            class interpreter;
-
-            using VMRegister = Addr;
-
             class vm_context {
-                friend class intrpreter;
-
             private:
 
 

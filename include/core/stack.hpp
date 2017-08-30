@@ -27,7 +27,7 @@ namespace dvm {
         public:
             stack() = delete;
 
-            explicit stack(UInt stack_size) : allocated_start(malloc(stack_size)) {
+            explicit stack(ULong stack_size) : allocated_start(malloc(stack_size)) {
                 if (allocated_start == nullptr)
                     throw dvm::core::exception(DVM_BAD_ALLOC);
 

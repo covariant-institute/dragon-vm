@@ -23,7 +23,7 @@ namespace dvm {
          * 我们用了 UInt 作为 stack 和 heap 大小的类型
          * 与虚拟机中寻址保持一致，Addr 也用 UInt
          */
-        using Addr = UInt;
+        using Addr = ULong;
 
         constexpr Bool True = static_cast<Bool>(true);
         constexpr Bool False = static_cast<Bool>(false);
