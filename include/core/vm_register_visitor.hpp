@@ -14,24 +14,26 @@ namespace dvm {
                 private:
                     Link register_addr;
 
-                public:
-                    register_visitor(const register_visitor &other) {
-                        this->register_addr = other.register_addr;
+                    template <typename T>
+                    inline T* get_pointer() {
+                        return reinterpret_cast<T *>(register_addr);
                     }
 
-                    explicit register_visitor(Link addr)
-                            : register_addr(addr) { }
+                public:
+                    register_visitor(const register_visitor &other);
+
+                    explicit register_visitor(Link addr);
 
                     ~register_visitor() = default;
 
                     template <typename T>
                     T get() {
-                        return *reinterpret_cast<T *>(register_addr);
+                        return *get_pointer<T>();
                     }
 
                     template <typename T>
                     T *set(T value) {
-                        T *ptr = reinterpret_cast<T *>(register_addr);
+                        T *ptr = get_pointer<T>();
                         *ptr = value;
                         return ptr;
                     }
