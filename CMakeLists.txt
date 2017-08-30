@@ -11,8 +11,9 @@ set(SOURCE_FILES
 
 # Pure Garbage Collector
 add_library(dragon_vm_gc SHARED
-        src/gc/gc.cpp
-        include/gc/gc.hpp)
+        src/gc/pure_gc.cpp
+        include/gc/pure_gc.hpp
+        include/gc/gc_provider.hpp)
 
 # Dragon VM Core
 add_library(dragon_vm_core SHARED
