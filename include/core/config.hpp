@@ -20,14 +20,14 @@ namespace dvm {
 			constexpr UChar VERSION_PATCH = 0;
 
 			/**
-			 * 默认的 VM 栈大小
+			 * 默认的 VM 栈大小 (10 K)
 			 */
-			constexpr ULong STACK_DEFAULT_SIZE = static_cast<ULong>(10240);
+			constexpr UInt STACK_DEFAULT_SIZE = 1024 * 10;
 
 			/**
-			 * 默认的 VM 堆大小
+			 * 默认的 VM 堆大小 (1 M)
 			 */
-			constexpr ULong HEAP_DEFAULT_SIZE = static_cast<ULong>(10240);
+			constexpr UInt HEAP_DEFAULT_SIZE = 1024 * 1024;
 
 			/**
 			 * 用当前的 VM 信息组合出一个 VersionID

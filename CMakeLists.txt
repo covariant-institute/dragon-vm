@@ -29,12 +29,19 @@ add_library(dragon_vm_core SHARED
         include/core/opcodes.hpp
         include/core/exceptions.hpp
         include/core/errorcodes.hpp
+        include/core/vm_context.hpp
+        include/core/vm_register.hpp
+        include/core/vm_register_visitor.hpp
+        include/core/vm_register_common.hpp
+        include/core/vm_register_offsets.hpp
 
         src/core/vm-main.cpp
         src/core/heap.cpp
         src/core/interpreter.cpp
         src/core/config.cpp
-        src/core/heap.cpp)
+        src/core/heap.cpp
+        src/core/vm_register.cpp
+        src/core/vm_register_visitor.cpp)
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)
@@ -52,3 +59,9 @@ target_link_libraries(test-gc dragon_vm_gc)
 
 add_executable(test-vm tests/test-vm.cpp)
 target_link_libraries(test-vm dragon_vm_core)
+
+add_executable(test-vm_register tests/test-vm_register.cpp)
+target_link_libraries(test-vm_register dragon_vm_core)
+
+add_executable(test-type tests/test-type.cpp)
+target_link_libraries(test-type dragon_vm_core)
