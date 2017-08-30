@@ -60,7 +60,7 @@ namespace dvm {
                 /**
                  * 寄存器名对应的寄存器ID
                  */
-                enum class vm_registers : VMRegisterID {
+                enum class vm_register_id : VMRegisterID {
                     /*
                      * 整型32位寄存器
                      * ix0 - ix7
