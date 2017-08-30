@@ -6,4 +6,4 @@ addons:
       - cmake-data
       - cmake
       
-script: cmake -G . && make all
+script: cmake . && make all
