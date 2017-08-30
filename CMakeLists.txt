@@ -69,8 +69,8 @@ target_link_libraries(test-type dragon_vm_core)
 # Experimental test cases
 add_executable(exp-threaded-interpreter
         experimental-tests/threaded-interpretation/opcodes.h
-        experimental-tests/threaded-interpretation/threaded_interpreter.h
-        experimental-tests/threaded-interpretation/threaded_interpreter.c
+        experimental-tests/threaded-interpretation/threaded-interpreter.h
+        experimental-tests/threaded-interpretation/threaded-interpreter.c
         experimental-tests/threaded-interpretation/benchmark_main.c
         experimental-tests/threaded-interpretation/decode-dispatch-interpreter.c
         experimental-tests/threaded-interpretation/decode-dispatch-interpreter.h)

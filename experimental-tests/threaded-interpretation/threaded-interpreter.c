@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "opcodes.h"
-#include "threaded_interpreter.h"
+#include "threaded-interpreter.h"
 
 void threaded_exec(int locales, int *program) {
     int *regs = (int *) malloc(locales * sizeof(int));

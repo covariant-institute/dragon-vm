@@ -7,7 +7,7 @@
 #include <strings.h>
 #include <sys/time.h>
 
-#include "threaded_interpreter.h"
+#include "threaded-interpreter.h"
 #include "decode-dispatch-interpreter.h"
 
 #include "opcodes.h"
@@ -46,14 +46,14 @@ int main() {
     printf("* Preheating system...   ");
     threaded_exec(reg_count, program);
     decode_dispatch_exec(reg_count, program);
-    printf("Dont.\n");
+    printf("Done.\n");
 
     printf("* Start benchmarking...\n");
     struct timeval start, end;
     long time_diff = 0;
     const int bench_times = 10;
-    long score_threaded[bench_times] = { 0 };
-    long score_dispatch[bench_times] = { 0 };
+    long sum_threaded = 0;
+    long sum_dispatch = 0;
 
     for (int i = 0; i < bench_times; i++) {
         gettimeofday(&start, NULL);
@@ -61,21 +61,14 @@ int main() {
         gettimeofday(&end, NULL);
         time_diff = diff_time_ms(&start, &end);
         printf("    Benchmark #%d: threaded-exec: %ld\n", i, time_diff);
-        score_threaded[i] = time_diff;
+        sum_threaded += time_diff;
 
         gettimeofday(&start, NULL);
         decode_dispatch_exec(reg_count, program);
         gettimeofday(&end, NULL);
         time_diff = diff_time_ms(&start, &end);
         printf("    Benchmark #%d: dispatch-exec: %ld\n", i, diff_time_ms(&start, &end));
-        score_dispatch[i] = time_diff;
-    }
-
-    long sum_threaded = 0;
-    long sum_dispatch = 0;
-    for (int i = 0; i < bench_times; i++) {
-        sum_threaded += score_threaded[i];
-        sum_dispatch += score_dispatch[i];
+        sum_dispatch += time_diff;
     }
 
     printf("* Benchmark results:\n");
