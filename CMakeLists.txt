@@ -29,6 +29,7 @@ add_library(dragon_vm_core SHARED
         include/core/opcodes.hpp
         include/core/exceptions.hpp
         include/core/errorcodes.hpp
+        include/core/vm_context.hpp
 
         src/core/vm-main.cpp
         src/core/heap.cpp
@@ -52,3 +53,6 @@ target_link_libraries(test-gc dragon_vm_gc)
 
 add_executable(test-vm tests/test-vm.cpp)
 target_link_libraries(test-vm dragon_vm_core)
+
+add_executable(test-type tests/test-type.cpp)
+target_link_libraries(test-type dragon_vm_core)

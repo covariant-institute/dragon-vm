@@ -152,7 +152,7 @@ namespace dvm {
                 }
 
             public:
-                gc_context(gc_context &) = delete;
+                gc_context(const gc_context &) = delete;
 
                 gc_context();
 
