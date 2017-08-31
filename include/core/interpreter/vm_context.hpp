@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core/vm_register.hpp>
+#include <core/interpreter/vm_register.hpp>
 namespace dvm {
     namespace core {
         namespace vm {

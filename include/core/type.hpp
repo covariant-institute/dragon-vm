@@ -38,7 +38,7 @@ namespace dvm {
             TYPE_ID_ULONG = 6,
             TYPE_ID_FLOAT = 7,
             TYPE_ID_DOUBLE = 8,
-            TYPE_ID_LINK = 9
+            TYPE_ID_LINK = 9,
         };
 
         template <typename T>

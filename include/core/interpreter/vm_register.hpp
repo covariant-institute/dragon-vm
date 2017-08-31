@@ -3,8 +3,8 @@
 //
 #pragma once
 
-#include <core/vm_register_common.hpp>
-#include <core/vm_register_visitor.hpp>
+#include <core/interpreter/vm_register_common.hpp>
+#include <core/interpreter/vm_register_visitor.hpp>
 #include <core/exceptions.hpp>
 
 namespace dvm {

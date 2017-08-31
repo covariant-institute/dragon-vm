@@ -2,7 +2,7 @@
 // Created by kiva on 2017/8/30.
 //
 
-#include <core/vm_register.hpp>
+#include <core/interpreter/vm_register.hpp>
 #include <cassert>
 #include <cmath>
 

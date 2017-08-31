@@ -1,8 +1,8 @@
 //
 // Created by kiva on 2017/8/30.
 //
-#include <core/vm_register.hpp>
-#include <core/vm_register_offsets.hpp>
+#include <core/interpreter/vm_register.hpp>
+#include <core/interpreter/vm_register_offsets.hpp>
 #include <core/errorcodes.hpp>
 #include <cstdlib>
 

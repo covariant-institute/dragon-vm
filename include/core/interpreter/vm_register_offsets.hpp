@@ -3,7 +3,7 @@
 //
 #pragma once
 
-#include <core/vm_register_common.hpp>
+#include <core/interpreter/vm_register_common.hpp>
 #include <cstddef>
 
 namespace dvm {

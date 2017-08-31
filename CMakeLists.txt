@@ -25,23 +25,23 @@ add_library(dragon_vm_core SHARED
         include/core/type.hpp
         include/core/utils.hpp
         include/core/dvm.hpp
-        include/core/interpreter.hpp
+        include/core/interpreter/interpreter.hpp
         include/core/opcodes.hpp
         include/core/exceptions.hpp
         include/core/errorcodes.hpp
-        include/core/vm_context.hpp
-        include/core/vm_register.hpp
-        include/core/vm_register_visitor.hpp
-        include/core/vm_register_common.hpp
-        include/core/vm_register_offsets.hpp
+        include/core/interpreter/vm_context.hpp
+        include/core/interpreter/vm_register.hpp
+        include/core/interpreter/vm_register_visitor.hpp
+        include/core/interpreter/vm_register_common.hpp
+        include/core/interpreter/vm_register_offsets.hpp
 
         src/core/vm-main.cpp
         src/core/heap.cpp
-        src/core/interpreter.cpp
+        src/core/interpreter/interpreter.cpp
         src/core/config.cpp
         src/core/heap.cpp
-        src/core/vm_register.cpp
-        src/core/vm_register_visitor.cpp)
+        src/core/interpreter/vm_register.cpp
+        src/core/interpreter/vm_register_visitor.cpp)
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)
