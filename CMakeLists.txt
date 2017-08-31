@@ -41,7 +41,7 @@ add_library(dragon_vm_core SHARED
         src/core/config.cpp
         src/core/heap.cpp
         src/core/interpreter/vm_register.cpp
-        src/core/interpreter/vm_register_visitor.cpp)
+        src/core/interpreter/vm_register_visitor.cpp include/core/object/vm_class.hpp)
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)

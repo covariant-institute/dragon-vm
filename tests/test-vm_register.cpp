@@ -7,7 +7,7 @@
 #include <cmath>
 
 int main() {
-    using namespace dvm::core::vm::registers;
+    using namespace dvm::core::interpreter::registers;
     vm_register_holder regs;
 
     // ix7 = 100

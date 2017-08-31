@@ -8,7 +8,7 @@
 
 namespace dvm {
     namespace core {
-        namespace vm {
+        namespace interpreter {
             namespace registers {
                 class register_visitor {
                 private:

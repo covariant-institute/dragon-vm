@@ -8,7 +8,7 @@
 
 namespace dvm {
     namespace core {
-        namespace vm {
+        namespace interpreter {
             namespace registers {
                 namespace offsets {
                     constexpr size_t REGISTER_OFFSET_TABLE[] = {

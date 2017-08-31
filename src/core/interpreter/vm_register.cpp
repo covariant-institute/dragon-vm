@@ -8,7 +8,7 @@
 
 namespace dvm {
     namespace core {
-        namespace vm {
+        namespace interpreter {
             namespace registers {
                 constexpr size_t get_registers_memory_size() {
                     return sizeof(VMRegisterIX64) * VM_REGISTERS_NUMBER;

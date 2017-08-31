@@ -3,7 +3,7 @@
 #include <core/interpreter/vm_register.hpp>
 namespace dvm {
     namespace core {
-        namespace vm {
+        namespace interpreter {
             class vm_context {
             private:
 

@@ -7,7 +7,7 @@
 
 namespace dvm {
     namespace core {
-        namespace vm {
+        namespace interpreter {
             namespace registers {
                 register_visitor::register_visitor(const register_visitor &other) {
                     this->register_addr = other.register_addr;

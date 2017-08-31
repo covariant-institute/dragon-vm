@@ -7,7 +7,7 @@
 
 namespace dvm {
     namespace core {
-        namespace vm {
+        namespace interpreter {
             namespace registers {
                 /**
                  * 寄存器ID，用于标识寄存器
