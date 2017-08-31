@@ -26,7 +26,7 @@ namespace dvm {
 
                     ~vm_register_holder();
 
-                    register_visitor get_register(vm_register_id id) throw(dvm::core::exception::exception);
+                    register_visitor get_register(vm_register_id id);
 
                     template <vm_register_id vm_reg, ULong offset = sizeof(VMRegisterIX64) * static_cast<VMRegisterID>(vm_reg)>
                     register_visitor get_register() {

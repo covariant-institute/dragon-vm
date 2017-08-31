@@ -26,7 +26,7 @@ namespace dvm {
                     delete registers;
                 }
 
-                register_visitor vm_register_holder::get_register(vm_register_id register_identifier) throw(dvm::core::exception::exception) {
+                register_visitor vm_register_holder::get_register(vm_register_id register_identifier) {
                     auto id = static_cast<VMRegisterID>(register_identifier);
 
                     if (id < VM_REGISTERS_NUMBER) {
