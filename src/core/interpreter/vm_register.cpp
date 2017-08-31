@@ -17,7 +17,7 @@ namespace dvm {
                 vm_register_holder::vm_register_holder() : registers(nullptr) {
                     auto memory = static_cast<Link>(::malloc(get_registers_memory_size()));
                     if (memory == nullptr) {
-                        throw dvm::core::exception::exception(DVM_BAD_ALLOC);
+                        throw dvm::core::exception(DVM_BAD_ALLOC);
                     }
                     this->registers = memory;
                 }
@@ -33,7 +33,7 @@ namespace dvm {
                         return register_visitor(registers + offsets::REGISTER_OFFSET_TABLE[id]);
                     }
 
-                    throw dvm::core::exception::exception(DVM_REGISTER_INVALID);
+                    throw dvm::core::exception(DVM_REGISTER_INVALID);
                 }
             }
         }
