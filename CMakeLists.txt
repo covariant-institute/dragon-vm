@@ -29,19 +29,26 @@ add_library(dragon_vm_core SHARED
         include/core/opcodes.hpp
         include/core/exceptions.hpp
         include/core/errorcodes.hpp
+
         include/core/interpreter/vm_context.hpp
         include/core/interpreter/vm_register.hpp
         include/core/interpreter/vm_register_visitor.hpp
         include/core/interpreter/vm_register_common.hpp
         include/core/interpreter/vm_register_offsets.hpp
 
+        include/core/object/class.hpp
+        include/core/object/slot.hpp
+
         src/core/vm-main.cpp
         src/core/heap.cpp
         src/core/interpreter/interpreter.cpp
         src/core/config.cpp
         src/core/heap.cpp
+
         src/core/interpreter/vm_register.cpp
-        src/core/interpreter/vm_register_visitor.cpp include/core/object/vm_class.hpp)
+        src/core/interpreter/vm_register_visitor.cpp
+
+        src/core/object/class.cpp)
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)
