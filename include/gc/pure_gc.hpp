@@ -10,56 +10,56 @@
 namespace dvm {
     namespace gc {
         namespace pure_gc {
-            struct link {
+            struct gc_link {
                 int number;
                 int children[1];
             };
 
-            struct node {
+            struct gc_node {
                 int mark;
                 union {
                     struct {
                         void *mem;
-                        struct link *children;
+                        struct gc_link *children;
 
                         void (*finalizer)(void *);
                     } n;
 
                     struct {
                         intptr_t mem;
-                        struct link *children;
+                        struct gc_link *children;
                         intptr_t weak;
                     } c;
                     int free;
                 } u;
             };
 
-            union stack_node {
+            union gc_stack_node {
                 int stack;
                 int number;
                 int handle;
             };
 
-            struct stack {
-                union stack_node *data;
+            struct gc_stack {
+                union gc_stack_node *data;
                 int top;
                 int bottom;
                 int current;
             };
 
-            struct hash_node {
+            struct gc_hash_node {
                 int id;
-                struct hash_node *next;
+                struct gc_hash_node *next;
             };
 
-            struct hash_map {
-                struct hash_node **table;
+            struct gc_hash_map {
+                struct gc_hash_node **table;
                 int size;
-                struct hash_node *free;
+                struct gc_hash_node *free;
                 int number;
             };
 
-            struct cache_node {
+            struct gc_cache_node {
                 int parent;
                 int child;
             };
@@ -75,16 +75,16 @@ namespace dvm {
                 int mark;
                 bool cache_dirty;
 
-                node *pool;
-                stack stack;
-                hash_map map;
-                cache_node cache[PURE_GC_CACHE_SIZE];
+                gc_node *pool;
+                gc_stack stack;
+                gc_hash_map map;
+                gc_cache_node cache[PURE_GC_CACHE_SIZE];
 
                 bool cache_insert(int parent, int child);
 
                 int node_alloc(void *p);
 
-                link *link_expand(struct link *old, int sz);
+                gc_link *link_expand(struct gc_link *old, int sz);
 
                 int stack_pack_internal(int from, int to, int top);
 
@@ -136,8 +136,8 @@ namespace dvm {
                  */
                 inline void stack_expand() {
                     if (((stack.top + 1) ^ stack.top) > stack.top) {
-                        stack.data = (union stack_node *) ::realloc(stack.data,
-                                                                    (stack.top * 2 + 1) * sizeof(union stack_node));
+                        stack.data = (union gc_stack_node *) ::realloc(stack.data,
+                                                                    (stack.top * 2 + 1) * sizeof(union gc_stack_node));
                     }
                 }
 
