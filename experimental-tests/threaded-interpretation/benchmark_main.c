@@ -16,20 +16,32 @@ long diff_time_ms(struct timeval *start, struct timeval *end) {
     return (1000000 * (end->tv_sec - start->tv_sec) + end->tv_usec - start->tv_usec) / 1000;
 }
 
-int main() {
-    // 10亿条指令
+int main(int argc, const char **argv) {
     int reg_count = 16;
 
+    // 10亿条指令
+    int code_count = 1000000000;
+    const int code_edge_expand = 100;
+
+    if (argc > 1) {
+        code_count = atoi(argv[1]);
+    }
+
+    printf("* Using code count: %d\n", code_count);
     printf("* Generating random code...   ");
-    int *program = (int *) malloc(sizeof(int) * 1000000010);
-    bzero(program, sizeof(int) * 1000000010);
+    fflush(stdout);
+
+    int *program = (int *) malloc(sizeof(int) * (code_count + code_edge_expand));
+    bzero(program, sizeof(int) * (code_count + code_edge_expand));
+
     for (int reg = 0; reg < reg_count; ++reg) {
         int i = reg * 3;
         program[i + 0] = OP_MOV;
         program[i + 1] = reg;
         program[i + 2] = reg;
     }
-    for (int i = reg_count * 3; i < 1000000000;) {
+
+    for (int i = reg_count * 3; i < code_count;) {
         int random_opcode = i % OP_DIV;
         int random_reg = i % reg_count;
         if (random_opcode < OP_ADD) {
@@ -40,10 +52,11 @@ int main() {
         program[i++] = random_reg;
         program[i++] = random_reg;
     }
-    program[1000000009] = OP_EXIT;
+    program[code_count + code_edge_expand - 1] = OP_EXIT;
     printf("Done.\n");
 
     printf("* Preheating system...   ");
+    fflush(stdout);
     threaded_exec(reg_count, program);
     decode_dispatch_exec(reg_count, program);
     printf("Done.\n");
