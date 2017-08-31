@@ -22,7 +22,7 @@ namespace dvm {
                 public:
                     vm_register_holder(const vm_register_holder &) = delete;
 
-                    vm_register_holder() throw(dvm::core::exception::exception);
+                    vm_register_holder();
 
                     ~vm_register_holder();
 

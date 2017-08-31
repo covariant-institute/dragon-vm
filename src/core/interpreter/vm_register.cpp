@@ -14,7 +14,7 @@ namespace dvm {
                     return sizeof(VMRegisterIX64) * VM_REGISTERS_NUMBER;
                 }
 
-                vm_register_holder::vm_register_holder() throw(dvm::core::exception::exception) : registers(nullptr) {
+                vm_register_holder::vm_register_holder() : registers(nullptr) {
                     auto memory = static_cast<Link>(::malloc(get_registers_memory_size()));
                     if (memory == nullptr) {
                         throw dvm::core::exception::exception(DVM_BAD_ALLOC);
