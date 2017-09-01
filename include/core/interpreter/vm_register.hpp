@@ -28,7 +28,7 @@ namespace dvm {
 
                     register_visitor get_register(vm_register_id id);
 
-                    template <vm_register_id vm_reg, ULong offset = sizeof(VMRegisterIX64) * static_cast<VMRegisterID>(vm_reg)>
+                    template <vm_register_id vm_reg, UInt64 offset = sizeof(VMRegisterIX64) * static_cast<VMRegisterID>(vm_reg)>
                     register_visitor get_register() {
                         return register_visitor(registers + offset);
                     }

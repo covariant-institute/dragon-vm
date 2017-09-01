@@ -48,7 +48,8 @@ add_library(dragon_vm_core SHARED
         src/core/interpreter/vm_register.cpp
         src/core/interpreter/vm_register_visitor.cpp
 
-        src/core/object/class.cpp)
+        src/core/object/class.cpp
+        src/core/object/object.cpp src/core/memory.cpp include/core/object/basic_classes.hpp src/core/object/basic_classes.cpp)
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)
@@ -72,6 +73,9 @@ target_link_libraries(test-vm_register dragon_vm_core)
 
 add_executable(test-type tests/test-type.cpp)
 target_link_libraries(test-type dragon_vm_core)
+
+add_executable(test-object tests/test-object.cpp)
+target_link_libraries(test-object dragon_vm_core)
 
 # Experimental test cases
 add_executable(exp-threaded-interpreter

@@ -13,7 +13,7 @@ namespace dvm {
 
                 vm_context(const vm_context &) = delete;
 
-                vm_context(ULong stack_size, ULong heap_size);
+                vm_context(UInt64 stack_size, UInt64 heap_size);
 
                 ~vm_context();
             };

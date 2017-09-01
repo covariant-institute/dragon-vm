@@ -13,7 +13,7 @@ int main()
 
 	dvm::core::stack s(STACK_DEFAULT_SIZE);
 
-	s.push(dvm::core::Int('A'));
+	s.push(dvm::core::Int32('A'));
 
 	dvm::core::Float b[] = {3.14, 6.28};
 	s.pushArray(b, array_length(b));
@@ -22,7 +22,7 @@ int main()
 	std::cout << pb[0] + pb[1] << std::endl;
 	s.pop();
 
-	auto *pa = static_cast<dvm::core::Char *>(s.top());
+	auto *pa = static_cast<dvm::core::Int8 *>(s.top());
 	std::cout << *pa << std::endl;
 	s.pop();
 	return 0;

@@ -3,8 +3,10 @@
 //
 #pragma once
 
-#include <core/object/class.hpp>
 #include <core/object/slot.hpp>
+#include <core/object/class.hpp>
+#include <core/exceptions.hpp>
+#include <core/errorcodes.hpp>
 #include <string>
 
 namespace dvm {
@@ -12,9 +14,21 @@ namespace dvm {
         namespace object {
             struct Object {
                 Class *prototype;
-                int slot_count;
                 Slot slots[0];
+
+                static Object* create_object(const Class *prototype);
             };
+
+            inline void ensure_valid(Object *object) {
+                if (object == nullptr) {
+                    throw dvm::core::exception(DVM_INVALID_OBJECT_MEMORY);
+                }
+            }
+
+            inline bool is_uninitialized(Object *object) {
+                ensure_valid(object);
+                return object->prototype == nullptr;
+            }
         }
 
         template <>

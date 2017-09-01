@@ -9,12 +9,21 @@
 namespace dvm {
     namespace core {
         namespace object {
-            struct Class {
-                type_identifier type;
-                std::string name;
-                Class *parent;
+            struct Object;
 
-                static Class* find_class(const std::string &name);
+            struct Class final {
+                type_identifier type;
+                int slot_count;
+                Class *parent;
+                std::string name;
+
+                static const Class* find_class(const std::string &name);
+
+                static const Class* define_class(Class *parent, const std::string &name, int slot_count);
+
+                static Class* define_bootstrap_class(const std::string &name, int slot_count);
+
+                Object *create_object() const;
             };
         }
     }

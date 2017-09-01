@@ -4,42 +4,51 @@
 
 namespace dvm {
     namespace core {
-        using Char = int8_t;
-        using Int = int32_t;
-        using Long = int64_t;
+        using Int8 = int8_t;
+        using Int16 = int16_t;
+        using Int32 = int32_t;
+        using Int64 = int64_t;
 
-        using UChar = uint8_t;
-        using UInt = uint32_t;
-        using ULong = uint64_t;
+        using UInt8 = uint8_t;
+        using UInt16 = uint16_t;
+        using UInt32 = uint32_t;
+        using UInt64 = uint64_t;
 
-        using Byte = UChar;
-        using Link = Byte *;
+        using Byte = UInt8;
         using Bool = Byte;
+        using Link = Byte *;
 
         using Float = float;
         using Double = double;
+
+        using SizeT = UInt64;
 
         /**
          * 我们用了 ULong 作为 stack 和 heap 大小的类型
          * 与虚拟机中寻址保持一致，Addr 也用 ULong
          */
-        using Addr = ULong;
+        using Addr = UInt64;
 
         constexpr Bool True = static_cast<Bool>(true);
         constexpr Bool False = static_cast<Bool>(false);
 
-        enum class type_identifier : UInt {
+        enum class type_identifier : UInt32 {
             TYPE_ID_UNSPECIFIC = 0,
-            TYPE_ID_CHAR = 1,
-            TYPE_ID_INT = 2,
-            TYPE_ID_LONG = 3,
-            TYPE_ID_UCHAR = 4,
-            TYPE_ID_UINT = 5,
-            TYPE_ID_ULONG = 6,
-            TYPE_ID_FLOAT = 7,
-            TYPE_ID_DOUBLE = 8,
-            TYPE_ID_LINK = 9,
-            TYPE_ID_OBJECT = 10,
+            TYPE_ID_INT8 = 1,
+            TYPE_ID_INT16 = 2,
+            TYPE_ID_INT32 = 3,
+            TYPE_ID_INT64 = 4,
+
+            TYPE_ID_UINT8 = 5,
+            TYPE_ID_UINT16 = 6,
+            TYPE_ID_UINT32 = 7,
+            TYPE_ID_UINT64 = 8,
+
+            TYPE_ID_FLOAT = 9,
+            TYPE_ID_DOUBLE = 10,
+            TYPE_ID_LINK = 11,
+
+            TYPE_ID_OBJECT = 12,
         };
 
         template <typename T>
@@ -50,44 +59,58 @@ namespace dvm {
         };
 
         template <>
-        struct type_id_converter<Char> {
+        struct type_id_converter<Int8> {
             constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_CHAR;
+                return type_identifier::TYPE_ID_INT8;
             }
         };
 
         template <>
-        struct type_id_converter<Int> {
+        struct type_id_converter<Int16> {
             constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_INT;
+                return type_identifier::TYPE_ID_INT16;
             }
         };
 
         template <>
-        struct type_id_converter<Long> {
+        struct type_id_converter<Int32> {
             constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_LONG;
+                return type_identifier::TYPE_ID_INT32;
             }
         };
 
         template <>
-        struct type_id_converter<UChar> {
+        struct type_id_converter<Int64> {
             constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_UCHAR;
+                return type_identifier::TYPE_ID_INT64;
             }
         };
 
         template <>
-        struct type_id_converter<UInt> {
+        struct type_id_converter<UInt8> {
             constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_UINT;
+                return type_identifier::TYPE_ID_UINT8;
             }
         };
 
         template <>
-        struct type_id_converter<ULong> {
+        struct type_id_converter<UInt16> {
             constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_ULONG;
+                return type_identifier::TYPE_ID_UINT16;
+            }
+        };
+
+        template <>
+        struct type_id_converter<UInt32> {
+            constexpr static type_identifier get_type_id() {
+                return type_identifier::TYPE_ID_UINT32;
+            }
+        };
+
+        template <>
+        struct type_id_converter<UInt64> {
+            constexpr static type_identifier get_type_id() {
+                return type_identifier::TYPE_ID_UINT64;
             }
         };
 
