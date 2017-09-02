@@ -14,6 +14,8 @@ namespace dvm {
         namespace object {
             struct Object {
                 const Class *prototype;
+
+                /* Keep in last */
                 Slot slots[0];
 
                 static Object* create_object(const Class *prototype);

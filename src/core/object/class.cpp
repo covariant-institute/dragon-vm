@@ -22,8 +22,8 @@ namespace dvm {
                 get_global_class_map().insert(std::unordered_map<std::string, Class*>::value_type(name, clazz));
             }
 
-            static Class* create_class() {
-                return (Class *) dvm_malloc(sizeof(Class));
+            static Class* create_class(int class_slot_count) {
+                return (Class *) dvm_malloc(sizeof(Class) + sizeof(Slot) * class_slot_count);
             }
 
             static Class *find_class_non_const(const std::string &name) {
@@ -39,28 +39,31 @@ namespace dvm {
                 return find_class_non_const(name);
             }
 
-            Class *Class::define_bootstrap_class(const std::string &name, int slot_count) {
-                Class *clazz = create_class();
+            Class *Class::define_bootstrap_class(const std::string &name,
+                                                 int class_slot_count, int member_slot_count) {
+                Class *clazz = create_class(class_slot_count);
                 clazz->type = type_identifier::TYPE_ID_OBJECT;
                 clazz->parent = nullptr;
                 clazz->name = new std::string(name);
-                clazz->slot_count = slot_count;
+                clazz->class_slot_count = class_slot_count;
+                clazz->member_slot_count = member_slot_count;
                 put_class(name, clazz);
                 return clazz;
             }
 
-            const Class *Class::define_class(Class *parent, const std::string &name, int slot_count) {
+            const Class *Class::define_class(Class *parent, const std::string &name,
+                                             int class_slot_count, int member_slot_count) {
                 Class *parent_class = parent;
                 if (parent_class == nullptr) {
                     parent_class = find_class_non_const("Object");
                 }
 
                 if (parent_class->type != type_identifier::TYPE_ID_OBJECT
-                    || slot_count < 1) {
+                    || member_slot_count < 1) {
                     throw dvm::core::exception(DVM_INVALID_OBJECT_MEMORY);
                 }
 
-                Class *clazz = define_bootstrap_class(name, slot_count);
+                Class *clazz = define_bootstrap_class(name, class_slot_count, member_slot_count);
                 clazz->parent = parent_class;
                 return clazz;
             }

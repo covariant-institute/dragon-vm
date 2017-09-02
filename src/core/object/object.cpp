@@ -13,8 +13,12 @@ namespace dvm {
                     return nullptr;
                 }
 
-                Object *object = (Object *) dvm_malloc(sizeof(Object) + sizeof(Slot) * prototype->slot_count);
+                Object *object = (Object *) dvm_malloc(sizeof(Object) + sizeof(Slot) * prototype->member_slot_count);
+
+                // Copy prototype reference
                 object->prototype = prototype;
+
+                // Parent object instantiation
                 object->slots[0].slot_type = type_identifier::TYPE_ID_OBJECT;
                 if (prototype->parent != nullptr) {
                     object->slots[0].object = prototype->parent->create_object();
