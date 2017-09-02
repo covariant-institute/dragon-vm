@@ -43,7 +43,7 @@ namespace dvm {
                 Class *clazz = create_class();
                 clazz->type = type_identifier::TYPE_ID_OBJECT;
                 clazz->parent = nullptr;
-                clazz->name = name;
+                clazz->name = new std::string(name);
                 clazz->slot_count = slot_count;
                 put_class(name, clazz);
                 return clazz;

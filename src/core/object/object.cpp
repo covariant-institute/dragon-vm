@@ -14,7 +14,7 @@ namespace dvm {
                 }
 
                 Object *object = (Object *) dvm_malloc(sizeof(Object) + sizeof(Slot) * prototype->slot_count);
-
+                object->prototype = prototype;
                 object->slots[0].slot_type = type_identifier::TYPE_ID_OBJECT;
                 if (prototype->parent != nullptr) {
                     object->slots[0].object = prototype->parent->create_object();

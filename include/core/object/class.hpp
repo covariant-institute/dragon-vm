@@ -15,7 +15,7 @@ namespace dvm {
                 type_identifier type;
                 int slot_count;
                 Class *parent;
-                std::string name;
+                std::string *name;
 
                 static const Class* find_class(const std::string &name);
 

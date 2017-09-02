@@ -13,7 +13,7 @@ namespace dvm {
     namespace core {
         namespace object {
             struct Object {
-                Class *prototype;
+                const Class *prototype;
                 Slot slots[0];
 
                 static Object* create_object(const Class *prototype);
