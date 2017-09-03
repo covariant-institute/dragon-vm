@@ -11,5 +11,7 @@ namespace dvm {
 		};
 
         void* dvm_malloc(SizeT size);
+
+		void dvm_free(void *ptr);
 	}
 }

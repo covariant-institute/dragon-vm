@@ -9,7 +9,7 @@
 int main() {
     using namespace dvm::core;
     using namespace dvm::core::object;
-    create_basic_classes();
+    init_base_classes();
 
     Object *object = Class::find_class("Object")->create_object();
     assert(object->slots[0].object == object);

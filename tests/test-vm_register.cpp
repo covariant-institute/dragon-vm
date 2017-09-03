@@ -3,36 +3,21 @@
 //
 
 #include <core/interpreter/vm_register.hpp>
+#include <core/object/basic_classes.hpp>
 #include <cassert>
 #include <cmath>
 
 int main() {
     using namespace dvm::core::interpreter::registers;
+    using namespace dvm::core::object;
+    init_base_classes();
+
     vm_register_holder regs;
 
-    // ix7 = 100
-    regs.get_register(vm_register_id::VM_REG_IX7).set<VMRegisterIX32>(100);
+    auto i32 = Class::find_class("Int32")->create_object();
+    i32->slots[1].slot_type = dvm::core::type_identifier::TYPE_ID_INT32;
+    i32->slots[1].i32 = 10086;
+    regs.get_register(vm_register_id::VM_REG_R0).set(i32);
 
-    // ix8 = INT64_MAX - 100
-    regs.get_register(vm_register_id::VM_REG_IX8).set<VMRegisterIX64>(INT64_MAX - 100);
-
-    auto ix7 = regs.get_register<vm_register_id::VM_REG_IX7>().get<VMRegisterIX32>();
-    auto ix8 = regs.get_register<vm_register_id::VM_REG_IX8>().get<VMRegisterIX64>();
-
-    printf("ix7= %d, ix8 = %lld, sum = %lld\n", ix7, ix8, ix7 + ix8);
-    assert(ix7 + ix8 == INT64_MAX);
-
-    // fx0 = 3.14
-    regs.get_register<vm_register_id::VM_REG_FX0>().set<VMRegisterFX32>(3.14);
-
-    // fx2 = 1.1234
-    regs.get_register<vm_register_id::VM_REG_FX2>().set<VMRegisterFX64>(1.1234);
-
-    auto fx0 = regs.get_register<vm_register_id::VM_REG_FX0>().get<VMRegisterFX32>();
-    auto fx2 = regs.get_register<vm_register_id::VM_REG_FX2>().get<VMRegisterFX64>();
-    printf("fx0 = %f, fx2 = %.12lf, sum = %.12lf\n", fx0, fx2, fx0 + fx2);
-    assert(fabs(fx0 + fx2 - 4.2634) < 0.0001);
-
-    printf("abs(ix7 + fx0 - ix7 - fx0) = %.10f\n", fabsf(ix7 + fx0 - ix7 - fx0));
-    assert(fabs(fabs(ix7 + fx0 - ix7) - fx0) < 0.01);
+    assert(regs.get_register<vm_register_id::VM_REG_R0>().get()->slots[1].i32 == 10086);
 }

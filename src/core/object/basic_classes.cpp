@@ -7,7 +7,7 @@
 namespace dvm {
     namespace core {
         namespace object {
-            void create_basic_classes() {
+            void init_base_classes() {
                 Class *object = Class::define_bootstrap_class("Object", 0, 1);
                 Class::define_class(object, "Int8", 0, 2);
                 Class::define_class(object, "Int16", 0, 2);
