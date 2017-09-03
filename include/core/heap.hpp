@@ -35,7 +35,7 @@ namespace dvm {
 		public:
 			heap() = delete;
 
-			explicit heap(ULong heap_size) : allocated_start(::malloc(heap_size))
+			explicit heap(UInt64 heap_size) : allocated_start(::malloc(heap_size))
 			{
 				if (allocated_start == nullptr)
 					throw dvm::core::exception(DVM_BAD_ALLOC);

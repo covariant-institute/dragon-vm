@@ -7,22 +7,22 @@
 
 namespace dvm {
     namespace core {
-        namespace vm {
+        namespace interpreter {
             namespace registers {
                 /**
                  * 寄存器ID，用于标识寄存器
                  */
-                using VMRegisterID = Int;
+                using VMRegisterID = Int32;
 
                 /**
                  * 整型32位寄存器
                  */
-                using VMRegisterIX32 = Int;
+                using VMRegisterIX32 = Int32;
 
                 /**
                  * 整型64位寄存器
                  */
-                using VMRegisterIX64 = Long;
+                using VMRegisterIX64 = Int64;
 
                 /**
                  * 浮点32位寄存器
@@ -37,24 +37,24 @@ namespace dvm {
                 /**
                  * 整型32位寄存器数量
                  */
-                constexpr UInt VM_REGISTERS_IX32_NUMBER = 8;
+                constexpr UInt32 VM_REGISTERS_IX32_NUMBER = 8;
 
                 /**
                  * 整型64位寄存器数量
                  */
-                constexpr UInt VM_REGISTERS_IX64_NUMBER = 4;
+                constexpr UInt32 VM_REGISTERS_IX64_NUMBER = 4;
 
                 /**
                  * 浮点32位寄存器数量
                  */
-                constexpr UInt VM_REGISTERS_FX32_NUMBER = 2;
+                constexpr UInt32 VM_REGISTERS_FX32_NUMBER = 2;
 
                 /**
                  * 浮点64位寄存器数量
                  */
-                constexpr UInt VM_REGISTERS_FX64_NUMBER = 2;
+                constexpr UInt32 VM_REGISTERS_FX64_NUMBER = 2;
 
-                constexpr UInt VM_REGISTERS_NUMBER = VM_REGISTERS_IX32_NUMBER + VM_REGISTERS_IX64_NUMBER
+                constexpr UInt32 VM_REGISTERS_NUMBER = VM_REGISTERS_IX32_NUMBER + VM_REGISTERS_IX64_NUMBER
                                                      + VM_REGISTERS_FX32_NUMBER + VM_REGISTERS_FX64_NUMBER;
 
                 /**

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.4)
+cmake_minimum_required(VERSION 3.2)
 project(dragon_vm)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -25,23 +25,31 @@ add_library(dragon_vm_core SHARED
         include/core/type.hpp
         include/core/utils.hpp
         include/core/dvm.hpp
-        include/core/interpreter.hpp
+        include/core/interpreter/interpreter.hpp
         include/core/opcodes.hpp
         include/core/exceptions.hpp
         include/core/errorcodes.hpp
-        include/core/vm_context.hpp
-        include/core/vm_register.hpp
-        include/core/vm_register_visitor.hpp
-        include/core/vm_register_common.hpp
-        include/core/vm_register_offsets.hpp
+
+        include/core/interpreter/vm_context.hpp
+        include/core/interpreter/vm_register.hpp
+        include/core/interpreter/vm_register_visitor.hpp
+        include/core/interpreter/vm_register_common.hpp
+        include/core/interpreter/vm_register_offsets.hpp
+
+        include/core/object/class.hpp
+        include/core/object/slot.hpp
 
         src/core/vm-main.cpp
         src/core/heap.cpp
-        src/core/interpreter.cpp
+        src/core/interpreter/interpreter.cpp
         src/core/config.cpp
         src/core/heap.cpp
-        src/core/vm_register.cpp
-        src/core/vm_register_visitor.cpp)
+
+        src/core/interpreter/vm_register.cpp
+        src/core/interpreter/vm_register_visitor.cpp
+
+        src/core/object/class.cpp
+        src/core/object/object.cpp src/core/memory.cpp include/core/object/basic_classes.hpp src/core/object/basic_classes.cpp)
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)
@@ -65,3 +73,15 @@ target_link_libraries(test-vm_register dragon_vm_core)
 
 add_executable(test-type tests/test-type.cpp)
 target_link_libraries(test-type dragon_vm_core)
+
+add_executable(test-object tests/test-object.cpp)
+target_link_libraries(test-object dragon_vm_core)
+
+# Experimental test cases
+add_executable(exp-threaded-interpreter
+        experimental-tests/threaded-interpretation/opcodes.h
+        experimental-tests/threaded-interpretation/threaded-interpreter.h
+        experimental-tests/threaded-interpretation/threaded-interpreter.c
+        experimental-tests/threaded-interpretation/benchmark_main.c
+        experimental-tests/threaded-interpretation/decode-dispatch-interpreter.c
+        experimental-tests/threaded-interpretation/decode-dispatch-interpreter.h)

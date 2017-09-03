@@ -1,9 +1,9 @@
 #pragma once
 
-#include <core/vm_register.hpp>
+#include <core/interpreter/vm_register.hpp>
 namespace dvm {
     namespace core {
-        namespace vm {
+        namespace interpreter {
             class vm_context {
             private:
 
@@ -13,7 +13,7 @@ namespace dvm {
 
                 vm_context(const vm_context &) = delete;
 
-                vm_context(ULong stack_size, ULong heap_size);
+                vm_context(UInt64 stack_size, UInt64 heap_size);
 
                 ~vm_context();
             };

@@ -20,7 +20,7 @@
  */
 bool dvm::gc::pure_gc::gc_context::cache_insert(int parent, int child) {
     int hash = (parent & CACHE_PARENT_MASK) << CACHE_CHILD_BITS | (child & CACHE_CHILD_MASK);
-    struct cache_node *cn = &cache[hash];
+    struct gc_cache_node *cn = &cache[hash];
     cache_dirty = true;
 
     if (cn->parent == -1) {
@@ -41,7 +41,7 @@ bool dvm::gc::pure_gc::gc_context::cache_insert(int parent, int child) {
  * @return handle
  */
 int dvm::gc::pure_gc::gc_context::node_alloc(void *p) {
-    struct node *ret;
+    struct gc_node *ret;
     if (free == -1) {
         int sz = size * 2;
         int i;
@@ -49,7 +49,7 @@ int dvm::gc::pure_gc::gc_context::node_alloc(void *p) {
             sz = 1024;
         }
 
-        pool = (struct node *) ::realloc(pool, sz * sizeof(struct node));
+        pool = (struct gc_node *) ::realloc(pool, sz * sizeof(struct gc_node));
         ret = pool + size;
         ret->u.n.children = nullptr;
 
@@ -80,8 +80,8 @@ int dvm::gc::pure_gc::gc_context::node_alloc(void *p) {
  * @param sz
  * @return
  */
-dvm::gc::pure_gc::link *dvm::gc::pure_gc::gc_context::link_expand(struct link *old, int sz) {
-    struct link *ret;
+dvm::gc::pure_gc::gc_link *dvm::gc::pure_gc::gc_context::link_expand(struct gc_link *old, int sz) {
+    struct gc_link *ret;
     if (old != nullptr) {
         sz += old->number;
         if ((sz ^ old->number) <= old->number) {
@@ -91,7 +91,7 @@ dvm::gc::pure_gc::link *dvm::gc::pure_gc::gc_context::link_expand(struct link *o
 
     sz = sz * 2 - 1;
 
-    ret = (struct link *) ::realloc(old, sizeof(struct link) + (sz - 1) * sizeof(int));
+    ret = (struct gc_link *) ::realloc(old, sizeof(struct gc_link) + (sz - 1) * sizeof(int));
     if (old == nullptr) {
         ret->number = 0;
     }
@@ -105,8 +105,8 @@ dvm::gc::pure_gc::link *dvm::gc::pure_gc::gc_context::link_expand(struct link *o
  * @return
  */
 static int cache_node_cmp(const void *a, const void *b) {
-    auto ca = (const struct dvm::gc::pure_gc::cache_node *) a;
-    auto cb = (const struct dvm::gc::pure_gc::cache_node *) b;
+    auto ca = (const struct dvm::gc::pure_gc::gc_cache_node *) a;
+    auto cb = (const struct dvm::gc::pure_gc::gc_cache_node *) b;
     if (ca->parent != cb->parent) {
         return cb->parent - ca->parent;
     }
@@ -124,14 +124,14 @@ void dvm::gc::pure_gc::gc_context::cache_flush() {
     int i;
     if (!cache_dirty)
         return;
-    qsort(cache, PURE_GC_CACHE_SIZE, sizeof(struct cache_node), cache_node_cmp);
+    qsort(cache, PURE_GC_CACHE_SIZE, sizeof(struct gc_cache_node), cache_node_cmp);
     i = 0;
     while (i < PURE_GC_CACHE_SIZE) {
         int parent = cache[i].parent;
-        struct cache_node *head;
-        struct cache_node *next;
-        struct node *node = &pool[parent];
-        struct link *children;
+        struct gc_cache_node *head;
+        struct gc_cache_node *next;
+        struct gc_node *node = &pool[parent];
+        struct gc_link *children;
         int sz;
         int j, k;
 
@@ -243,19 +243,19 @@ void dvm::gc::pure_gc::gc_context::node_add(int parent, int child) {
  * expand hash map space
  */
 void dvm::gc::pure_gc::gc_context::map_expand() {
-    struct hash_node **table;
+    struct gc_hash_node **table;
     int sz, i;
     if (map.size == 0) {
         sz = 1024;
     } else {
         sz = map.size * 2;
     }
-    table = (struct hash_node **) ::malloc(sz * sizeof(struct hash_node *));
-    memset(table, 0, sz * sizeof(struct hash_node *));
+    table = (struct gc_hash_node **) ::malloc(sz * sizeof(struct gc_hash_node *));
+    memset(table, 0, sz * sizeof(struct gc_hash_node *));
     for (i = 0; i < map.size; i++) {
-        struct hash_node *t = map.table[i];
+        struct gc_hash_node *t = map.table[i];
         while (t != nullptr) {
-            struct hash_node *tmp = t;
+            struct gc_hash_node *tmp = t;
             void *p = pool[tmp->id].u.n.mem;
             int new_hash = hash(p) & (sz - 1);
             t = t->next;
@@ -277,7 +277,7 @@ void dvm::gc::pure_gc::gc_context::map_expand() {
  */
 int dvm::gc::pure_gc::gc_context::map_id(void *p) {
     int h = hash(p);
-    struct hash_node *node = map.table[h & (map.size - 1)];
+    struct gc_hash_node *node = map.table[h & (map.size - 1)];
     while (node != nullptr) {
         if (pool[node->id].u.n.mem == p) {
             return node->id;
@@ -294,7 +294,7 @@ int dvm::gc::pure_gc::gc_context::map_id(void *p) {
         node = map.free;
         map.free = node->next;
     } else {
-        node = (struct hash_node *) ::malloc(sizeof(*node));
+        node = (struct gc_hash_node *) ::malloc(sizeof(*node));
     }
     node->id = node_alloc(p);
     node->next = map.table[h & (map.size - 1)];
@@ -311,8 +311,8 @@ void dvm::gc::pure_gc::gc_context::map_erase(int id) {
     void *p = pool[id].u.n.mem;
     if (p != nullptr) {
         int h = hash(p);
-        struct hash_node **node = &map.table[h & (map.size - 1)];
-        struct hash_node *find;
+        struct gc_hash_node **node = &map.table[h & (map.size - 1)];
+        struct gc_hash_node *find;
         while ((*node)->id != id) {
             node = &(*node)->next;
             assert(*node);
@@ -486,16 +486,16 @@ void dvm::gc::pure_gc::gc_context::gc_exit() {
     }
     ::free(pool);
     for (i = 0; i < map.size; i++) {
-        struct hash_node *p = map.table[i];
+        struct gc_hash_node *p = map.table[i];
         while (p != nullptr) {
-            struct hash_node *n = p->next;
+            struct gc_hash_node *n = p->next;
             ::free(p);
             p = n;
         }
     }
     ::free(map.table);
     while (map.free != nullptr) {
-        struct hash_node *p = map.free->next;
+        struct gc_hash_node *p = map.free->next;
         ::free(map.free);
         map.free = p;
     }
@@ -509,7 +509,7 @@ void dvm::gc::pure_gc::gc_context::gc_exit() {
  */
 void dvm::gc::pure_gc::gc_context::gc_mark(int root) {
     if (pool[root].mark < mark + 1) {
-        struct link *children = pool[root].u.n.children;
+        struct gc_link *children = pool[root].u.n.children;
         pool[root].mark = mark + 1;
         if (children != nullptr) {
             int i;
@@ -629,7 +629,7 @@ dvm::gc::pure_gc::gc_weak_table *dvm::gc::pure_gc::gc_context::new_weak_table(vo
  */
 void *dvm::gc::pure_gc::gc_context::weak_table_next(struct gc_weak_table *cont, int *iter) {
     int i, j;
-    struct link *children;
+    struct gc_link *children;
     cache_flush();
     children = pool[cont->node_id].u.n.children;
     if (children == nullptr) {
@@ -678,7 +678,7 @@ void *dvm::gc::pure_gc::gc_context::clone(void *from, size_t sz) {
     int from_id = map_id(from);
     void *to = ::malloc(sz);
     int to_id = map_id(to);
-    struct link *from_children = pool[from_id].u.n.children;
+    struct gc_link *from_children = pool[from_id].u.n.children;
     stack_push(to_id);
 
     cache_flush();
@@ -713,7 +713,7 @@ void *dvm::gc::pure_gc::gc_context::realloc(void *p, size_t sz, void *parent) {
     int new_id = map_id(ret);
     int old_id = map_id(p);
 
-    struct link *tmp = pool[new_id].u.n.children;
+    struct gc_link *tmp = pool[new_id].u.n.children;
     pool[new_id].u.n.children = pool[old_id].u.n.children;
     pool[old_id].u.n.children = tmp;
 

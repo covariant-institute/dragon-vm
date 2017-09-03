@@ -3,12 +3,12 @@
 //
 #pragma once
 
-#include <core/vm_register_common.hpp>
+#include <core/interpreter/vm_register_common.hpp>
 #include <cstddef>
 
 namespace dvm {
     namespace core {
-        namespace vm {
+        namespace interpreter {
             namespace registers {
                 namespace offsets {
                     constexpr size_t REGISTER_OFFSET_TABLE[] = {

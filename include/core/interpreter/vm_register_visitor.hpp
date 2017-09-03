@@ -4,11 +4,11 @@
 
 #pragma once
 
-#include <core/vm_register_common.hpp>
+#include <core/interpreter/vm_register_common.hpp>
 
 namespace dvm {
     namespace core {
-        namespace vm {
+        namespace interpreter {
             namespace registers {
                 class register_visitor {
                 private:

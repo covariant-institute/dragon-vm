@@ -9,5 +9,7 @@ namespace dvm {
 			Addr data_size;
 			Byte reachable;
 		};
+
+        void* dvm_malloc(SizeT size);
 	}
 }

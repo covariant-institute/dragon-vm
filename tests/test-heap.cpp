@@ -39,10 +39,10 @@ void gc_start()
 
 int main()
 {
-	auto *pa = gc_malloc<dvm::core::Int>();
+	auto *pa = gc_malloc<dvm::core::Int32>();
 	*pa = 10;
 	std::cout << *pa << std::endl;
-	auto *pb = gc_malloc<dvm::core::Char>();
+	auto *pb = gc_malloc<dvm::core::Int8>();
 	*pb = 'A';
 	std::cout << *pb << std::endl;
 	free_top();

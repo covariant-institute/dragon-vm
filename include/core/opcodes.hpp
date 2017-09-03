@@ -4,8 +4,8 @@
 
 namespace dvm {
 	namespace core {
-		namespace vm {
-			enum class vm_opcode : UChar {
+		namespace interpreter {
+			enum class vm_opcode : UInt8 {
 				VM_OP_NOP = 0,
 			};
 		}

@@ -2,12 +2,12 @@
 // Created by kiva on 2017/8/30.
 //
 
-#include <core/vm_register.hpp>
+#include <core/interpreter/vm_register.hpp>
 #include <cassert>
 #include <cmath>
 
 int main() {
-    using namespace dvm::core::vm::registers;
+    using namespace dvm::core::interpreter::registers;
     vm_register_holder regs;
 
     // ix7 = 100
