@@ -5,3 +5,4 @@
 #define DVM_REGISTER_INVALID "Invalid register id."
 #define DVM_CLASS_NOT_FOUND "Class not found."
 #define DVM_INVALID_OBJECT_MEMORY "Invalid object memory."
+#define DVM_UNSATISFIED_SLOT_TYPE "Unsatisfied slot type."
