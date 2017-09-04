@@ -63,11 +63,11 @@ namespace dvm {
 
                 SETTER_GENERATOR(UInt64, u64, type_identifier::TYPE_ID_UINT64)
 
-                SETTER_GENERATOR(Float, f32, type_identifier::TYPE_ID_FLOAT);
+                SETTER_GENERATOR(Float, f32, type_identifier::TYPE_ID_FLOAT)
 
-                SETTER_GENERATOR(Double, f64, type_identifier::TYPE_ID_DOUBLE);
+                SETTER_GENERATOR(Double, f64, type_identifier::TYPE_ID_DOUBLE)
 
-                SETTER_GENERATOR(Object*, object, type_identifier::TYPE_ID_OBJECT);
+                SETTER_GENERATOR(Object*, object, type_identifier::TYPE_ID_OBJECT)
 
 #undef SETTER_GENERATOR
 
