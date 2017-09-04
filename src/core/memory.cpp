@@ -17,6 +17,12 @@ namespace dvm {
             }
             return memory;
         }
+
+        void dvm_free(void *ptr) {
+            if (ptr) {
+                ::free(ptr);
+            }
+        }
     }
 }
 

@@ -9,7 +9,7 @@
 namespace dvm {
     namespace core {
         namespace object {
-            void create_basic_classes();
+            void init_base_classes();
         }
     }
 }

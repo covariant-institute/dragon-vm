@@ -1,10 +1,10 @@
 //
-// Created by kiva on 2017/8/30.
+// Created by kiva on 2017/9/3.
 //
-
 #pragma once
 
 #include <core/interpreter/vm_register_common.hpp>
+#include <core/object/object.hpp>
 
 namespace dvm {
     namespace core {
@@ -12,30 +12,21 @@ namespace dvm {
             namespace registers {
                 class register_visitor {
                 private:
-                    Link register_addr;
-
-                    template <typename T>
-                    inline T* get_pointer() {
-                        return reinterpret_cast<T *>(register_addr);
-                    }
+                    VMRegister *register_ptr;
 
                 public:
-                    register_visitor(const register_visitor &other);
+                    register_visitor(const register_visitor &);
 
-                    explicit register_visitor(Link addr);
+                    explicit register_visitor(VMRegister *register_ptr);
 
                     ~register_visitor() = default;
 
-                    template <typename T>
-                    T get() {
-                        return *get_pointer<T>();
+                    void set(object::Object *object) {
+                        *this->register_ptr = object;
                     }
 
-                    template <typename T>
-                    T *set(T value) {
-                        T *ptr = get_pointer<T>();
-                        *ptr = value;
-                        return ptr;
+                    object::Object* get() {
+                        return *this->register_ptr;
                     }
                 };
             }

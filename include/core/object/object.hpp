@@ -3,6 +3,7 @@
 //
 #pragma once
 
+#include <core/type.hpp>
 #include <core/object/slot.hpp>
 #include <core/object/class.hpp>
 #include <core/exceptions.hpp>

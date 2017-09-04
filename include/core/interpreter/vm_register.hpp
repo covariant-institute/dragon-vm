@@ -17,7 +17,7 @@ namespace dvm {
                     friend class vm_context;
 
                 private:
-                    Link registers;
+                    VMRegister *registers;
 
                 public:
                     vm_register_holder(const vm_register_holder &) = delete;
@@ -28,9 +28,9 @@ namespace dvm {
 
                     register_visitor get_register(vm_register_id id);
 
-                    template <vm_register_id vm_reg, UInt64 offset = sizeof(VMRegisterIX64) * static_cast<VMRegisterID>(vm_reg)>
+                    template <vm_register_id vm_reg, Int32 index = static_cast<VMRegisterID>(vm_reg)>
                     register_visitor get_register() {
-                        return register_visitor(registers + offset);
+                        return register_visitor(registers + index);
                     }
                 };
             }
