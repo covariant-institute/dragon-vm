@@ -68,7 +68,7 @@ namespace dvm {
                 return clazz;
             }
 
-            Object *Class::create_object() const {
+            Object *Class::new_instance() const {
                 return Object::create_object(this);
             }
         }

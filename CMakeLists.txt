@@ -33,7 +33,10 @@ add_library(dragon_vm_core SHARED
         include/core/interpreter/vm_context.hpp
         include/core/interpreter/vm_register.hpp
         include/core/interpreter/vm_register_common.hpp
+        include/core/interpreter/vm_register_visitor.hpp
 
+        include/core/object/basic_classes.hpp
+        include/core/object/method.hpp
         include/core/object/class.hpp
         include/core/object/slot.hpp
 
@@ -44,9 +47,12 @@ add_library(dragon_vm_core SHARED
         src/core/heap.cpp
 
         src/core/interpreter/vm_register.cpp
+        src/core/interpreter/vm_register_visitor.cpp
 
         src/core/object/class.cpp
-        src/core/object/object.cpp src/core/memory.cpp include/core/object/basic_classes.hpp src/core/object/basic_classes.cpp include/core/interpreter/vm_register_visitor.hpp src/core/interpreter/vm_register_visitor.cpp)
+        src/core/object/object.cpp src/core/memory.cpp
+        src/core/object/basic_classes.cpp
+        )
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)
