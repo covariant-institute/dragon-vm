@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core/opcodes.hpp>
+#include <core/interpreter/opcodes.hpp>
 #include <core/interpreter/vm_context.hpp>
 
 namespace dvm {

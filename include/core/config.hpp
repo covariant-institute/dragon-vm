@@ -5,6 +5,8 @@
 namespace dvm {
 	namespace core {
 		namespace config {
+			using VersionID = Int32;
+
 			/**
 			 * 用来标识合法的 DVM 相关文件
 			 * 文件的第一个字节等于 DVM_MAGIC 时，VM 才认为这是合法的可执行文件
@@ -33,7 +35,7 @@ namespace dvm {
 			 * 用当前的 VM 信息组合出一个 VersionID
 			 * @return VersionID
 			 */
-			constexpr Int32 make_version_id()
+			constexpr VersionID make_version_id()
 			{
 				return (DVM_MAGIC << 24)
 				       | (VERSION_MAJOR << 16)
@@ -46,7 +48,7 @@ namespace dvm {
 			 * @param version_id Target VersionID
 			 * @return true if is valid
 			 */
-			bool validate_version_id(Int32 version_id);
+			bool validate_version_id(VersionID version_id);
 		}
 	}
 }

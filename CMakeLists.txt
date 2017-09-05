@@ -26,7 +26,7 @@ add_library(dragon_vm_core SHARED
         include/core/utils.hpp
         include/core/dvm.hpp
         include/core/interpreter/interpreter.hpp
-        include/core/opcodes.hpp
+        include/core/interpreter/opcodes.hpp
         include/core/exceptions.hpp
         include/core/errorcodes.hpp
 
@@ -52,7 +52,7 @@ add_library(dragon_vm_core SHARED
         src/core/object/class.cpp
         src/core/object/object.cpp src/core/memory.cpp
         src/core/object/basic_classes.cpp
-        )
+        include/core/dcx/dcx_file.hpp)
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)

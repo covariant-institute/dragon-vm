@@ -7,7 +7,7 @@
 namespace dvm {
 	namespace core {
 		namespace config {
-			bool validate_version_id(Int32 version_id)
+			bool validate_version_id(VersionID version_id)
 			{
 				return version_id <= make_version_id();
 			}
