@@ -40,6 +40,8 @@ add_library(dragon_vm_core SHARED
         include/core/object/class.hpp
         include/core/object/slot.hpp
 
+        include/core/dcx/dcx_file.hpp
+
         src/core/vm-main.cpp
         src/core/heap.cpp
         src/core/interpreter/interpreter.cpp
@@ -48,11 +50,15 @@ add_library(dragon_vm_core SHARED
 
         src/core/interpreter/vm_register.cpp
         src/core/interpreter/vm_register_visitor.cpp
+        src/core/interpreter/vm_context.cpp
 
         src/core/object/class.cpp
         src/core/object/object.cpp src/core/memory.cpp
         src/core/object/basic_classes.cpp
-        include/core/dcx/dcx_file.hpp)
+        src/core/object/method.cpp src/core/object/abs_method.hpp
+        src/core/object/abs_method.cpp
+        src/core/object/foreign_method.cpp
+        src/core/object/foreign_method.hpp)
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)
@@ -79,6 +85,9 @@ target_link_libraries(test-type dragon_vm_core)
 
 add_executable(test-object tests/test-object.cpp)
 target_link_libraries(test-object dragon_vm_core)
+
+add_executable(test-method tests/test-method.cpp)
+target_link_libraries(test-method dragon_vm_core)
 
 # Experimental test cases
 add_executable(exp-threaded-interpreter

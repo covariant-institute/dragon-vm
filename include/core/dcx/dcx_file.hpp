@@ -23,11 +23,6 @@ namespace dvm {
                  * 类的定义和实现
                  */
                 UInt32 class_defs_offset;
-
-                /**
-                 * 程序开始执行的地方
-                 */
-                UInt32 entry_point_offset;
             };
 
             /**
@@ -48,7 +43,6 @@ namespace dvm {
              */
             struct dcx_file_class_header {
                 UInt32 class_name_size;
-                UInt32 class_data_size;
                 UInt32 class_slot_count;
                 UInt32 member_class_count;
             };
@@ -56,7 +50,6 @@ namespace dvm {
             struct dcx_file_class_entry {
                 dcx_file_class_header header;
                 Byte *class_name;
-                Byte *class_data;
             };
 
             /**

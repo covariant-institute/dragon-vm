@@ -40,7 +40,7 @@ namespace dvm {
             }
 
             Class *Class::define_bootstrap_class(const std::string &name,
-                                                 int class_slot_count, int member_slot_count) {
+                                                 Int32 class_slot_count, Int32 member_slot_count) {
                 Class *clazz = create_class(class_slot_count);
                 clazz->type = type_identifier::TYPE_ID_OBJECT;
                 clazz->parent = nullptr;
@@ -52,7 +52,7 @@ namespace dvm {
             }
 
             const Class *Class::define_class(Class *parent, const std::string &name,
-                                             int class_slot_count, int member_slot_count) {
+                                             Int32 class_slot_count, Int32 member_slot_count) {
                 Class *parent_class = parent;
                 if (parent_class == nullptr) {
                     parent_class = find_class_non_const("Object");
