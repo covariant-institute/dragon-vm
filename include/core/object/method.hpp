@@ -26,7 +26,8 @@ namespace dvm {
                 static Method *new_foreign_method(const std::string &name, const std::string &signature,
                                                   FFIFunction ffi);
 
-                static Method *new_dvm_method(const std::string &name, const std::string &signature);
+                static Method *new_dvm_method(const std::string &name, const std::string &signature,
+                                              Byte *body, SizeT length);
             };
         }
     }

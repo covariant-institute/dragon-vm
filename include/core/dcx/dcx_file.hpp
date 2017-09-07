@@ -23,18 +23,23 @@ namespace dvm {
                  * 类的定义和实现
                  */
                 UInt32 class_defs_offset;
+
+                /**
+                 * 方法定义和实现
+                 */
+                UInt32 method_defs_offset;
             };
 
             /**
              * 常量池
              */
-            struct dcx_file_constant_pool_header {
+            struct dcx_file_constant_header {
                 UInt32 constant_id;
                 UInt32 constant_data_size;
             };
 
-            struct dcx_file_constant_pool_entry {
-                dcx_file_constant_pool_header header;
+            struct dcx_file_constant_entry {
+                dcx_file_constant_header header;
                 Byte *constant_data;
             };
 
@@ -42,14 +47,26 @@ namespace dvm {
              * 类定义
              */
             struct dcx_file_class_header {
-                UInt32 class_name_size;
+                UInt32 class_name_id;
                 UInt32 class_slot_count;
                 UInt32 member_class_count;
             };
 
             struct dcx_file_class_entry {
                 dcx_file_class_header header;
-                Byte *class_name;
+            };
+
+            /**
+             * 方法定义
+             */
+            struct dcx_file_method_header {
+                UInt32 method_name_id;
+                UInt32 method_length;
+            };
+
+            struct dcx_file_method_entry {
+                dcx_file_method_header header;
+                Byte *method_body;
             };
 
             /**

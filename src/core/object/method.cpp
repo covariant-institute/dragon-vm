@@ -4,6 +4,7 @@
 
 #include <core/object/method.hpp>
 #include "foreign_method.hpp"
+#include "dvm_method.hpp"
 
 namespace dvm {
     namespace core {
@@ -16,8 +17,9 @@ namespace dvm {
                 return new ForeignMethod(name, signature, ffi);
             }
 
-            Method *Method::new_dvm_method(const std::string &name, const std::string &signature) {
-                return nullptr;
+            Method *
+            Method::new_dvm_method(const std::string &name, const std::string &signature, Byte *body, SizeT length) {
+                return new DvmMethod(name, signature, body, length);
             }
         }
     }

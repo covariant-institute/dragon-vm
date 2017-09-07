@@ -22,14 +22,14 @@ namespace dvm {
                 static Object* create_object(const Class *prototype);
             };
 
-            inline void ensure_valid(Object *object) {
+            inline void ensure_object_valid(Object *object) {
                 if (object == nullptr) {
                     throw dvm::core::exception(DVM_INVALID_OBJECT_MEMORY);
                 }
             }
 
             inline bool is_uninitialized(Object *object) {
-                ensure_valid(object);
+                ensure_object_valid(object);
                 return object->prototype == nullptr;
             }
         }

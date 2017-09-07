@@ -41,6 +41,7 @@ add_library(dragon_vm_core SHARED
         include/core/object/slot.hpp
 
         include/core/dcx/dcx_file.hpp
+        include/core/dcx/dcx_reader.hpp
 
         src/core/vm-main.cpp
         src/core/heap.cpp
@@ -58,7 +59,7 @@ add_library(dragon_vm_core SHARED
         src/core/object/method.cpp src/core/object/abs_method.hpp
         src/core/object/abs_method.cpp
         src/core/object/foreign_method.cpp
-        src/core/object/foreign_method.hpp)
+        src/core/object/foreign_method.hpp src/core/dcx/dcx_reader.cpp)
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)
