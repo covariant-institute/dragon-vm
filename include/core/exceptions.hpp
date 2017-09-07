@@ -3,6 +3,7 @@
 // DVM Exceptions
 #include <exception>
 #include <string>
+#include <utility>
 
 namespace dvm {
 	namespace core {
@@ -11,19 +12,19 @@ namespace dvm {
 		public:
 			exception() = delete;
 
-			exception(const std::string &what) : mWhat(what) {}
+			explicit exception(std::string what) : mWhat(std::move(what)) {}
 
 			exception(const exception &) = default;
 
 			exception(exception &&) = default;
 
-			virtual ~exception() = default;
+			~exception() override = default;
 
 			exception &operator=(const exception &)= default;
 
 			exception &operator=(exception &&)= default;
 
-			virtual const char *what() const noexcept override
+			const char *what() const noexcept override
 			{
 				return this->mWhat.c_str();
 			}
