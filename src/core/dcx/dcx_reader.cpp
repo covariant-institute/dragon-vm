@@ -42,7 +42,6 @@ namespace dvm {
             }
 
             bool dcx_reader::read_header(dcx_file_header &header) {
-
                 return true;
             }
 
