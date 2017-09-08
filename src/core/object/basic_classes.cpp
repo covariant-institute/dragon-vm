@@ -30,7 +30,7 @@ namespace dvm {
 #define CREATOR_COMMON_IMPLEMENT(TYPE, SLOT_SETTER) \
             CREATOR_SIGNATURE(TYPE) { \
                 Object *object = Class::find_class(#TYPE)->new_instance(); \
-                ensure_valid(object); \
+                ensure_object_valid(object); \
                 object->slots[1].set_##SLOT_SETTER(value); \
                 return object; \
             }

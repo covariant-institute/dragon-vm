@@ -5,6 +5,8 @@
 #include <core/exceptions.hpp>
 #include <core/errorcodes.hpp>
 
+#include "reader_impl.hpp"
+
 namespace dvm {
     namespace core {
         namespace dcx {
@@ -28,6 +30,10 @@ namespace dvm {
                         throw dvm::core::exception(DVM_DCX_INVALID);
                     }
 
+                    if (!config::validate_version_id(dcx_header.version_id)) {
+                        throw dvm::core::exception(DVM_DCX_INVALID_VERSION_ID);
+                    }
+
                 } catch (const dvm::core::exception &what) {
                     close();
                     throw what;
@@ -42,6 +48,11 @@ namespace dvm {
             }
 
             bool dcx_reader::read_header(dcx_file_header &header) {
+                if (dcx_file == nullptr) {
+                    return false;
+                }
+                fseek(dcx_file, 0, SEEK_SET);
+                header.version_id = read_i32(dcx_file);
                 return true;
             }
 

@@ -61,6 +61,7 @@ add_library(dragon_vm_core SHARED
 
         src/core/vm-main.cpp
         src/core/heap.cpp
+        src/core/memory.cpp
         src/core/interpreter/interpreter.cpp
         src/core/config.cpp
         src/core/heap.cpp
@@ -70,12 +71,19 @@ add_library(dragon_vm_core SHARED
         src/core/interpreter/vm_context.cpp
 
         src/core/object/class.cpp
-        src/core/object/object.cpp src/core/memory.cpp
+        src/core/object/object.cpp
         src/core/object/basic_classes.cpp
-        src/core/object/method.cpp src/core/object/abs_method.hpp
+        src/core/object/method.cpp
+        src/core/object/abs_method.hpp
         src/core/object/abs_method.cpp
         src/core/object/foreign_method.cpp
-        src/core/object/foreign_method.hpp src/core/dcx/dcx_reader.cpp)
+        src/core/object/foreign_method.hpp
+        src/core/object/dvm_method.cpp
+        src/core/object/dvm_method.hpp
+
+        src/core/dcx/dcx_reader.cpp
+        src/core/dcx/reader_impl.hpp
+        src/core/dcx/reader_impl.cpp)
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)
@@ -105,6 +113,12 @@ target_link_libraries(test-object dragon_vm_core)
 
 add_executable(test-method tests/test-method.cpp)
 target_link_libraries(test-method dragon_vm_core)
+
+add_executable(test-dcx tests/test-dcx.cpp)
+target_link_libraries(test-dcx dragon_vm_core)
+
+# Build tools
+add_executable(generate-empty-dcx build-test/generate-empty-dcx.cpp)
 
 # Experimental test cases
 add_executable(exp-threaded-interpreter

@@ -8,7 +8,6 @@
 #include <core/object/class.hpp>
 #include <core/exceptions.hpp>
 #include <core/errorcodes.hpp>
-#include <string>
 
 namespace dvm {
     namespace core {
