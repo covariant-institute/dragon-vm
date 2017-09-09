@@ -6,6 +6,7 @@
 #include <core/exceptions.hpp>
 
 #include <core/errorcodes.hpp>
+#include <core/memory.hpp>
 
 namespace dvm {
     namespace core {
@@ -67,19 +68,7 @@ namespace dvm {
                     return false;
                 }
 
-                if (!ByteOrderedReader::read<DcxFileJumpTable>(dcx_file, &info.file_header.jump_table)) {
-                    return false;
-                }
-
-                if (fseek(dcx_file, info.file_header.jump_table.constant_pool_start, SEEK_SET) != 0) {
-                    return false;
-                }
-
                 if (!ByteOrderedReader::read<DcxFileConstantPoolHeader>(dcx_file, &info.constant_pool_header)) {
-                    return false;
-                }
-
-                if (fseek(dcx_file, info.file_header.jump_table.class_pool_start, SEEK_SET) != 0) {
                     return false;
                 }
 
@@ -87,22 +76,30 @@ namespace dvm {
                     return false;
                 }
 
-                if (fseek(dcx_file, info.file_header.jump_table.method_pool_start, SEEK_SET) != 0) {
-                    return false;
-                }
-
                 return ByteOrderedReader::read<DcxFileMethodPoolHeader>(dcx_file, &info.method_pool_header);
             }
 
             bool DcxReader::read_next_constant_entry(DcxFileConstantEntry &entry) {
+                if (ByteOrderedReader::read<DcxFileConstantEntryHeader>(dcx_file, &entry.header)) {
+                    entry.constant_data = (Byte *) dvm_malloc(sizeof(Byte) * entry.header.constant_data_size);
+
+                    return ByteOrderedReader::read_bytes(dcx_file, entry.constant_data,
+                                                         entry.header.constant_data_size);
+                }
                 return false;
             }
 
             bool DcxReader::read_next_class_entry(DcxFileClassEntry &entry) {
-                return false;
+                return ByteOrderedReader::read<DcxFileClassEntryHeader>(dcx_file, &entry.header);
             }
 
             bool DcxReader::read_next_method_entry(DcxFileMethodEntry &entry) {
+                if (ByteOrderedReader::read<DcxFileMethodEntryHeader>(dcx_file, &entry.header)) {
+                    entry.method_body = (Byte *) dvm_malloc(sizeof(Byte) * entry.header.method_length);
+
+                    return ByteOrderedReader::read_bytes(dcx_file, entry.method_body,
+                                                         entry.header.method_length);
+                }
                 return false;
             }
         }

@@ -59,6 +59,10 @@ namespace dvm {
 #endif
                     return r == 1;
                 }
+
+                static inline bool read_bytes(FILE *file, Byte *destination, SizeT length) {
+                    return fread(reinterpret_cast<void *>(destination), sizeof(Byte), length, file) == length;
+                }
             };
         }
     }

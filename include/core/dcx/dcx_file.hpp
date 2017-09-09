@@ -11,26 +11,6 @@ namespace dvm {
     namespace core {
         namespace dcx {
             /**
-             * 每个成员都存储着对应区开始位置在文件中的偏移
-             */
-            struct DcxFileJumpTable {
-                /**
-                 * 常量池
-                 */
-                UInt32 constant_pool_start;
-
-                /**
-                 * 类的定义和实现
-                 */
-                UInt32 class_pool_start;
-
-                /**
-                 * 方法定义和实现
-                 */
-                UInt32 method_pool_start;
-            };
-
-            /**
              * 常量池
              */
             struct DcxFileConstantPoolHeader {
@@ -71,13 +51,13 @@ namespace dvm {
                 UInt32 method_entries;
             };
 
-            struct DcxFileMethodHeader {
+            struct DcxFileMethodEntryHeader {
                 UInt32 method_name_id;
                 UInt32 method_length;
             };
 
             struct DcxFileMethodEntry {
-                DcxFileMethodHeader header;
+                DcxFileMethodEntryHeader header;
                 Byte *method_body;
             };
 
@@ -86,7 +66,6 @@ namespace dvm {
              */
             struct DcxFileHeader {
                 config::VersionID version_id;
-                DcxFileJumpTable jump_table;
             };
 
             struct DcxFileInfo {

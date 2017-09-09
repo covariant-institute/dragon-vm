@@ -31,11 +31,6 @@ int main(int argc, const char **argv) {
 
     DcxFileHeader header = {
             .version_id = make_version_id(),
-            .jump_table = {
-                    .constant_pool_start = sizeof(DcxFileHeader),
-                    .class_pool_start = sizeof(DcxFileHeader) + sizeof(constantPoolHeader),
-                    .method_pool_start = sizeof(DcxFileHeader) + sizeof(constantPoolHeader) + sizeof(classPoolHeader)
-            }
     };
 
     fwrite(reinterpret_cast<const void *>(&header), sizeof(header), 1, fp);

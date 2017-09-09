@@ -12,6 +12,7 @@ namespace dvm {
         namespace dcx {
             class DcxReader;
 
+
             class DcxReader {
             private:
                 FILE *dcx_file;

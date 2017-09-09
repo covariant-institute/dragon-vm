@@ -9,7 +9,7 @@
 int main(int argc, const char **argv) {
     using namespace dvm::core::dcx;
     DcxReader reader { };
-    assert(reader.open(argv[1] ? argv[1] : "../build-test/empty-dcx.dcx"));
+    assert(reader.open(argv[1] ? argv[1] : "../cmake-build-debug/empty-dcx.dcx"));
 
     reader.close();
 }
