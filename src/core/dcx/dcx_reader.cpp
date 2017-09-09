@@ -80,6 +80,10 @@ namespace dvm {
             }
 
             bool DcxReader::read_next_constant_entry(DcxFileConstantEntry &entry) {
+                if (dcx_file == nullptr) {
+                    return false;
+                }
+
                 if (ByteOrderedReader::read<DcxFileConstantEntryHeader>(dcx_file, &entry.header)) {
                     entry.constant_data = (Byte *) dvm_malloc(sizeof(Byte) * entry.header.constant_data_size);
 
@@ -90,10 +94,18 @@ namespace dvm {
             }
 
             bool DcxReader::read_next_class_entry(DcxFileClassEntry &entry) {
+                if (dcx_file == nullptr) {
+                    return false;
+                }
+
                 return ByteOrderedReader::read<DcxFileClassEntryHeader>(dcx_file, &entry.header);
             }
 
             bool DcxReader::read_next_method_entry(DcxFileMethodEntry &entry) {
+                if (dcx_file == nullptr) {
+                    return false;
+                }
+
                 if (ByteOrderedReader::read<DcxFileMethodEntryHeader>(dcx_file, &entry.header)) {
                     entry.method_body = (Byte *) dvm_malloc(sizeof(Byte) * entry.header.method_length);
 
