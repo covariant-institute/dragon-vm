@@ -41,6 +41,18 @@ namespace dvm {
                 bool read_next_class_entry(DcxFileClassEntry &entry);
 
                 bool read_next_method_entry(DcxFileMethodEntry &entry);
+
+                inline UInt32 get_constant_entries() const {
+                    return dcx_file_info.constant_pool_header.constant_entries;
+                }
+
+                inline UInt32 get_class_entries() const {
+                    return dcx_file_info.class_pool_header.class_entries;
+                }
+
+                inline UInt32 get_method_entries() const {
+                    return dcx_file_info.method_pool_header.method_entries;
+                }
             };
         }
     }

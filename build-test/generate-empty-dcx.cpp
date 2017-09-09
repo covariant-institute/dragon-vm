@@ -6,9 +6,55 @@
 #include <cerrno>
 #include <cstdio>
 #include <cstring>
+#include <cstdlib>
 
+using namespace dvm::core;
 using namespace dvm::core::dcx;
 using namespace dvm::core::config;
+
+UInt32 write_string_constant(FILE *fp, const char *str) {
+    static UInt32 id = 0;
+
+    UInt32 current_id = id++;
+    DcxFileConstantEntry constantEntry = {
+            .header = {
+                    .constant_data_size = static_cast<UInt32>(strlen(str)),
+                    .constant_id = current_id
+            },
+            .constant_data = (Byte *) str
+    };
+
+    fwrite(reinterpret_cast<void *>(&constantEntry.header), sizeof(constantEntry.header), 1, fp);
+    fwrite(reinterpret_cast<void *>(constantEntry.constant_data), sizeof(Byte),
+           constantEntry.header.constant_data_size, fp);
+
+    return current_id;
+}
+
+void write_class_entry(FILE *fp, UInt32 class_name_id, UInt32 class_slot_count) {
+    DcxFileClassEntry classEntry = {
+            .header = {
+                    .class_name_id = class_name_id,
+                    .class_slot_count = class_slot_count,
+            }
+    };
+
+    fwrite(reinterpret_cast<void *>(&classEntry.header), sizeof(classEntry.header), 1, fp);
+}
+
+void write_method_entry(FILE *fp, UInt32 method_name_id, Byte *body, SizeT length) {
+    DcxFileMethodEntry methodEntry = {
+            .header = {
+                    .method_length = static_cast<UInt32>(length),
+                    .method_name_id = method_name_id,
+            },
+            .method_body = body
+    };
+
+    fwrite(reinterpret_cast<void *>(&methodEntry.header), sizeof(methodEntry.header), 1, fp);
+    fwrite(reinterpret_cast<void *>(methodEntry.method_body), sizeof(Byte),
+           methodEntry.header.method_length, fp);
+}
 
 int main(int argc, const char **argv) {
     FILE *fp = fopen(argv[1] ? argv[1] : "empty-dcx.dcx", "wb");
@@ -18,15 +64,15 @@ int main(int argc, const char **argv) {
     }
 
     DcxFileConstantPoolHeader constantPoolHeader = {
-            .constant_entries = 123
+            .constant_entries = 3
     };
 
     DcxFileClassPoolHeader classPoolHeader = {
-            .class_entries = 456
+            .class_entries = 1
     };
 
     DcxFileMethodPoolHeader methodPoolHeader = {
-            .method_entries = 789
+            .method_entries = 1
     };
 
     DcxFileHeader header = {
@@ -41,8 +87,21 @@ int main(int argc, const char **argv) {
 
     fwrite(reinterpret_cast<const void *>(&methodPoolHeader), sizeof(methodPoolHeader), 1, fp);
 
-    fclose(fp);
+    // Write constant "hello_world"
+    write_string_constant(fp, "hello_world");
+    UInt32 class_name_id = write_string_constant(fp, "Main");
+    UInt32 method_name_id = write_string_constant(fp, "dvm_main");
 
+    // Write class "Main"
+    write_class_entry(fp, class_name_id, 10086);
+
+    // Write method "do_sth"
+    SizeT length = 128;
+    auto *body = (Byte *) malloc(sizeof(Byte) * length);
+    bzero(reinterpret_cast<void *>(body), length);
+    write_method_entry(fp, method_name_id, body, length);
+
+    fclose(fp);
     printf("OK\n");
     return 0;
 }
