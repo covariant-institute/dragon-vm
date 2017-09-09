@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 
 namespace dvm {
     namespace core {
@@ -24,8 +25,8 @@ namespace dvm {
         using SizeT = UInt64;
 
         /**
-         * 我们用了 ULong 作为 stack 和 heap 大小的类型
-         * 与虚拟机中寻址保持一致，Addr 也用 ULong
+         * 我们用了 UInt64 作为 stack 和 heap 大小的类型
+         * 与虚拟机中寻址保持一致，Addr 也用 UInt64
          */
         using Addr = UInt64;
 

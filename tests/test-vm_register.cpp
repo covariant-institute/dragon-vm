@@ -14,7 +14,7 @@ int main() {
 
     vm_register_holder regs;
 
-    auto i32 = Class::find_class("Int32")->create_object();
+    auto i32 = Class::find_class("Int32")->new_instance();
     i32->slots[1].slot_type = dvm::core::type_identifier::TYPE_ID_INT32;
     i32->slots[1].i32 = 10086;
     regs.get_register(vm_register_id::VM_REG_R0).set(i32);

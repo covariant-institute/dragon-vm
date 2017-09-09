@@ -1,6 +1,22 @@
 cmake_minimum_required(VERSION 3.2)
 project(dragon_vm)
 
+include(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+if (COMPILER_SUPPORTS_CXX11)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+elseif (COMPILER_SUPPORTS_CXX0X)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+else()
+    message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+endif()
+
+try_run(IS_LITTLE_ENDIAN COMPILE_RESULT ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/build-test/check-le-or-be.c)
+if (IS_LITTLE_ENDIAN)
+    add_definitions(-DDVM_LITTLE_ENDIAN=1)
+endif ()
+
 set(CMAKE_CXX_STANDARD 11)
 
 include_directories(include)
@@ -26,27 +42,48 @@ add_library(dragon_vm_core SHARED
         include/core/utils.hpp
         include/core/dvm.hpp
         include/core/interpreter/interpreter.hpp
-        include/core/opcodes.hpp
+        include/core/interpreter/opcodes.hpp
         include/core/exceptions.hpp
         include/core/errorcodes.hpp
 
         include/core/interpreter/vm_context.hpp
         include/core/interpreter/vm_register.hpp
         include/core/interpreter/vm_register_common.hpp
+        include/core/interpreter/vm_register_visitor.hpp
 
+        include/core/object/basic_classes.hpp
+        include/core/object/method.hpp
         include/core/object/class.hpp
         include/core/object/slot.hpp
 
+        include/core/dcx/dcx_file.hpp
+        include/core/dcx/dcx_reader.hpp
+
         src/core/vm-main.cpp
         src/core/heap.cpp
+        src/core/memory.cpp
         src/core/interpreter/interpreter.cpp
         src/core/config.cpp
         src/core/heap.cpp
 
         src/core/interpreter/vm_register.cpp
+        src/core/interpreter/vm_register_visitor.cpp
+        src/core/interpreter/vm_context.cpp
 
         src/core/object/class.cpp
-        src/core/object/object.cpp src/core/memory.cpp include/core/object/basic_classes.hpp src/core/object/basic_classes.cpp include/core/interpreter/vm_register_visitor.hpp src/core/interpreter/vm_register_visitor.cpp)
+        src/core/object/object.cpp
+        src/core/object/basic_classes.cpp
+        src/core/object/method.cpp
+        src/core/object/abs_method.hpp
+        src/core/object/abs_method.cpp
+        src/core/object/foreign_method.cpp
+        src/core/object/foreign_method.hpp
+        src/core/object/dvm_method.cpp
+        src/core/object/dvm_method.hpp
+
+        src/core/dcx/dcx_reader.cpp
+        src/core/dcx/reader_impl.hpp
+        src/core/dcx/reader_impl.cpp)
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)
@@ -73,6 +110,15 @@ target_link_libraries(test-type dragon_vm_core)
 
 add_executable(test-object tests/test-object.cpp)
 target_link_libraries(test-object dragon_vm_core)
+
+add_executable(test-method tests/test-method.cpp)
+target_link_libraries(test-method dragon_vm_core)
+
+add_executable(test-dcx tests/test-dcx.cpp)
+target_link_libraries(test-dcx dragon_vm_core)
+
+# Build tools
+add_executable(generate-empty-dcx build-test/generate-empty-dcx.cpp)
 
 # Experimental test cases
 add_executable(exp-threaded-interpreter

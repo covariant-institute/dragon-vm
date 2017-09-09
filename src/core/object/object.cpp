@@ -21,7 +21,7 @@ namespace dvm {
                 // Parent object instantiation
                 object->slots[0].slot_type = type_identifier::TYPE_ID_OBJECT;
                 if (prototype->parent != nullptr) {
-                    object->slots[0].object = prototype->parent->create_object();
+                    object->slots[0].object = prototype->parent->new_instance();
                 } else {
                     object->slots[0].object = object;
                 }

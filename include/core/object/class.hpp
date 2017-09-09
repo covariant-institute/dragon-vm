@@ -14,8 +14,8 @@ namespace dvm {
 
             struct Class final {
                 type_identifier type;
-                int class_slot_count;
-                int member_slot_count;
+                Int32 class_slot_count;
+                Int32 member_slot_count;
 
                 Class *parent;
                 std::string *name;
@@ -26,12 +26,12 @@ namespace dvm {
                 static const Class* find_class(const std::string &name);
 
                 static const Class* define_class(Class *parent, const std::string &name,
-                                                 int class_slot_count, int member_slot_count);
+                                                 Int32 class_slot_count, Int32 member_slot_count);
 
                 static Class* define_bootstrap_class(const std::string &name,
-                                                     int class_slot_count, int member_slot_count);
+                                                     Int32 class_slot_count, Int32 member_slot_count);
 
-                Object *create_object() const;
+                Object *new_instance() const;
             };
         }
     }
