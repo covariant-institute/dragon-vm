@@ -83,7 +83,7 @@ add_library(dragon_vm_core SHARED
 
         src/core/dcx/dcx_reader.cpp
         src/core/dcx/reader_impl.hpp
-        src/core/dcx/reader_impl.cpp)
+        )
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)

@@ -10,9 +10,9 @@
 namespace dvm {
     namespace core {
         namespace dcx {
-            class dcx_reader;
+            class DcxReader;
 
-            class dcx_reader {
+            class DcxReader {
             private:
                 FILE *dcx_file;
                 dcx_file_header dcx_header;
@@ -20,13 +20,13 @@ namespace dvm {
                 bool read_header(dcx_file_header &header);
 
             public:
-                dcx_reader(const dcx_reader &) = delete;
+                DcxReader(const DcxReader &) = delete;
 
-                dcx_reader() = default;
+                DcxReader() = default;
 
-                explicit dcx_reader(const std::string &file_path);
+                explicit DcxReader(const std::string &file_path);
 
-                ~dcx_reader();
+                ~DcxReader();
 
                 bool open(const std::string &file_path);
 

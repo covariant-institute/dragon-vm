@@ -8,7 +8,7 @@
 
 int main(int argc, const char **argv) {
     using namespace dvm::core::dcx;
-    dcx_reader reader;
+    DcxReader reader;
     assert(reader.open(argv[1] ? argv[1] : "../build-test/empty-dcx.dcx"));
 
     reader.close();
