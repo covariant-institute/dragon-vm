@@ -2,10 +2,10 @@
 // Created by kiva on 2017/9/7.
 //
 #include <core/dcx/dcx_reader.hpp>
+#include <core/dcx/byte_ordered_reader.hpp>
 #include <core/exceptions.hpp>
-#include <core/errorcodes.hpp>
 
-#include "reader_impl.hpp"
+#include <core/errorcodes.hpp>
 
 namespace dvm {
     namespace core {
@@ -26,12 +26,18 @@ namespace dvm {
                 }
 
                 try {
-                    if (!read_header(dcx_header)) {
+                    fseek(dcx_file, 0, SEEK_SET);
+
+                    if (!read_header(dcx_file_info)) {
                         throw dvm::core::exception(DVM_DCX_INVALID);
                     }
 
-                    if (!config::validate_version_id(dcx_header.version_id)) {
+                    if (!config::validate_version_id(dcx_file_info.file_header.version_id)) {
                         throw dvm::core::exception(DVM_DCX_INVALID_VERSION_ID);
+                    }
+
+                    if (!read_dcx_file_info(dcx_file_info)) {
+                        throw dvm::core::exception(DVM_DCX_INVALID);
                     }
 
                 } catch (const dvm::core::exception &what) {
@@ -47,24 +53,56 @@ namespace dvm {
                 }
             }
 
-            bool DcxReader::read_header(dcx_file_header &header) {
+            bool DcxReader::read_header(DcxFileInfo &info) {
                 if (dcx_file == nullptr) {
                     return false;
                 }
-                fseek(dcx_file, 0, SEEK_SET);
-                header.version_id = ByteOrderedReader::read_typed_data<Int32>(dcx_file);
-                return true;
+
+                return ByteOrderedReader::read<config::VersionID>(dcx_file, &info.file_header.version_id);;
             }
 
-            bool DcxReader::read_next_constant_entry(dcx_file_constant_entry &entry) {
+
+            bool DcxReader::read_dcx_file_info(DcxFileInfo &info) {
+                if (dcx_file == nullptr) {
+                    return false;
+                }
+
+                if (!ByteOrderedReader::read<DcxFileJumpTable>(dcx_file, &info.file_header.jump_table)) {
+                    return false;
+                }
+
+                if (fseek(dcx_file, info.file_header.jump_table.constant_pool_start, SEEK_SET) != 0) {
+                    return false;
+                }
+
+                if (!ByteOrderedReader::read<DcxFileConstantPoolHeader>(dcx_file, &info.constant_pool_header)) {
+                    return false;
+                }
+
+                if (fseek(dcx_file, info.file_header.jump_table.class_pool_start, SEEK_SET) != 0) {
+                    return false;
+                }
+
+                if (!ByteOrderedReader::read<DcxFileClassPoolHeader>(dcx_file, &info.class_pool_header)) {
+                    return false;
+                }
+
+                if (fseek(dcx_file, info.file_header.jump_table.method_pool_start, SEEK_SET) != 0) {
+                    return false;
+                }
+
+                return ByteOrderedReader::read<DcxFileMethodPoolHeader>(dcx_file, &info.method_pool_header);
+            }
+
+            bool DcxReader::read_next_constant_entry(DcxFileConstantEntry &entry) {
                 return false;
             }
 
-            bool DcxReader::read_next_class_entry(dcx_file_class_entry &entry) {
+            bool DcxReader::read_next_class_entry(DcxFileClassEntry &entry) {
                 return false;
             }
 
-            bool DcxReader::read_next_method_entry(dcx_file_method_entry &entry) {
+            bool DcxReader::read_next_method_entry(DcxFileMethodEntry &entry) {
                 return false;
             }
         }

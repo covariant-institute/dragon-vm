@@ -17,16 +17,37 @@ int main(int argc, const char **argv) {
         return 1;
     }
 
-    dcx_file_header header = {
+    DcxFileConstantPoolHeader constantPoolHeader = {
+            .constant_entries = 123
+    };
+
+    DcxFileClassPoolHeader classPoolHeader = {
+            .class_entries = 456
+    };
+
+    DcxFileMethodPoolHeader methodPoolHeader = {
+            .method_entries = 789
+    };
+
+    DcxFileHeader header = {
             .version_id = make_version_id(),
             .jump_table = {
-                    .class_defs_offset = 0,
-                    .constant_pool_offset = 0,
-                    .method_defs_offset = 0
+                    .constant_pool_start = sizeof(DcxFileHeader),
+                    .class_pool_start = sizeof(DcxFileHeader) + sizeof(constantPoolHeader),
+                    .method_pool_start = sizeof(DcxFileHeader) + sizeof(constantPoolHeader) + sizeof(classPoolHeader)
             }
     };
 
     fwrite(reinterpret_cast<const void *>(&header), sizeof(header), 1, fp);
+
+    fwrite(reinterpret_cast<const void *>(&constantPoolHeader), sizeof(constantPoolHeader), 1, fp);
+
+    fwrite(reinterpret_cast<const void *>(&classPoolHeader), sizeof(classPoolHeader), 1, fp);
+
+    fwrite(reinterpret_cast<const void *>(&methodPoolHeader), sizeof(methodPoolHeader), 1, fp);
+
     fclose(fp);
+
+    printf("OK\n");
     return 0;
 }

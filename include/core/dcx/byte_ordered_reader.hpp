@@ -15,6 +15,10 @@ namespace dvm {
                 static T get_value(T value) {
                     return 0;
                 }
+
+                static bool is_available() {
+                    return false;
+                }
             };
 
             template <>
@@ -25,6 +29,10 @@ namespace dvm {
                            ((value & 0x00FF0000) >> 8) |
                            ((value & 0xFF000000) >> 24);
                 }
+
+                static bool is_available() {
+                    return true;
+                }
             };
 
             template <>
@@ -32,19 +40,24 @@ namespace dvm {
                 static Int32 get_value(UInt32 value) {
                     return little_endian<Int32>::get_value(static_cast<Int32>(value));
                 }
+
+                static bool is_available() {
+                    return true;
+                }
             };
 #endif
 
             struct ByteOrderedReader {
                 template <typename T>
-                static inline T read_typed_data(FILE *file) {
-                    T r;
-                    fread(reinterpret_cast<void *>(&r), sizeof(T), 1, file);
+                static inline bool read(FILE *file, T *destination) {
+                    size_t r = fread(reinterpret_cast<void *>(destination), sizeof(T), 1, file);
 
 #ifndef DVM_LITTLE_ENDIAN
-                    r = little_endian<T>::get_value(r);
+                    if (r == 1 && little_endian<T>::is_available()) {
+                        *destination = little_endian<T>::get_value(*destination);
+                    }
 #endif
-                    return r;
+                    return r == 1;
                 }
             };
         }

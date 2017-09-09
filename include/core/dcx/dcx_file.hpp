@@ -13,68 +13,88 @@ namespace dvm {
             /**
              * 每个成员都存储着对应区开始位置在文件中的偏移
              */
-            struct dcx_file_jump_table {
+            struct DcxFileJumpTable {
                 /**
                  * 常量池
                  */
-                UInt32 constant_pool_offset;
+                UInt32 constant_pool_start;
 
                 /**
                  * 类的定义和实现
                  */
-                UInt32 class_defs_offset;
+                UInt32 class_pool_start;
 
                 /**
                  * 方法定义和实现
                  */
-                UInt32 method_defs_offset;
+                UInt32 method_pool_start;
             };
 
             /**
              * 常量池
              */
-            struct dcx_file_constant_header {
+            struct DcxFileConstantPoolHeader {
+                UInt32 constant_entries;
+            };
+
+            struct DcxFileConstantEntryHeader {
                 UInt32 constant_id;
                 UInt32 constant_data_size;
             };
 
-            struct dcx_file_constant_entry {
-                dcx_file_constant_header header;
+            struct DcxFileConstantEntry {
+                DcxFileConstantEntryHeader header;
                 Byte *constant_data;
             };
 
             /**
              * 类定义
              */
-            struct dcx_file_class_header {
+            struct DcxFileClassPoolHeader {
+                UInt32 class_entries;
+            };
+
+            struct DcxFileClassEntryHeader {
                 UInt32 class_name_id;
                 UInt32 class_slot_count;
                 UInt32 member_class_count;
             };
 
-            struct dcx_file_class_entry {
-                dcx_file_class_header header;
+            struct DcxFileClassEntry {
+                DcxFileClassEntryHeader header;
             };
 
             /**
              * 方法定义
              */
-            struct dcx_file_method_header {
+            struct DcxFileMethodPoolHeader {
+                UInt32 method_entries;
+            };
+
+            struct DcxFileMethodHeader {
                 UInt32 method_name_id;
                 UInt32 method_length;
             };
 
-            struct dcx_file_method_entry {
-                dcx_file_method_header header;
+            struct DcxFileMethodEntry {
+                DcxFileMethodHeader header;
                 Byte *method_body;
             };
 
             /**
              * DCX 文件头信息
              */
-            struct dcx_file_header {
+            struct DcxFileHeader {
                 config::VersionID version_id;
-                dcx_file_jump_table jump_table;
+                DcxFileJumpTable jump_table;
+            };
+
+            struct DcxFileInfo {
+                DcxFileHeader file_header;
+
+                DcxFileConstantPoolHeader constant_pool_header;
+                DcxFileClassPoolHeader class_pool_header;
+                DcxFileMethodPoolHeader method_pool_header;
             };
         }
     }
