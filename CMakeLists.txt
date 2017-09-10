@@ -83,7 +83,7 @@ add_library(dragon_vm_core SHARED
 
         src/core/dcx/dcx_reader.cpp
         include/core/dcx/byte_ordered_reader.hpp
-        )
+        src/core/stack.cpp)
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)
@@ -92,9 +92,6 @@ target_link_libraries(dragon_vm_cmdline dragon_vm_core)
 # Test cases
 add_executable(test-stack tests/test-stack.cpp)
 target_link_libraries(test-stack dragon_vm_core)
-
-add_executable(test-heap tests/test-heap.cpp)
-target_link_libraries(test-heap dragon_vm_core)
 
 add_executable(test-gc tests/test-gc.cpp)
 target_link_libraries(test-gc dragon_vm_gc)

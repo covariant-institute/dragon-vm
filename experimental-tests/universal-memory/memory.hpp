@@ -12,11 +12,11 @@ namespace cov {
         using byte=uint8_t;
         using size_t=uint64_t;
     private:
-        // Stack Start
+        // stack Start
         void *ss = nullptr;
-        // Stack Pointer
+        // stack Pointer
         byte *sp = nullptr;
-        // Stack Limit
+        // stack Limit
         byte *sl = nullptr;
     public:
         stack() = delete;
@@ -38,13 +38,13 @@ namespace cov {
 
         void *top() {
             if (sp == sl)
-                throw std::runtime_error("Stack is empty.");
+                throw std::runtime_error("stack is empty.");
             return reinterpret_cast<void *>(sp + sizeof(size_t));
         }
 
         void *push(size_t size) {
             if (sp - reinterpret_cast<byte *>(ss) < size + sizeof(size_t))
-                throw std::runtime_error("Stack overflow.");
+                throw std::runtime_error("stack overflow.");
             sp -= size + sizeof(size_t);
             *reinterpret_cast<size_t *>(sp) = size;
             return reinterpret_cast<void *>(sp + sizeof(size_t));
@@ -52,7 +52,7 @@ namespace cov {
 
         void pop() {
             if (sp == sl)
-                throw std::runtime_error("Stack is empty.");
+                throw std::runtime_error("stack is empty.");
             sp += *reinterpret_cast<size_t *>(sp) + sizeof(size_t);
         }
 
@@ -69,11 +69,11 @@ namespace cov {
             first_fit, best_fit, worst_fit
         };
     private:
-        // Heap Start
+        // heap Start
         void *hs = nullptr;
-        // Heap Pointer
+        // heap Pointer
         byte *hp = nullptr;
-        // Heap Limit
+        // heap Limit
         byte *hl = nullptr;
         allocate_policy policy = allocate_policy::best_fit;
         std::list<byte *> free_list;

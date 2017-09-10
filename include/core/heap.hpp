@@ -11,52 +11,68 @@
 #include <list>
 
 namespace dvm {
-	namespace core {
-		class heap final {
-			static inline bool compare(Byte *lhs, Byte *rhs)
-			{
-				return reinterpret_cast<mem_block_info *>(lhs)->data_size < reinterpret_cast<mem_block_info *>(rhs)->data_size;
-			}
+    namespace core {
+        class Heap final {
+        public:
+            enum class AllocationPolicy {
+                FIRST_FIT, BEST_FIT, WORST_FIT
+            };
 
-			void *allocated_start = nullptr;
-			Byte *heap_pointer = nullptr;
-			std::list<Byte *> free_list;
+        private:
+            // heap start
+            void *hs = nullptr;
 
-			inline void move_forward(size_t forward_size)
-			{
-				heap_pointer += forward_size;
-			}
+            // heap pointer
+            Byte *hp = nullptr;
 
-			inline void move_backward(size_t backward_size)
-			{
-				heap_pointer -= backward_size;
-			}
+            // heap limit
+            Byte *hl = nullptr;
 
-		public:
-			heap() = delete;
+            AllocationPolicy policy = AllocationPolicy::BEST_FIT;
+            std::list<Byte *> free_list;
 
-			explicit heap(UInt64 heap_size) : allocated_start(::malloc(heap_size))
-			{
-				if (allocated_start == nullptr)
-					throw dvm::core::exception(DVM_BAD_ALLOC);
-				memset(allocated_start, '\0', heap_size);
-				heap_pointer = static_cast<Byte *>(allocated_start);
-			}
+            inline SizeT &get_size(Byte *ptr) {
+                return *reinterpret_cast<SizeT *>(ptr);
+            }
 
-			heap(const heap &) = delete;
+            inline void sort_by_size() {
+                free_list.sort([this](Byte *lhs, Byte *rhs) {
+                    return get_size(lhs) < get_size(rhs);
+                });
+            }
 
-			~heap()
-			{
-				if (allocated_start != nullptr) {
-					::free(allocated_start);
-				}
-			}
+            inline void sort_by_size_reverse() {
+                free_list.sort([this](Byte *lhs, Byte *rhs) {
+                    return get_size(lhs) > get_size(rhs);
+                });
+            }
 
-			void *malloc(const mem_block_info &);
+            inline void sort_by_address() {
+                free_list.sort([this](Byte *lhs, Byte *rhs) {
+                    return lhs < rhs;
+                });
+            }
 
-			void free(void *);
+            void compress();
 
-			void gc(const stack &);
-		};
-	}
+            void *find_in_free_list(SizeT size);
+
+        public:
+            Heap() = delete;
+
+            Heap(const Heap &) = delete;
+
+            explicit Heap(SizeT size, AllocationPolicy p = AllocationPolicy::BEST_FIT);
+
+            ~Heap();
+
+            void *malloc(SizeT size);
+
+            void free(void *ptr);
+
+            inline SizeT size_of(void *ptr) {
+                return get_size(reinterpret_cast<Byte *>(ptr));
+            }
+        };
+    }
 }
