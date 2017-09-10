@@ -31,7 +31,11 @@ namespace dvm {
                 static Class* define_bootstrap_class(const std::string &name,
                                                      Int32 class_slot_count, Int32 member_slot_count);
 
+                SizeT calculate_needed_size() const;
+
                 Object *new_instance() const;
+
+                Object *new_instance(Object *uninitialized) const;
             };
         }
     }
