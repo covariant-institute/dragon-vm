@@ -128,3 +128,6 @@ add_executable(exp-threaded-interpreter
         experimental-tests/threaded-interpretation/benchmark_main.c
         experimental-tests/threaded-interpretation/decode-dispatch-interpreter.c
         experimental-tests/threaded-interpretation/decode-dispatch-interpreter.h)
+
+add_executable(exp-universal-memory
+        experimental-tests/universal-memory/test.cpp)
