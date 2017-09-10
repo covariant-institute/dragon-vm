@@ -71,7 +71,6 @@ add_library(dragon_vm_core SHARED
         src/core/interpreter/vm_context.cpp
 
         src/core/object/class.cpp
-        src/core/object/object.cpp
         src/core/object/basic_classes.cpp
         src/core/object/method.cpp
         src/core/object/abs_method.hpp

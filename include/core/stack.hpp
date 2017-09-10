@@ -4,6 +4,7 @@
 #include <core/memory.hpp>
 #include <core/exceptions.hpp>
 #include <core/errorcodes.hpp>
+#include <core/object/object.hpp>
 #include <cstring>
 #include <cstdlib>
 
@@ -26,6 +27,8 @@ namespace dvm {
                 }
             }
 
+            object::Object *allocate_on_stack(SizeT size);
+
         public:
             Stack() = delete;
 
@@ -39,27 +42,11 @@ namespace dvm {
                 return sp == sl;
             }
 
-            void *top();
+            object::Object *peek();
 
-            void *adjust(SizeT size);
+            object::Object *pop();
 
-            void pop();
-
-            template <typename T>
-            void push(const T &t) {
-                auto *element = static_cast<T *>(adjust(sizeof(T)));
-                dvm_construct_object(element, t);
-            }
-
-            template <typename T>
-            void push_array(const T *array, SizeT length) {
-                auto *elements = static_cast<T *>(adjust(sizeof(T) * length));
-                dvm_construct_object_array(elements, array, length);
-            }
-
-            inline SizeT size_of(void *ptr) {
-                return *reinterpret_cast<SizeT *>(reinterpret_cast<Byte *>(ptr) - sizeof(SizeT));
-            }
+            object::Object *new_instance(const object::Class *prototype);
         };
     }
 }

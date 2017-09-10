@@ -69,7 +69,26 @@ namespace dvm {
             }
 
             Object *Class::new_instance() const {
-                return Object::create_object(this);
+                return new_instance((Object *) dvm_malloc(calculate_needed_size()));
+            }
+
+            SizeT Class::calculate_needed_size() const {
+                return sizeof(Object) + sizeof(Slot) * this->member_slot_count;
+            }
+
+            Object *Class::new_instance(Object *uninitialized) const {
+                // Copy prototype reference
+                uninitialized->prototype = this;
+
+                // Parent object instantiation
+                uninitialized->slots[0].slot_type = type_identifier::TYPE_ID_OBJECT;
+                if (this->parent != nullptr) {
+                    uninitialized->slots[0].object = this->parent->new_instance();
+                } else {
+                    uninitialized->slots[0].object = uninitialized;
+                }
+
+                return uninitialized;
             }
         }
     }

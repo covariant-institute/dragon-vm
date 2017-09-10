@@ -24,7 +24,7 @@ namespace dvm {
         template <typename T>
         void dvm_construct_object_array(T *elements, const T *array, SizeT length) {
             for (int i = 0; i < length; ++i) {
-                dvm_construct_object(elements + i, *(array + i));
+                dvm_construct_object(elements + i, array[i]);
             }
         }
 

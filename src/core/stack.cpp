@@ -16,24 +16,36 @@ namespace dvm {
             sl = sp;
         }
 
-        void *dvm::core::Stack::top() {
+        object::Object *dvm::core::Stack::peek() {
             ensure_stack_not_empty();
-            return reinterpret_cast<void *>(sp + sizeof(SizeT));
+            return reinterpret_cast<object::Object *>(sp + sizeof(SizeT));
         }
 
-        void *Stack::adjust(SizeT size) {
+        object::Object *Stack::allocate_on_stack(SizeT size) {
             if (sp - reinterpret_cast<Byte *>(ss) < size + sizeof(SizeT)) {
                 throw dvm::core::exception(DVM_MEMORY_STACK_OVERFLOW);
             }
 
             sp -= size + sizeof(SizeT);
             *reinterpret_cast<SizeT *>(sp) = size;
-            return reinterpret_cast<void *>(sp + sizeof(SizeT));
+            return reinterpret_cast<object::Object *>(sp + sizeof(SizeT));
         }
 
-        void Stack::pop() {
+        object::Object *Stack::pop() {
             ensure_stack_not_empty();
+
+            object::Object *current = peek();
             sp += *reinterpret_cast<SizeT *>(sp) + sizeof(SizeT);
+            return current;
+        }
+
+        object::Object* Stack::new_instance(const object::Class *prototype) {
+            if (prototype == nullptr) {
+                return nullptr;
+            }
+
+            auto *uninitialized = allocate_on_stack(prototype->calculate_needed_size());
+            return prototype->new_instance(uninitialized);
         }
     }
 }

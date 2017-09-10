@@ -17,8 +17,6 @@ namespace dvm {
 
                 /* Keep in last */
                 Slot slots[0];
-
-                static Object* create_object(const Class *prototype);
             };
 
             inline void ensure_object_valid(Object *object) {
