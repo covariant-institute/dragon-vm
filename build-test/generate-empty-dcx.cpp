@@ -2,7 +2,7 @@
 // Created by kiva on 2017/9/8.
 //
 
-#include <core/dcx/dcx_file.hpp>
+#include <core/dcx/dcx_file_info.hpp>
 #include <cerrno>
 #include <cstdio>
 #include <cstring>

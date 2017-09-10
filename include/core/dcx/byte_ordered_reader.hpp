@@ -1,6 +1,7 @@
 //
 // Created by kiva on 2017/9/8.
 //
+#pragma once
 
 #include <core/type.hpp>
 #include <cstdio>

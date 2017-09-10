@@ -3,7 +3,7 @@
 //
 #pragma once
 
-#include <core/dcx/dcx_file.hpp>
+#include <core/dcx/dcx_file_info.hpp>
 #include <string>
 #include <cstdio>
 

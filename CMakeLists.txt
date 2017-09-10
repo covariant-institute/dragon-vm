@@ -56,7 +56,7 @@ add_library(dragon_vm_core SHARED
         include/core/object/class.hpp
         include/core/object/slot.hpp
 
-        include/core/dcx/dcx_file.hpp
+        include/core/dcx/dcx_file_info.hpp
         include/core/dcx/dcx_reader.hpp
 
         src/core/vm-main.cpp
@@ -82,7 +82,7 @@ add_library(dragon_vm_core SHARED
 
         src/core/dcx/dcx_reader.cpp
         include/core/dcx/byte_ordered_reader.hpp
-        src/core/stack.cpp)
+        src/core/stack.cpp include/core/dcx/dcx_file.hpp)
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)
