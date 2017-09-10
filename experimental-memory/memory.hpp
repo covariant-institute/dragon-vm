@@ -1,9 +1,62 @@
+#pragma once
 #include <stdexcept>
 #include <cstdint>
 #include <cstdlib>
 #include <utility>
 #include <list>
 namespace cov {
+	class stack final {
+	public:
+		using byte=uint8_t;
+		using size_t=uint64_t;
+	private:
+		// Stack Start
+		void* ss=nullptr;
+		// Stack Pointer
+		byte* sp=nullptr;
+		// Stack Limit
+		byte* sl=nullptr;
+	public:
+		stack()=delete;
+		stack(const stack&)=delete;
+		stack(size_t size):ss(::malloc(size))
+		{
+			sp=reinterpret_cast<byte*>(ss)+size;
+			sl=sp;
+		}
+		~stack()
+		{
+			::free(ss);
+		}
+		inline bool empty() const
+		{
+			return sp==sl;
+		}
+		void* top()
+		{
+			if(sp==sl)
+				throw std::runtime_error("Stack is empty.");
+			return reinterpret_cast<void*>(sp+sizeof(size_t));
+		}
+		void* push(size_t size)
+		{
+			if(sp-reinterpret_cast<byte*>(ss)<size+sizeof(size_t))
+				throw std::runtime_error("Stack overflow.");
+			sp-=size+sizeof(size_t);
+			*reinterpret_cast<size_t*>(sp)=size;
+			return reinterpret_cast<void*>(sp+sizeof(size_t));
+		}
+		void pop()
+		{
+			if(sp==sl)
+				throw std::runtime_error("Stack is empty.");
+			sp+=*reinterpret_cast<size_t*>(sp)+sizeof(size_t);
+		}
+		size_t size_of(void* ptr)
+		{
+			return *reinterpret_cast<size_t*>(reinterpret_cast<byte*>(ptr)-sizeof(size_t));
+		}
+	};
 	class heap final {
 	public:
 		using byte=uint8_t;
