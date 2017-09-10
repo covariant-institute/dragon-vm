@@ -31,12 +31,9 @@ namespace dvm {
             return reinterpret_cast<object::Object *>(sp + sizeof(SizeT));
         }
 
-        object::Object *Stack::pop() {
+        void Stack::pop() {
             ensure_stack_not_empty();
-
-            object::Object *current = peek();
             sp += *reinterpret_cast<SizeT *>(sp) + sizeof(SizeT);
-            return current;
         }
 
         object::Object* Stack::new_instance(const object::Class *prototype) {

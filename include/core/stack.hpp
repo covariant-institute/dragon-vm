@@ -44,7 +44,7 @@ namespace dvm {
 
             object::Object *peek();
 
-            object::Object *pop();
+            void pop();
 
             object::Object *new_instance(const object::Class *prototype);
         };
