@@ -16,13 +16,10 @@ UInt32 write_string_constant(FILE *fp, const char *str) {
     static UInt32 id = 0;
 
     UInt32 current_id = id++;
-    DcxFileConstantEntry constantEntry = {
-            .header = {
-                    .constant_data_size = static_cast<UInt32>(strlen(str)),
-                    .constant_id = current_id
-            },
-            .constant_data = (Byte *) str
-    };
+    DcxFileConstantEntry constantEntry = { };
+    constantEntry.header.constant_data_size = static_cast<UInt32>(strlen(str));
+    constantEntry.header.constant_id = current_id;
+    constantEntry.constant_data = (Byte *) str;
 
     fwrite(reinterpret_cast<void *>(&constantEntry.header), sizeof(constantEntry.header), 1, fp);
     fwrite(reinterpret_cast<void *>(constantEntry.constant_data), sizeof(Byte),
@@ -32,24 +29,18 @@ UInt32 write_string_constant(FILE *fp, const char *str) {
 }
 
 void write_class_entry(FILE *fp, UInt32 class_name_id, UInt32 class_slot_count) {
-    DcxFileClassEntry classEntry = {
-            .header = {
-                    .class_name_id = class_name_id,
-                    .class_slot_count = class_slot_count,
-            }
-    };
+    DcxFileClassEntry classEntry = { };
+    classEntry.header.class_name_id = class_name_id;
+    classEntry.header.class_slot_count = class_slot_count;
 
     fwrite(reinterpret_cast<void *>(&classEntry.header), sizeof(classEntry.header), 1, fp);
 }
 
 void write_method_entry(FILE *fp, UInt32 method_name_id, Byte *body, SizeT length) {
-    DcxFileMethodEntry methodEntry = {
-            .header = {
-                    .method_length = static_cast<UInt32>(length),
-                    .method_name_id = method_name_id,
-            },
-            .method_body = body
-    };
+    DcxFileMethodEntry methodEntry = { };
+    methodEntry.header.method_length = static_cast<UInt32>(length);
+    methodEntry.header.method_name_id = method_name_id;
+    methodEntry.method_body = body;
 
     fwrite(reinterpret_cast<void *>(&methodEntry.header), sizeof(methodEntry.header), 1, fp);
     fwrite(reinterpret_cast<void *>(methodEntry.method_body), sizeof(Byte),
@@ -63,21 +54,17 @@ int main(int argc, const char **argv) {
         return 1;
     }
 
-    DcxFileConstantPoolHeader constantPoolHeader = {
-            .constant_entries = 3
-    };
+    DcxFileConstantPoolHeader constantPoolHeader = { };
+    constantPoolHeader.constant_entries = 3;
 
-    DcxFileClassPoolHeader classPoolHeader = {
-            .class_entries = 1
-    };
+    DcxFileClassPoolHeader classPoolHeader = { };
+    classPoolHeader.class_entries = 1;
 
-    DcxFileMethodPoolHeader methodPoolHeader = {
-            .method_entries = 1
-    };
+    DcxFileMethodPoolHeader methodPoolHeader = { };
+    methodPoolHeader.method_entries = 1;
 
-    DcxFileHeader header = {
-            .version_id = make_version_id(),
-    };
+    DcxFileHeader header = { };
+    header.version_id = make_version_id();
 
     fwrite(reinterpret_cast<const void *>(&header), sizeof(header), 1, fp);
 
