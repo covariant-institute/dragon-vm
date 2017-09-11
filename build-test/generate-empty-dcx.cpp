@@ -64,7 +64,7 @@ int main(int argc, const char **argv) {
     classPoolHeader.class_entries = 1;
 
     DcxFileMethodPoolHeader methodPoolHeader = { };
-    methodPoolHeader.method_entries = 1;
+    methodPoolHeader.method_entries = 0;
 
     DcxFileHeader header = { };
     header.version_id = make_version_id();
@@ -81,16 +81,16 @@ int main(int argc, const char **argv) {
     write_string_constant(fp, "hello_world");
     UInt32 parent_class_name_id = write_string_constant(fp, "Object");
     UInt32 class_name_id = write_string_constant(fp, "Main");
-    UInt32 method_name_id = write_string_constant(fp, "dvm_main");
+//    UInt32 method_name_id = write_string_constant(fp, "dvm_main");
 
     // Write class "Main"
     write_class_entry(fp, parent_class_name_id, class_name_id, 0, 1);
 
     // Write method "do_sth"
-    SizeT length = 128;
-    auto *body = (Byte *) malloc(sizeof(Byte) * length);
-    bzero(reinterpret_cast<void *>(body), length);
-    write_method_entry(fp, method_name_id, body, length);
+//    SizeT length = 128;
+//    auto *body = (Byte *) malloc(sizeof(Byte) * length);
+//    bzero(reinterpret_cast<void *>(body), length);
+//    write_method_entry(fp, method_name_id, body, length);
 
     fclose(fp);
     printf("OK\n");

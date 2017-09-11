@@ -18,18 +18,21 @@ namespace dvm {
                               [&](dcx::DcxFileClassEntry &entry) {
                                   using object::Class;
 
-                                  auto parent_class_name = dcx_file->get_constant(
+                                  auto x = dcx_file->constant_pool;
+                                  auto parent_class_name_entry = dcx_file->get_constant(
                                           entry.header.parent_class_name_id);
-                                  auto class_name = dcx_file->get_constant(entry.header.class_name_id);
-                                  if (parent_class_name.constant_data == nullptr
-                                      || class_name.constant_data == nullptr) {
+                                  auto class_name_entry = dcx_file->get_constant(entry.header.class_name_id);
+                                  if (parent_class_name_entry.constant_data == nullptr
+                                      || class_name_entry.constant_data == nullptr) {
                                       throw dvm::core::exception(DVM_DCX_LINKING_INVALID_NAME);
                                   }
 
-                                  auto *parent = Class::find_class(context,
-                                                                   reinterpret_cast<const char *>(parent_class_name.constant_data));
+                                  std::string parent_class_name(reinterpret_cast<const char *>(parent_class_name_entry.constant_data));
+                                  std::string class_name(reinterpret_cast<const char *>(class_name_entry.constant_data));
+
+                                  auto *parent = Class::find_class(context, parent_class_name);
                                   Class::define_class(context, parent,
-                                                      reinterpret_cast<const char *>(class_name.constant_data),
+                                                      class_name,
                                                       entry.header.class_slot_count, entry.header.member_slot_count);
                               });
             }
