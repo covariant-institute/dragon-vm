@@ -9,6 +9,10 @@
 
 namespace dvm {
     namespace core {
+        namespace runtime {
+            class VMContext;
+        }
+
         namespace object {
             struct Object;
 
@@ -23,12 +27,13 @@ namespace dvm {
                 /* Keep in last */
                 Slot slots[0];
 
-                static const Class* find_class(const std::string &name);
+                static const Class *find_class(runtime::VMContext &context, const std::string &name);
 
-                static const Class* define_class(Class *parent, const std::string &name,
+                static const Class *define_class(runtime::VMContext &context, Class *parent,
+                                                 const std::string &name,
                                                  Int32 class_slot_count, Int32 member_slot_count);
 
-                static Class* define_bootstrap_class(const std::string &name,
+                static Class *define_bootstrap_class(runtime::VMContext &context, const std::string &name,
                                                      Int32 class_slot_count, Int32 member_slot_count);
 
                 SizeT calculate_needed_size() const;

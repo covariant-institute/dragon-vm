@@ -3,17 +3,18 @@
 //
 #include <core/config.hpp>
 #include <core/object/method.hpp>
+#include <core/dcx/dcx_file.hpp>
 
 using namespace dvm::core::object;
-using namespace dvm::core::interpreter;
+using namespace dvm::core::runtime;
 
-void ffi_hello(vm_context &context) {
-    printf("Hello, this is ffi_hello");
+void ffi_hello(VMContext &context) {
+    printf("Hello, this is ffi_hello\n");
 }
 
 int main() {
     auto *method = Method::new_foreign_method("ffi_hello", "()V", ffi_hello);
-    vm_context context(dvm::core::config::STACK_DEFAULT_SIZE, dvm::core::config::HEAP_DEFAULT_SIZE);
+    VMContext context{ };
     method->invoke(context);
     return 0;
 }

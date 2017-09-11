@@ -23,7 +23,7 @@ namespace dvm {
 
             inline void ensure_stack_not_empty() const {
                 if (empty()) {
-                    throw dvm::core::exception(DVM_MEMORT_STACK_EMPTY);
+                    throw dvm::core::exception(DVM_MEMORY_STACK_EMPTY);
                 }
             }
 

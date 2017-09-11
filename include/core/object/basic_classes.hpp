@@ -9,10 +9,10 @@
 namespace dvm {
     namespace core {
         namespace object {
-            void init_base_classes();
+            void init_base_classes(runtime::VMContext &context);
 
 #define CREATOR_SIGNATURE(TYPE) \
-            Object* new_##TYPE(TYPE value)
+            Object* new_##TYPE(runtime::VMContext &context, TYPE value)
 
             CREATOR_SIGNATURE(Int8);
 

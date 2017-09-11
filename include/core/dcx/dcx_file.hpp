@@ -6,19 +6,22 @@
 
 #include <core/dcx/dcx_file_info.hpp>
 #include <memory>
-#include <unordered_map>
+#include <vector>
 #include <string>
 
 namespace dvm {
     namespace core {
         namespace dcx {
             class DcxFile;
+            class DcxLinker;
 
             class DcxFile {
+                friend class DcxLinker;
+
             private:
-                std::unordered_map<UInt32, DcxFileConstantEntry> constant_pool;
-                std::unordered_map<UInt32, DcxFileClassEntry> class_pool;
-                std::unordered_map<UInt32, DcxFileMethodEntry> method_pool;
+                std::vector<DcxFileConstantEntry> constant_pool;
+                std::vector<DcxFileClassEntry> class_pool;
+                std::vector<DcxFileMethodEntry> method_pool;
 
                 DcxFile() = default;
 
@@ -29,9 +32,7 @@ namespace dvm {
             public:
                 ~DcxFile() = default;
 
-                DcxFileConstantEntry get_constant(UInt32 constant_id);
-
-                static std::unique_ptr<DcxFile> open(const std::string &path);
+                static std::shared_ptr<DcxFile> open(const std::string &path);
             };
         }
     }

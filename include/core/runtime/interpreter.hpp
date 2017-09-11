@@ -12,7 +12,7 @@ namespace dvm {
 
             class opcode_provider {
             public:
-                virtual vm_opcode get_next_opcode() = 0;
+                virtual VMOpcodes get_next_opcode() = 0;
             };
 
             class interpreter {

@@ -4,16 +4,16 @@
 #pragma once
 
 #include <core/object/object.hpp>
-#include <core/interpreter/vm_context.hpp>
+#include <core/runtime/vm_context.hpp>
 
 namespace dvm {
     namespace core {
         namespace object {
-            using FFIFunction = void (*)(interpreter::vm_context &);
+            using FFIFunction = void (*)(runtime::VMContext &);
 
             class Method {
             public:
-                virtual void invoke(interpreter::vm_context &context) = 0;
+                virtual void invoke(runtime::VMContext &context) = 0;
 
                 virtual Bool is_foreign_method() = 0;
 

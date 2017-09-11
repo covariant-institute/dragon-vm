@@ -12,7 +12,7 @@ namespace dvm {
                     : AbsMethod(name, signature, False), method_body(body), method_length(length) {
             }
 
-            void DvmMethod::invoke(interpreter::vm_context &context) {
+            void DvmMethod::invoke(runtime::VMContext &context) {
             }
         }
     }

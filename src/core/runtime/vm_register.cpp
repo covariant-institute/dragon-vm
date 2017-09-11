@@ -12,20 +12,20 @@ namespace dvm {
                     return sizeof(VMRegister) * VM_REGISTERS_NUMBER;
                 }
 
-                vm_register_holder::vm_register_holder() : registers(nullptr) {
+                VMRegisterHolder::VMRegisterHolder() : registers(nullptr) {
                     auto memory = static_cast<VMRegister *>(dvm_malloc(get_registers_memory_size()));
                     this->registers = memory;
                 }
 
-                vm_register_holder::~vm_register_holder() {
+                VMRegisterHolder::~VMRegisterHolder() {
                     dvm_free(registers);
                 }
 
-                register_visitor vm_register_holder::get_register(vm_register_id register_identifier) {
+                RegisterVisitor VMRegisterHolder::get_register(VMRegisterName register_identifier) {
                     auto id = static_cast<VMRegisterID>(register_identifier);
 
                     if (id < VM_REGISTERS_NUMBER) {
-                        return register_visitor(registers + id);
+                        return RegisterVisitor(registers + id);
                     }
 
                     throw dvm::core::exception(DVM_REGISTER_INVALID);

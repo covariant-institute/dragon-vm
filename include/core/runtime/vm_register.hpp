@@ -10,27 +10,27 @@
 namespace dvm {
     namespace core {
         namespace runtime {
-            namespace registers {
-                class vm_context;
+            class VMContext;
 
-                class vm_register_holder {
-                    friend class vm_context;
+            namespace registers {
+                class VMRegisterHolder {
+                    friend class VMContext;
 
                 private:
                     VMRegister *registers;
 
                 public:
-                    vm_register_holder(const vm_register_holder &) = delete;
+                    VMRegisterHolder(const VMRegisterHolder &) = delete;
 
-                    vm_register_holder();
+                    VMRegisterHolder();
 
-                    ~vm_register_holder();
+                    ~VMRegisterHolder();
 
-                    register_visitor get_register(vm_register_id id);
+                    RegisterVisitor get_register(VMRegisterName id);
 
-                    template <vm_register_id vm_reg, Int32 index = static_cast<VMRegisterID>(vm_reg)>
-                    register_visitor get_register() {
-                        return register_visitor(registers + index);
+                    template <VMRegisterName vm_reg, Int32 index = static_cast<VMRegisterID>(vm_reg)>
+                    RegisterVisitor get_register() {
+                        return RegisterVisitor(registers + index);
                     }
                 };
             }

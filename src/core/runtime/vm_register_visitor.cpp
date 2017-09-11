@@ -8,11 +8,11 @@ namespace dvm {
     namespace core {
         namespace runtime {
             namespace registers {
-                register_visitor::register_visitor(VMRegister *register_ptr)
+                RegisterVisitor::RegisterVisitor(VMRegister *register_ptr)
                     :register_ptr(register_ptr) {
                 }
 
-                register_visitor::register_visitor(const register_visitor &other)
+                RegisterVisitor::RegisterVisitor(const RegisterVisitor &other)
                     :register_ptr(other.register_ptr) {
                 }
             }
