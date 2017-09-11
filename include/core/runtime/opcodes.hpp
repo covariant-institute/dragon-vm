@@ -4,7 +4,7 @@
 
 namespace dvm {
 	namespace core {
-		namespace interpreter {
+		namespace runtime {
 			/**
 			 * 为了方便我们使用 Threaded-Interpretation，指令一律用 UInt32
 			 */

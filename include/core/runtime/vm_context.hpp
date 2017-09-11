@@ -1,10 +1,10 @@
 #pragma once
 
-#include <core/interpreter/vm_register.hpp>
+#include <core/runtime/vm_register.hpp>
 
 namespace dvm {
     namespace core {
-        namespace interpreter {
+        namespace runtime {
             // TODO VM Executing Context
             class vm_context {
             private:

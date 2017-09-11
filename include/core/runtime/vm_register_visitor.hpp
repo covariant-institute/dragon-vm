@@ -3,12 +3,12 @@
 //
 #pragma once
 
-#include <core/interpreter/vm_register_common.hpp>
+#include <core/runtime/vm_register_common.hpp>
 #include <core/object/object.hpp>
 
 namespace dvm {
     namespace core {
-        namespace interpreter {
+        namespace runtime {
             namespace registers {
                 class register_visitor {
                 private:

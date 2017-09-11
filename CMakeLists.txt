@@ -41,15 +41,15 @@ add_library(dragon_vm_core SHARED
         include/core/type.hpp
         include/core/utils.hpp
         include/core/dvm.hpp
-        include/core/interpreter/interpreter.hpp
-        include/core/interpreter/opcodes.hpp
+        include/core/runtime/interpreter.hpp
+        include/core/runtime/opcodes.hpp
         include/core/exceptions.hpp
         include/core/errorcodes.hpp
 
-        include/core/interpreter/vm_context.hpp
-        include/core/interpreter/vm_register.hpp
-        include/core/interpreter/vm_register_common.hpp
-        include/core/interpreter/vm_register_visitor.hpp
+        include/core/runtime/vm_context.hpp
+        include/core/runtime/vm_register.hpp
+        include/core/runtime/vm_register_common.hpp
+        include/core/runtime/vm_register_visitor.hpp
 
         include/core/object/basic_classes.hpp
         include/core/object/method.hpp
@@ -62,13 +62,13 @@ add_library(dragon_vm_core SHARED
         src/core/vm-main.cpp
         src/core/heap.cpp
         src/core/memory.cpp
-        src/core/interpreter/interpreter.cpp
+        src/core/runtime/interpreter.cpp
         src/core/config.cpp
         src/core/heap.cpp
 
-        src/core/interpreter/vm_register.cpp
-        src/core/interpreter/vm_register_visitor.cpp
-        src/core/interpreter/vm_context.cpp
+        src/core/runtime/vm_register.cpp
+        src/core/runtime/vm_register_visitor.cpp
+        src/core/runtime/vm_context.cpp
 
         src/core/object/class.cpp
         src/core/object/basic_classes.cpp
@@ -82,7 +82,7 @@ add_library(dragon_vm_core SHARED
 
         src/core/dcx/dcx_reader.cpp
         include/core/dcx/byte_ordered_reader.hpp
-        src/core/stack.cpp include/core/dcx/dcx_file.hpp)
+        src/core/stack.cpp include/core/dcx/dcx_file.hpp src/core/dcx/dcx_file.cpp)
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)

@@ -1,12 +1,12 @@
 //
 // Created by kiva on 2017/8/30.
 //
-#include <core/interpreter/vm_register.hpp>
+#include <core/runtime/vm_register.hpp>
 #include <core/memory.hpp>
 
 namespace dvm {
     namespace core {
-        namespace interpreter {
+        namespace runtime {
             namespace registers {
                 constexpr size_t get_registers_memory_size() {
                     return sizeof(VMRegister) * VM_REGISTERS_NUMBER;

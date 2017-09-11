@@ -1,11 +1,11 @@
 #pragma once
 
-#include <core/interpreter/opcodes.hpp>
-#include <core/interpreter/vm_context.hpp>
+#include <core/runtime/opcodes.hpp>
+#include <core/runtime/vm_context.hpp>
 
 namespace dvm {
     namespace core {
-        namespace interpreter {
+        namespace runtime {
             class opcode_provider;
 
             class interpreter;
