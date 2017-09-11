@@ -36,7 +36,9 @@ namespace dvm {
 
             struct DcxFileClassEntryHeader {
                 UInt32 class_name_id;
+                UInt32 parent_class_name_id;
                 UInt32 class_slot_count;
+                UInt32 member_slot_count;
             };
 
             struct DcxFileClassEntry {

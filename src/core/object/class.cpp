@@ -27,7 +27,7 @@ namespace dvm {
             }
 
             Class *Class::define_bootstrap_class(runtime::VMContext &context, const std::string &name,
-                                                 Int32 class_slot_count, Int32 member_slot_count) {
+                                                 UInt32 class_slot_count, UInt32 member_slot_count) {
                 Class *clazz = create_class(class_slot_count);
                 clazz->type = type_identifier::TYPE_ID_OBJECT;
                 clazz->parent = nullptr;
@@ -38,9 +38,9 @@ namespace dvm {
                 return clazz;
             }
 
-            const Class *Class::define_class(runtime::VMContext &context, Class *parent, const std::string &name,
-                                             Int32 class_slot_count, Int32 member_slot_count) {
-                Class *parent_class = parent;
+            const Class *Class::define_class(runtime::VMContext &context, const Class *parent, const std::string &name,
+                                             UInt32 class_slot_count, UInt32 member_slot_count) {
+                const Class *parent_class = parent;
                 if (parent_class == nullptr) {
                     parent_class = find_class_non_const(context, "Object");
                 }

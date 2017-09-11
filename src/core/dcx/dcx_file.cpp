@@ -19,7 +19,7 @@ namespace dvm {
                     if (!reader.read_constant_entry(constant_entry)) {
                         throw dvm::core::exception(DVM_DCX_LOAD_ERROR);
                     }
-                    constant_pool.push_back(constant_entry);
+                    constant_pool[constant_entry.header.constant_id] = constant_entry;
                 }
 
                 DcxFileClassEntry class_entry{ };
@@ -49,6 +49,14 @@ namespace dvm {
                 std::shared_ptr<DcxFile> dcx(new DcxFile);
                 dcx->load_dcx(path);
                 return dcx;
+            }
+
+            DcxFileConstantEntry DcxFile::get_constant(UInt32 constant_id) const {
+                auto iter = constant_pool.find(constant_id);
+                if (iter != constant_pool.end()) {
+                    return iter->second;
+                }
+                return { };
             }
         }
     }

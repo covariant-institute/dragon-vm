@@ -28,10 +28,13 @@ UInt32 write_string_constant(FILE *fp, const char *str) {
     return current_id;
 }
 
-void write_class_entry(FILE *fp, UInt32 class_name_id, UInt32 class_slot_count) {
+void write_class_entry(FILE *fp, UInt32 parent_class_name_id, UInt32 class_name_id, UInt32 class_slot_count,
+                       UInt32 member_slot_count) {
     DcxFileClassEntry classEntry = { };
+    classEntry.header.parent_class_name_id = parent_class_name_id;
     classEntry.header.class_name_id = class_name_id;
     classEntry.header.class_slot_count = class_slot_count;
+    classEntry.header.member_slot_count = member_slot_count;
 
     fwrite(reinterpret_cast<void *>(&classEntry.header), sizeof(classEntry.header), 1, fp);
 }
@@ -76,11 +79,12 @@ int main(int argc, const char **argv) {
 
     // Write constant "hello_world"
     write_string_constant(fp, "hello_world");
+    UInt32 parent_class_name_id = write_string_constant(fp, "Object");
     UInt32 class_name_id = write_string_constant(fp, "Main");
     UInt32 method_name_id = write_string_constant(fp, "dvm_main");
 
     // Write class "Main"
-    write_class_entry(fp, class_name_id, 10086);
+    write_class_entry(fp, parent_class_name_id, class_name_id, 0, 1);
 
     // Write method "do_sth"
     SizeT length = 128;

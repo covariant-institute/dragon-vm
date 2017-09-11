@@ -10,6 +10,7 @@
 #define DVM_DCX_INVALID_VERSION_ID "Unsupported version id."
 #define DVM_DCX_NOT_OPEN "Dcx file not open."
 #define DVM_DCX_LOAD_ERROR "Error loading dcx file."
+#define DVM_DCX_LINKING_INVALID_NAME "Invalid class name."
 
 #define DVM_MEMORY_STACK_OVERFLOW "Stack overflow."
 #define DVM_MEMORY_STACK_EMPTY "Empty stack."
