@@ -26,7 +26,7 @@ namespace dvm {
 
                 const std::string &get_name() override;
 
-                void invoke(interpreter::vm_context &context) override = 0;
+                void invoke(runtime::VMContext &context) override = 0;
             };
         }
     }

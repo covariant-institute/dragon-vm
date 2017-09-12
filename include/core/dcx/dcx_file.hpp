@@ -1,80 +1,41 @@
 //
-// Created by kiva on 2017/9/5.
+// Created by kiva on 2017/9/11.
 //
 
 #pragma once
 
-#include <core/type.hpp>
-#include <core/config.hpp>
+#include <core/dcx/dcx_file_info.hpp>
+#include <memory>
+#include <vector>
+#include <string>
+#include <unordered_map>
 
 namespace dvm {
     namespace core {
         namespace dcx {
-            /**
-             * 每个成员都存储着对应区开始位置在文件中的偏移
-             */
-            struct dcx_file_jump_table {
-                /**
-                 * 常量池
-                 */
-                UInt32 constant_pool_offset;
+            class DcxFile;
+            class DcxLinker;
 
-                /**
-                 * 类的定义和实现
-                 */
-                UInt32 class_defs_offset;
+            class DcxFile {
+                friend class DcxLinker;
 
-                /**
-                 * 方法定义和实现
-                 */
-                UInt32 method_defs_offset;
-            };
+            private:
+                std::unordered_map<UInt32, DcxFileConstantEntry> constant_pool;
+                std::vector<DcxFileClassEntry> class_pool;
+                std::vector<DcxFileMethodEntry> method_pool;
 
-            /**
-             * 常量池
-             */
-            struct dcx_file_constant_header {
-                UInt32 constant_id;
-                UInt32 constant_data_size;
-            };
+                DcxFile() = default;
 
-            struct dcx_file_constant_entry {
-                dcx_file_constant_header header;
-                Byte *constant_data;
-            };
+                void load_dcx(const std::string &path);
 
-            /**
-             * 类定义
-             */
-            struct dcx_file_class_header {
-                UInt32 class_name_id;
-                UInt32 class_slot_count;
-                UInt32 member_class_count;
-            };
+                void load_dcx(Byte *bytes, SizeT length);
 
-            struct dcx_file_class_entry {
-                dcx_file_class_header header;
-            };
+                DcxFileConstantEntry get_constant(UInt32 constant_id) const;
 
-            /**
-             * 方法定义
-             */
-            struct dcx_file_method_header {
-                UInt32 method_name_id;
-                UInt32 method_length;
-            };
+            public:
+                ~DcxFile() = default;
 
-            struct dcx_file_method_entry {
-                dcx_file_method_header header;
-                Byte *method_body;
-            };
-
-            /**
-             * DCX 文件头信息
-             */
-            struct dcx_file_header {
-                config::VersionID version_id;
-                dcx_file_jump_table jump_table;
+                static std::shared_ptr<DcxFile> open(const std::string &path);
             };
         }
     }

@@ -1,18 +1,18 @@
 #pragma once
 
-#include <core/interpreter/opcodes.hpp>
-#include <core/interpreter/vm_context.hpp>
+#include <core/runtime/opcodes.hpp>
+#include <core/runtime/vm_context.hpp>
 
 namespace dvm {
     namespace core {
-        namespace interpreter {
+        namespace runtime {
             class opcode_provider;
 
             class interpreter;
 
             class opcode_provider {
             public:
-                virtual vm_opcode get_next_opcode() = 0;
+                virtual VMOpcodes get_next_opcode() = 0;
             };
 
             class interpreter {

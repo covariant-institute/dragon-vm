@@ -8,28 +8,28 @@
 namespace dvm {
     namespace core {
         namespace object {
-            void init_base_classes() {
-                Class *object = Class::define_bootstrap_class("Object", 0, 1);
-                Class::define_class(object, "Int8", 0, 2);
-                Class::define_class(object, "Int16", 0, 2);
-                Class::define_class(object, "Int32", 0, 2);
-                Class::define_class(object, "Int64", 0, 2);
-                Class::define_class(object, "UInt8", 0, 2);
-                Class::define_class(object, "UInt16", 0, 2);
-                Class::define_class(object, "UInt32", 0, 2);
-                Class::define_class(object, "UInt64", 0, 2);
-                Class::define_class(object, "Bool", 0, 2);
-                Class::define_class(object, "Byte", 0, 2);
-                Class::define_class(object, "Float", 0, 2);
-                Class::define_class(object, "Double", 0, 2);
+            void init_base_classes(runtime::VMContext &context) {
+                Class *object = Class::define_bootstrap_class(context, "Object", 0, 1);
+                Class::define_class(context, object, "Int8", 0, 2);
+                Class::define_class(context, object, "Int16", 0, 2);
+                Class::define_class(context, object, "Int32", 0, 2);
+                Class::define_class(context, object, "Int64", 0, 2);
+                Class::define_class(context, object, "UInt8", 0, 2);
+                Class::define_class(context, object, "UInt16", 0, 2);
+                Class::define_class(context, object, "UInt32", 0, 2);
+                Class::define_class(context, object, "UInt64", 0, 2);
+                Class::define_class(context, object, "Bool", 0, 2);
+                Class::define_class(context, object, "Byte", 0, 2);
+                Class::define_class(context, object, "Float", 0, 2);
+                Class::define_class(context, object, "Double", 0, 2);
             }
 
 #define CREATOR_SIGNATURE(TYPE) \
-            Object* new_##TYPE(TYPE value)
+            Object* new_##TYPE(runtime::VMContext &context, TYPE value)
 
 #define CREATOR_COMMON_IMPLEMENT(TYPE, SLOT_SETTER) \
             CREATOR_SIGNATURE(TYPE) { \
-                Object *object = Class::find_class(#TYPE)->new_instance(); \
+                Object *object = Class::find_class(context, #TYPE)->new_instance(); \
                 ensure_object_valid(object); \
                 object->slots[1].set_##SLOT_SETTER(value); \
                 return object; \

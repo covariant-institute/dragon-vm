@@ -8,7 +8,7 @@
 
 namespace dvm {
     namespace core {
-        namespace interpreter {
+        namespace runtime {
             namespace registers {
                 /**
                  * 寄存器ID，用于标识寄存器
@@ -23,20 +23,28 @@ namespace dvm {
                 /**
                  * 通用对象寄存器数量
                  */
-                constexpr UInt32 VM_REGISTERS_NUMBER = 8;
+                constexpr UInt32 VM_REGISTERS_NUMBER = 16;
 
                 /**
                  * 寄存器名对应的寄存器ID
                  */
-                enum class vm_register_id : VMRegisterID {
-                    VM_REG_R0 = 0,
-                    VM_REG_R1,
-                    VM_REG_R2,
-                    VM_REG_R3,
-                    VM_REG_R4,
-                    VM_REG_R5,
-                    VM_REG_R6,
-                    VM_REG_R7,
+                enum class VMRegisterName : VMRegisterID {
+                    R0 = 0,
+                    R1,
+                    R2,
+                    R3,
+                    R4,
+                    R5,
+                    R6,
+                    R7,
+                    R8,
+                    R9,
+                    R10,
+                    R11,
+                    R12,
+                    R13,
+                    R14,
+                    R15,
                 };
             }
         }

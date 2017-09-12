@@ -3,9 +3,11 @@
 ### Overview
 DVM has its custom executable binary format, which is called `.dcx`
 
-Each `.dcx` file contains the following information:
+Each `.dcx` file contains the following information(ordered):
 * DCX Magic
 * Dragon VM Version ID
+* Pool Headers
+* Pools
 
 ### DCX Magic
 An unique magic code to ensure that this file can be loaded into DVM.
@@ -26,4 +28,76 @@ VersionId = (magic code << 24)
             | (patch version);
 ```
 As you see, to simplify the validation process, **we check magic code and VersionID together**.
+
+### Pool Headers
+Three headers now:
+```c++
+DcxFileConstantPoolHeader constant_pool_header;
+DcxFileClassPoolHeader class_pool_header;
+DcxFileMethodPoolHeader method_pool_header;
+```
+
+Each header structure contains a `UInt32` field named `*_entries`, which is set to the element count in the pool.
+
+### Pools
+DCX file uses pools to store information required by program.
+Each pool element has a `header`, which contains its data whose type is primitive such as `Int`, `Double` etc., 
+and a `container`, which contains data like `Byte *`.
+
+#### Constant Pool
+Exactly speaking, `constant pool` is `string constant pool`, only string constants are stored in this pool.
+
+Pool element:
+```c++
+struct DcxFileConstantEntryHeader {
+    UInt32 constant_id;
+    UInt32 constant_data_size;
+};
+struct DcxFileConstantEntry {
+    DcxFileConstantEntryHeader header;
+    Byte *constant_data;
+};
+```
+* `constant_data`: C-style string.
+* `constant_data_size`: the length of string.
+
+#### Class Pool
+Class definitions are here.
+
+Pool element:
+```c++
+struct DcxFileClassEntryHeader {
+    UInt32 class_name_id;
+    UInt32 parent_class_name_id;
+    UInt32 class_slot_count;
+    UInt32 member_slot_count;
+};
+
+struct DcxFileClassEntry {
+    DcxFileClassEntryHeader header;
+};
+```
+* `class_name_id`: Class name, a constant string.
+* `parent_class_name_id`: Class name, a constant string.
+* `class_slot_count`: Numbers of the slots which is in class.
+* `member_slot_count`: Numbers of the slots which is in class instance(also called object).
+
+#### Method Pool
+Method definitions are here:
+
+Pool element:
+```c++
+struct DcxFileMethodEntryHeader {
+    UInt32 method_name_id;
+    UInt32 method_length;
+};
+struct DcxFileMethodEntry {
+    DcxFileMethodEntryHeader header;
+    Byte *method_body;
+};
+```
+* `method_name_id`: Method name, a constant string.
+* `method_signature_id`: Method signature, a constant string.
+* `method_length`: Size of the `method_body`.
+* `method_body`: Method executable codes.
 

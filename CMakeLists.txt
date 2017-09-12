@@ -41,37 +41,36 @@ add_library(dragon_vm_core SHARED
         include/core/type.hpp
         include/core/utils.hpp
         include/core/dvm.hpp
-        include/core/interpreter/interpreter.hpp
-        include/core/interpreter/opcodes.hpp
+        include/core/runtime/interpreter.hpp
+        include/core/runtime/opcodes.hpp
         include/core/exceptions.hpp
         include/core/errorcodes.hpp
 
-        include/core/interpreter/vm_context.hpp
-        include/core/interpreter/vm_register.hpp
-        include/core/interpreter/vm_register_common.hpp
-        include/core/interpreter/vm_register_visitor.hpp
+        include/core/runtime/vm_context.hpp
+        include/core/runtime/vm_register.hpp
+        include/core/runtime/vm_register_common.hpp
+        include/core/runtime/vm_register_visitor.hpp
 
         include/core/object/basic_classes.hpp
         include/core/object/method.hpp
         include/core/object/class.hpp
         include/core/object/slot.hpp
 
-        include/core/dcx/dcx_file.hpp
+        include/core/dcx/dcx_file_info.hpp
         include/core/dcx/dcx_reader.hpp
 
         src/core/vm-main.cpp
         src/core/heap.cpp
         src/core/memory.cpp
-        src/core/interpreter/interpreter.cpp
+        src/core/runtime/interpreter.cpp
         src/core/config.cpp
         src/core/heap.cpp
 
-        src/core/interpreter/vm_register.cpp
-        src/core/interpreter/vm_register_visitor.cpp
-        src/core/interpreter/vm_context.cpp
+        src/core/runtime/vm_register.cpp
+        src/core/runtime/vm_register_visitor.cpp
+        src/core/runtime/vm_context.cpp
 
         src/core/object/class.cpp
-        src/core/object/object.cpp
         src/core/object/basic_classes.cpp
         src/core/object/method.cpp
         src/core/object/abs_method.hpp
@@ -82,8 +81,8 @@ add_library(dragon_vm_core SHARED
         src/core/object/dvm_method.hpp
 
         src/core/dcx/dcx_reader.cpp
-        src/core/dcx/reader_impl.hpp
-        src/core/dcx/reader_impl.cpp)
+        include/core/dcx/byte_ordered_reader.hpp
+        src/core/stack.cpp include/core/dcx/dcx_file.hpp src/core/dcx/dcx_file.cpp include/core/dcx/dcx_linker.hpp src/core/dcx/dcx_linker.cpp include/core/runtime/thread.hpp)
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)
@@ -92,9 +91,6 @@ target_link_libraries(dragon_vm_cmdline dragon_vm_core)
 # Test cases
 add_executable(test-stack tests/test-stack.cpp)
 target_link_libraries(test-stack dragon_vm_core)
-
-add_executable(test-heap tests/test-heap.cpp)
-target_link_libraries(test-heap dragon_vm_core)
 
 add_executable(test-gc tests/test-gc.cpp)
 target_link_libraries(test-gc dragon_vm_gc)
@@ -128,3 +124,6 @@ add_executable(exp-threaded-interpreter
         experimental-tests/threaded-interpretation/benchmark_main.c
         experimental-tests/threaded-interpretation/decode-dispatch-interpreter.c
         experimental-tests/threaded-interpretation/decode-dispatch-interpreter.h)
+
+add_executable(exp-universal-memory
+        experimental-tests/universal-memory/test.cpp)

@@ -12,7 +12,7 @@ namespace dvm {
                     : AbsMethod(name, signature, True), foreign_function(ffi) {
             }
 
-            void ForeignMethod::invoke(interpreter::vm_context &context) {
+            void ForeignMethod::invoke(runtime::VMContext &context) {
                 if (foreign_function != nullptr) {
                     foreign_function(context);
                 }

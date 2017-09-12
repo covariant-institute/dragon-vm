@@ -2,22 +2,26 @@
 // Created by kiva on 2017/8/30.
 //
 
-#include <core/interpreter/vm_register.hpp>
+#include <core/runtime/vm_register.hpp>
 #include <core/object/basic_classes.hpp>
 #include <cassert>
 #include <cmath>
+#include <core/runtime/vm_context.hpp>
 
 int main() {
-    using namespace dvm::core::interpreter::registers;
+    using namespace dvm::core::runtime::registers;
     using namespace dvm::core::object;
-    init_base_classes();
+    using namespace dvm::core::runtime;
+    VMContext context{};
 
-    vm_register_holder regs;
+    init_base_classes(context);
 
-    auto i32 = Class::find_class("Int32")->new_instance();
+    VMRegisterHolder regs;
+
+    auto i32 = Class::find_class(context, "Int32")->new_instance();
     i32->slots[1].slot_type = dvm::core::type_identifier::TYPE_ID_INT32;
     i32->slots[1].i32 = 10086;
-    regs.get_register(vm_register_id::VM_REG_R0).set(i32);
+    regs.get_register(VMRegisterName::R0).set(i32);
 
-    assert(regs.get_register<vm_register_id::VM_REG_R0>().get()->slots[1].i32 == 10086);
+    assert(regs.get_register<VMRegisterName::R0>().get()->slots[1].i32 == 10086);
 }

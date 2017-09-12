@@ -3,23 +3,23 @@
 //
 #pragma once
 
-#include <core/interpreter/vm_register_common.hpp>
+#include <core/runtime/vm_register_common.hpp>
 #include <core/object/object.hpp>
 
 namespace dvm {
     namespace core {
-        namespace interpreter {
+        namespace runtime {
             namespace registers {
-                class register_visitor {
+                class RegisterVisitor {
                 private:
                     VMRegister *register_ptr;
 
                 public:
-                    register_visitor(const register_visitor &);
+                    RegisterVisitor(const RegisterVisitor &);
 
-                    explicit register_visitor(VMRegister *register_ptr);
+                    explicit RegisterVisitor(VMRegister *register_ptr);
 
-                    ~register_visitor() = default;
+                    ~RegisterVisitor() = default;
 
                     void set(object::Object *object) {
                         *this->register_ptr = object;

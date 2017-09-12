@@ -3,27 +3,36 @@
 //
 
 #include <core/stack.hpp>
-#include <core/utils.hpp>
 #include <core/config.hpp>
-#include <iostream>
+#include <core/object/basic_classes.hpp>
+#include <cassert>
+#include <core/runtime/vm_context.hpp>
 
-int main()
-{
-	using dvm::core::config::STACK_DEFAULT_SIZE;
+int main() {
+    using namespace dvm::core;
+    using namespace dvm::core::object;
+    using namespace dvm::core::runtime;
+    VMContext context{};
 
-	dvm::core::stack s(STACK_DEFAULT_SIZE);
+    init_base_classes(context);
+    Stack s(dvm::core::config::STACK_DEFAULT_SIZE);
 
-	s.push(dvm::core::Int32('A'));
+    auto *prototype_int32 = Class::find_class(context, "Int32");
+    auto *i32 = s.new_instance(prototype_int32);
+    assert(i32->prototype == prototype_int32);
+    assert(i32->slots[0].slot_type == type_identifier::TYPE_ID_OBJECT);
+    assert(i32->slots[0].object->prototype == Class::find_class(context, "Object"));
+    assert(i32->slots[1].slot_type == type_identifier::TYPE_ID_UNSPECIFIC);
 
-	dvm::core::Float b[] = {3.14, 6.28};
-	s.pushArray(b, array_length(b));
+    i32->slots[1].set_i32(52019);
+    assert(i32->slots[1].slot_type == type_identifier::TYPE_ID_INT32);
 
-	auto *pb = static_cast<dvm::core::Float *>(s.top());
-	std::cout << pb[0] + pb[1] << std::endl;
-	s.pop();
+    auto *another_i32 = s.new_instance(prototype_int32);
+    another_i32->slots[1].set_i32(1234);
+    s.pop();
 
-	auto *pa = static_cast<dvm::core::Int8 *>(s.top());
-	std::cout << *pa << std::endl;
-	s.pop();
-	return 0;
+    i32 = s.peek();
+    assert(i32->slots[1].i32 == 52019);
+
+    return 0;
 }
