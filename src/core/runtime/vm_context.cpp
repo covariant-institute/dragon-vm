@@ -7,13 +7,7 @@
 namespace dvm {
     namespace core {
         namespace runtime {
-            VMContext::VMContext()
-                    : stack(config::STACK_DEFAULT_SIZE) {
-            }
-
-            VMContext::VMContext(std::shared_ptr<dcx::DcxFile> dcx_file)
-                    : VMContext() {
-                set_file(dcx_file);
+            VMContext::VMContext(){
             }
 
 
@@ -32,10 +26,6 @@ namespace dvm {
                 } catch (const std::out_of_range &e) {
                     throw dvm::core::exception(DVM_CLASS_NOT_FOUND);
                 }
-            }
-
-            void VMContext::set_file(const std::shared_ptr<dcx::DcxFile> &dcx_file) {
-                VMContext::dcx_file = dcx_file;
             }
         }
     }

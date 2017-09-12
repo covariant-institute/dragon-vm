@@ -33,9 +33,8 @@ namespace dvm {
 
                 INVOKE_METHOD,
 
-                POP,
-                PUSH_CONSTANT,
                 TYPED_OPCODES(PUSH),
+                TYPED_OPCODES(POP),
 
                 TYPED_OPCODES(SET_SLOT),
                 TYPED_OPCODES(SET_CLASS_SLOT),
