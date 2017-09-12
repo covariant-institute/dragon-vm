@@ -18,7 +18,6 @@ namespace dvm {
                               [&](dcx::DcxFileClassEntry &entry) {
                                   using object::Class;
 
-                                  auto x = dcx_file->constant_pool;
                                   auto parent_class_name_entry = dcx_file->get_constant(
                                           entry.header.parent_class_name_id);
                                   auto class_name_entry = dcx_file->get_constant(entry.header.class_name_id);

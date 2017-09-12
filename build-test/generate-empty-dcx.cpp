@@ -39,10 +39,11 @@ void write_class_entry(FILE *fp, UInt32 parent_class_name_id, UInt32 class_name_
     fwrite(reinterpret_cast<void *>(&classEntry.header), sizeof(classEntry.header), 1, fp);
 }
 
-void write_method_entry(FILE *fp, UInt32 method_name_id, Byte *body, SizeT length) {
+void write_method_entry(FILE *fp, UInt32 method_name_id, UInt32 method_signature_id, Byte *body, SizeT length) {
     DcxFileMethodEntry methodEntry = { };
     methodEntry.header.method_length = static_cast<UInt32>(length);
     methodEntry.header.method_name_id = method_name_id;
+    methodEntry.header.method_signature_id = method_signature_id;
     methodEntry.method_body = body;
 
     fwrite(reinterpret_cast<void *>(&methodEntry.header), sizeof(methodEntry.header), 1, fp);
@@ -58,7 +59,7 @@ int main(int argc, const char **argv) {
     }
 
     DcxFileConstantPoolHeader constantPoolHeader = { };
-    constantPoolHeader.constant_entries = 3;
+    constantPoolHeader.constant_entries = 5;
 
     DcxFileClassPoolHeader classPoolHeader = { };
     classPoolHeader.class_entries = 1;
@@ -79,18 +80,19 @@ int main(int argc, const char **argv) {
 
     // Write constant "hello_world"
     write_string_constant(fp, "hello_world");
-    UInt32 parent_class_name_id = write_string_constant(fp, "Object");
     UInt32 class_name_id = write_string_constant(fp, "Main");
-//    UInt32 method_name_id = write_string_constant(fp, "dvm_main");
+    UInt32 parent_class_name_id = write_string_constant(fp, "Object");
+    UInt32 method_name_id = write_string_constant(fp, "dvm_main");
+    UInt32 method_signature_id = write_string_constant(fp, "()V");
 
     // Write class "Main"
     write_class_entry(fp, parent_class_name_id, class_name_id, 0, 1);
 
-    // Write method "do_sth"
-//    SizeT length = 128;
-//    auto *body = (Byte *) malloc(sizeof(Byte) * length);
-//    bzero(reinterpret_cast<void *>(body), length);
-//    write_method_entry(fp, method_name_id, body, length);
+    // Write method "dvm_main"
+    SizeT length = 128;
+    auto *body = (Byte *) malloc(sizeof(Byte) * length);
+    bzero(reinterpret_cast<void *>(body), length);
+    write_method_entry(fp, method_name_id, method_signature_id, body, length);
 
     fclose(fp);
     printf("OK\n");

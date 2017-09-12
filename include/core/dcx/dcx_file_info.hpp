@@ -54,6 +54,7 @@ namespace dvm {
 
             struct DcxFileMethodEntryHeader {
                 UInt32 method_name_id;
+                UInt32 method_signature_id;
                 UInt32 method_length;
             };
 
