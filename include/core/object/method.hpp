@@ -9,7 +9,6 @@
 namespace dvm {
     namespace core {
         namespace object {
-            using FFIFunction = void (*)(runtime::VMContext &);
 
             class Method {
             public:
@@ -22,9 +21,6 @@ namespace dvm {
                 virtual const std::string &get_name() = 0;
 
                 static Method *resolve(const std::string &name, const std::string &signature);
-
-                static Method *new_foreign_method(const std::string &name, const std::string &signature,
-                                                  FFIFunction ffi);
 
                 static Method *new_dvm_method(const std::string &name, const std::string &signature,
                                               Byte *body, SizeT length);

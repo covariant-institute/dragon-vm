@@ -13,10 +13,6 @@ namespace dvm {
                 return nullptr;
             }
 
-            Method *Method::new_foreign_method(const std::string &name, const std::string &signature, FFIFunction ffi) {
-                return new ForeignMethod(name, signature, ffi);
-            }
-
             Method *
             Method::new_dvm_method(const std::string &name, const std::string &signature, Byte *body, SizeT length) {
                 return new DvmMethod(name, signature, body, length);

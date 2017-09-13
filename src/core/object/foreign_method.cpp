@@ -8,14 +8,11 @@ namespace dvm {
     namespace core {
         namespace object {
 
-            ForeignMethod::ForeignMethod(const std::string &name, const std::string &signature, FFIFunction ffi)
-                    : AbsMethod(name, signature, True), foreign_function(ffi) {
+            ForeignMethod::ForeignMethod(const std::string &name, const std::string &signature)
+                    : AbsMethod(name, signature, True) {
             }
 
             void ForeignMethod::invoke(runtime::VMContext &context) {
-                if (foreign_function != nullptr) {
-                    foreign_function(context);
-                }
             }
         }
     }

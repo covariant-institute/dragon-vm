@@ -11,10 +11,9 @@ namespace dvm {
         namespace object {
             class ForeignMethod : public AbsMethod {
             private:
-                FFIFunction foreign_function;
 
             public:
-                ForeignMethod(const std::string &name, const std::string &signature, FFIFunction ffi);
+                ForeignMethod(const std::string &name, const std::string &signature);
 
                 ~ForeignMethod() override = default;
 

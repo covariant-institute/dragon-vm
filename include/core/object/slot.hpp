@@ -44,7 +44,7 @@ namespace dvm {
 #define SETTER_GENERATOR(TYPE, MEMBER, TYPE_ID) \
                 void set_##MEMBER(TYPE value) { \
                     ensure_type_valid(TYPE_ID); \
-                    MEMBER = value; \
+                    (MEMBER) = value; \
                 }
 
                 SETTER_GENERATOR(Int8, i8, type_identifier::TYPE_ID_INT8)

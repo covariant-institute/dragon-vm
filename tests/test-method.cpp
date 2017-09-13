@@ -8,14 +8,7 @@
 using namespace dvm::core::object;
 using namespace dvm::core::runtime;
 
-void ffi_hello(VMContext &context) {
-    printf("Hello, this is ffi_hello\n");
-}
-
 int main() {
-    auto *method = Method::new_foreign_method("ffi_hello", "()V", ffi_hello);
-    VMContext context{ };
-    method->invoke(context);
     return 0;
 }
 
