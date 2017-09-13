@@ -89,7 +89,11 @@ Pool element:
 ```c++
 struct DcxFileMethodEntryHeader {
     UInt32 method_name_id;
+    UInt32 method_signature_id;
+    UInt32 method_return_type_name_id;
     UInt32 method_length;
+    Bool method_is_native;
+    Bool method_is_static;
 };
 struct DcxFileMethodEntry {
     DcxFileMethodEntryHeader header;
@@ -98,6 +102,8 @@ struct DcxFileMethodEntry {
 ```
 * `method_name_id`: Method name, a constant string.
 * `method_signature_id`: Method signature, a constant string.
+* `method_return_type_name_id`: Class name of the return type, a constant string.
 * `method_length`: Size of the `method_body`.
 * `method_body`: Method executable codes.
-
+* `method_is_native`: Is native method or not.
+* `method_is_static`: Is static method or not.
