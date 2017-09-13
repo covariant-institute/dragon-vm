@@ -15,7 +15,7 @@ namespace dvm {
             struct Object {
                 const Class *prototype;
 
-                /* Keep in last */
+                /* Keep it last */
                 Slot slots[0];
             };
 

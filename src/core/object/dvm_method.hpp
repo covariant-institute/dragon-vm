@@ -15,7 +15,8 @@ namespace dvm {
                 SizeT method_length;
 
             public:
-                DvmMethod(const std::string &name, const std::string &signature, Byte *body, SizeT length);
+                DvmMethod(Class *return_type, const std::string &name, const std::string &signature, Bool is_static_method,
+                          Byte *body, SizeT length);
 
                 ~DvmMethod() override = default;
 

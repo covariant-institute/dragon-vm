@@ -6,17 +6,22 @@
 #include <core/object/class.hpp>
 #include <core/runtime/opcodes.hpp>
 #include <core/runtime/vm_register.hpp>
-#include <core/dcx/dcx_file.hpp>
 
+#include <core/dcx/dcx_file.hpp>
 #include <unordered_map>
 
 namespace dvm {
     namespace core {
+        namespace object {
+            class Method;
+        }
+
         namespace runtime {
             // TODO VM Executing Context
             class VMContext {
             private:
                 std::unordered_map<std::string, object::Class *> class_map;
+                std::unordered_map<std::string, std::unordered_map<std::string, object::Method *>> method_map;
 
             public:
                 VMContext();
@@ -28,6 +33,11 @@ namespace dvm {
                 void register_class(const std::string &class_name, object::Class *prototype);
 
                 object::Class *find_class(const std::string &class_name);
+
+                void register_method(const std::string &method_name, const std::string &signature,
+                                     object::Method *method);
+
+                object::Method *resolve_method(const std::string &method_name, const std::string &signature);
             };
         }
     }

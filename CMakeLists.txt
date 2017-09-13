@@ -75,14 +75,12 @@ add_library(dragon_vm_core SHARED
         src/core/object/method.cpp
         src/core/object/abs_method.hpp
         src/core/object/abs_method.cpp
-        src/core/object/foreign_method.cpp
-        src/core/object/foreign_method.hpp
         src/core/object/dvm_method.cpp
         src/core/object/dvm_method.hpp
 
         src/core/dcx/dcx_reader.cpp
         include/core/dcx/byte_ordered_reader.hpp
-        src/core/stack.cpp include/core/dcx/dcx_file.hpp src/core/dcx/dcx_file.cpp include/core/dcx/dcx_linker.hpp src/core/dcx/dcx_linker.cpp include/core/runtime/thread.hpp)
+        src/core/stack.cpp include/core/dcx/dcx_file.hpp src/core/dcx/dcx_file.cpp include/core/dcx/dcx_linker.hpp src/core/dcx/dcx_linker.cpp include/core/runtime/thread.hpp src/core/object/native_method.hpp src/core/object/native_method.cpp)
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)

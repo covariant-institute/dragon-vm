@@ -13,14 +13,20 @@ namespace dvm {
             private:
                 std::string method_name;
                 std::string method_signature;
-                Bool is_foreign;
+                Class *return_type;
+                Bool is_native_method;
+                Bool is_static_method;
 
             public:
-                AbsMethod(const std::string &name, const std::string &signature, Bool is_foreign);
+                AbsMethod(Class *return_type, const std::string &name, const std::string &signature, Bool is_native_method, Bool is_static_method);
 
                 virtual ~AbsMethod() = default;
 
-                Bool is_foreign_method() override;
+                Bool is_native() override;
+
+                Bool is_static() override;
+
+                Class *get_return_type() override;
 
                 const std::string &get_signature() override;
 

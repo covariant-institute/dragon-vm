@@ -18,12 +18,8 @@ namespace dvm {
                 return (Class *) dvm_malloc(sizeof(Class) + sizeof(Slot) * class_slot_count);
             }
 
-            static Class *find_class_non_const(runtime::VMContext &context, const std::string &name) {
-                return context.find_class(name);
-            }
-
             const Class *Class::find_class(runtime::VMContext &context, const std::string &name) {
-                return find_class_non_const(context, name);
+                return context.find_class(name);
             }
 
             Class *Class::define_bootstrap_class(runtime::VMContext &context, const std::string &name,
@@ -42,7 +38,7 @@ namespace dvm {
                                              UInt32 class_slot_count, UInt32 member_slot_count) {
                 const Class *parent_class = parent;
                 if (parent_class == nullptr) {
-                    parent_class = find_class_non_const(context, "Object");
+                    parent_class = context.find_class("Object");
                 }
 
                 if (parent_class->type != type_identifier::TYPE_ID_OBJECT

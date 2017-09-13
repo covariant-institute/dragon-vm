@@ -24,7 +24,7 @@ namespace dvm {
                 const Class *parent;
                 std::string *name;
 
-                /* Keep in last */
+                /* Keep it last */
                 Slot slots[0];
 
                 static const Class *find_class(runtime::VMContext &context, const std::string &name);

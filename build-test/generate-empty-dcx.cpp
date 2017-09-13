@@ -39,16 +39,24 @@ void write_class_entry(FILE *fp, UInt32 parent_class_name_id, UInt32 class_name_
     fwrite(reinterpret_cast<void *>(&classEntry.header), sizeof(classEntry.header), 1, fp);
 }
 
-void write_method_entry(FILE *fp, UInt32 method_name_id, UInt32 method_signature_id, Byte *body, SizeT length) {
+void
+write_method_entry(FILE *fp, UInt32 return_type_id, UInt32 method_name_id, UInt32 method_signature_id, Bool is_native,
+                   Bool is_static, Byte *body, SizeT length) {
     DcxFileMethodEntry methodEntry = { };
-    methodEntry.header.method_length = static_cast<UInt32>(length);
+    methodEntry.header.method_is_native = is_native;
+    methodEntry.header.method_is_static = is_static;
+    methodEntry.header.method_return_type_name_id = return_type_id;
     methodEntry.header.method_name_id = method_name_id;
     methodEntry.header.method_signature_id = method_signature_id;
-    methodEntry.method_body = body;
+    methodEntry.header.method_length = !is_native ? static_cast<UInt32>(length) : 0;
 
     fwrite(reinterpret_cast<void *>(&methodEntry.header), sizeof(methodEntry.header), 1, fp);
-    fwrite(reinterpret_cast<void *>(methodEntry.method_body), sizeof(Byte),
-           methodEntry.header.method_length, fp);
+
+    if (!is_native) {
+        methodEntry.method_body = body;
+        fwrite(reinterpret_cast<void *>(methodEntry.method_body), sizeof(Byte),
+               methodEntry.header.method_length, fp);
+    }
 }
 
 int main(int argc, const char **argv) {
@@ -59,13 +67,13 @@ int main(int argc, const char **argv) {
     }
 
     DcxFileConstantPoolHeader constantPoolHeader = { };
-    constantPoolHeader.constant_entries = 5;
+    constantPoolHeader.constant_entries = 7;
 
     DcxFileClassPoolHeader classPoolHeader = { };
     classPoolHeader.class_entries = 1;
 
     DcxFileMethodPoolHeader methodPoolHeader = { };
-    methodPoolHeader.method_entries = 0;
+    methodPoolHeader.method_entries = 2;
 
     DcxFileHeader header = { };
     header.version_id = make_version_id();
@@ -82,8 +90,10 @@ int main(int argc, const char **argv) {
     write_string_constant(fp, "hello_world");
     UInt32 class_name_id = write_string_constant(fp, "Main");
     UInt32 parent_class_name_id = write_string_constant(fp, "Object");
+    UInt32 return_type_id = write_string_constant(fp, "Int32");
     UInt32 method_name_id = write_string_constant(fp, "dvm_main");
-    UInt32 method_signature_id = write_string_constant(fp, "()V");
+    UInt32 method_signature_id = write_string_constant(fp, "(X)");
+    UInt32 method_signature_2_id = write_string_constant(fp, "(K)");
 
     // Write class "Main"
     write_class_entry(fp, parent_class_name_id, class_name_id, 0, 1);
@@ -92,7 +102,10 @@ int main(int argc, const char **argv) {
     SizeT length = 128;
     auto *body = (Byte *) malloc(sizeof(Byte) * length);
     bzero(reinterpret_cast<void *>(body), length);
-    write_method_entry(fp, method_name_id, method_signature_id, body, length);
+    // dvm method
+    write_method_entry(fp, return_type_id, method_name_id, method_signature_id, False, True, body, length);
+    // native method
+    write_method_entry(fp, return_type_id, method_name_id, method_signature_2_id, True, True, nullptr, 0);
 
     fclose(fp);
     printf("OK\n");

@@ -6,6 +6,7 @@
 #include <core/dcx/dcx_reader.hpp>
 #include <core/exceptions.hpp>
 #include <core/errorcodes.hpp>
+#include <core/memory.hpp>
 
 namespace dvm {
     namespace core {

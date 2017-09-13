@@ -8,8 +8,10 @@ namespace dvm {
     namespace core {
         namespace object {
 
-            DvmMethod::DvmMethod(const std::string &name, const std::string &signature, Byte *body, SizeT length)
-                    : AbsMethod(name, signature, False), method_body(body), method_length(length) {
+            DvmMethod::DvmMethod(Class *return_type, const std::string &name, const std::string &signature,
+                                 Bool is_static_method, Byte *body, SizeT length)
+                    : AbsMethod(return_type, name, signature, False, is_static_method), method_body(body),
+                      method_length(length) {
             }
 
             void DvmMethod::invoke(runtime::VMContext &context) {
