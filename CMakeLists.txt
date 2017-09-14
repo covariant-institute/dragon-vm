@@ -51,7 +51,6 @@ add_library(dragon_vm_core SHARED
         include/core/runtime/vm_register_common.hpp
         include/core/runtime/vm_register_visitor.hpp
 
-        include/core/object/basic_classes.hpp
         include/core/object/method.hpp
         include/core/object/class.hpp
         include/core/object/slot.hpp
@@ -71,7 +70,6 @@ add_library(dragon_vm_core SHARED
         src/core/runtime/vm_context.cpp
 
         src/core/object/class.cpp
-        src/core/object/basic_classes.cpp
         src/core/object/method.cpp
         src/core/object/abs_method.hpp
         src/core/object/abs_method.cpp

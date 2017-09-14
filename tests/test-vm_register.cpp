@@ -3,18 +3,15 @@
 //
 
 #include <core/runtime/vm_register.hpp>
-#include <core/object/basic_classes.hpp>
 #include <cassert>
-#include <cmath>
 #include <core/runtime/vm_context.hpp>
 
 int main() {
     using namespace dvm::core::runtime::registers;
     using namespace dvm::core::object;
     using namespace dvm::core::runtime;
-    VMContext context{};
 
-    init_base_classes(context);
+    VMContext context{};
 
     VMRegisterHolder regs;
 

@@ -11,11 +11,13 @@ namespace dvm {
         namespace dcx {
             class DcxLinker {
             private:
-                static std::string constant_to_string(std::shared_ptr<DcxFile> dcx_file, UInt32 constant_id);
+                static std::string constant_to_string(const DcxFileConstantEntry &entry);
 
                 static void validate_class(DcxFileClassEntry &entry);
 
                 static void validate_method(DcxFileMethodEntry &entry);
+
+                static void link_constant(runtime::VMContext &context, std::shared_ptr<DcxFile> dcx_file);
 
                 static void link_class(runtime::VMContext &context, std::shared_ptr<DcxFile> dcx_file);
 

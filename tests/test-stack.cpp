@@ -4,7 +4,6 @@
 
 #include <core/stack.hpp>
 #include <core/config.hpp>
-#include <core/object/basic_classes.hpp>
 #include <cassert>
 #include <core/runtime/vm_context.hpp>
 
@@ -14,7 +13,6 @@ int main() {
     using namespace dvm::core::runtime;
     VMContext context{};
 
-    init_base_classes(context);
     Stack s(dvm::core::config::STACK_DEFAULT_SIZE);
 
     auto *prototype_int32 = Class::find_class(context, "Int32");

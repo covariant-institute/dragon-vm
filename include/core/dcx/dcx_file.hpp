@@ -8,7 +8,6 @@
 #include <memory>
 #include <vector>
 #include <string>
-#include <unordered_map>
 
 namespace dvm {
     namespace core {
@@ -20,7 +19,7 @@ namespace dvm {
                 friend class DcxLinker;
 
             private:
-                std::unordered_map<UInt32, DcxFileConstantEntry> constant_pool;
+                std::vector<DcxFileConstantEntry> constant_pool;
                 std::vector<DcxFileClassEntry> class_pool;
                 std::vector<DcxFileMethodEntry> method_pool;
 
@@ -30,10 +29,8 @@ namespace dvm {
 
                 void load_dcx(Byte *bytes, SizeT length);
 
-                DcxFileConstantEntry get_constant(UInt32 constant_id) const;
-
             public:
-                ~DcxFile() = default;
+                ~DcxFile();
 
                 static std::shared_ptr<DcxFile> open(const std::string &path);
             };

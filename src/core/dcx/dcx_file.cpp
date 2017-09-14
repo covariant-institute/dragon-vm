@@ -12,6 +12,20 @@ namespace dvm {
     namespace core {
         namespace dcx {
 
+            DcxFile::~DcxFile() {
+                std::for_each(method_pool.begin(), method_pool.end(),
+                              [&](DcxFileMethodEntry &entry) {
+                                  if (!entry.header.method_is_native) {
+                                      dvm_free(entry.method_body);
+                                  }
+                              });
+
+                std::for_each(constant_pool.begin(), constant_pool.end(),
+                              [&](DcxFileConstantEntry &entry) {
+                                  dvm_free(entry.constant_data);
+                              });
+            }
+
             void DcxFile::load_dcx(const std::string &path) {
                 DcxReader reader(path);
 
@@ -20,7 +34,7 @@ namespace dvm {
                     if (!reader.read_constant_entry(constant_entry)) {
                         throw dvm::core::exception(DVM_DCX_LOAD_ERROR);
                     }
-                    constant_pool[constant_entry.header.constant_id] = constant_entry;
+                    constant_pool.push_back(constant_entry);
                 }
 
                 DcxFileClassEntry class_entry{ };
@@ -38,7 +52,7 @@ namespace dvm {
                     }
                     method_pool.push_back(method_entry);
                 }
-                
+
                 reader.close();
             }
 
@@ -50,14 +64,6 @@ namespace dvm {
                 std::shared_ptr<DcxFile> dcx(new DcxFile);
                 dcx->load_dcx(path);
                 return dcx;
-            }
-
-            DcxFileConstantEntry DcxFile::get_constant(UInt32 constant_id) const {
-                auto iter = constant_pool.find(constant_id);
-                if (iter != constant_pool.end()) {
-                    return iter->second;
-                }
-                return { };
             }
         }
     }

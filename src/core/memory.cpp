@@ -19,7 +19,7 @@ namespace dvm {
         }
 
         void dvm_free(void *ptr) {
-            if (ptr) {
+            if (ptr != nullptr) {
                 ::free(ptr);
             }
         }

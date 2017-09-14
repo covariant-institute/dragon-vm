@@ -18,3 +18,4 @@
 
 #define DVM_RUNTIME_CLASS_NOT_FOUND "Class not found."
 #define DVM_RUNTIME_METHOD_NOT_FOUND "Method not found."
+#define DVM_RUNTIME_CONSTANT_NOT_FOUND "Constant not found."
