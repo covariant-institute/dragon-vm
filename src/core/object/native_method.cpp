@@ -22,6 +22,10 @@ namespace dvm {
             NativeMethod::~NativeMethod() = default;
 
             object::Object *NativeMethod::invoke(runtime::VMContext &context) {
+                if (callable.callable == nullptr) {
+                    callable.callable = resolver::resolve_native(get_name(), get_signature());
+                }
+
                 return callable(context);
             }
         }
