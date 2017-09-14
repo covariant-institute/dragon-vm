@@ -21,8 +21,8 @@ namespace dvm {
 
             NativeMethod::~NativeMethod() = default;
 
-            void NativeMethod::invoke(runtime::VMContext &context) {
-                callable(context);
+            object::Object *NativeMethod::invoke(runtime::VMContext &context) {
+                return callable(context);
             }
         }
     }

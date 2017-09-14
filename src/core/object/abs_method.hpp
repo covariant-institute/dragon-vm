@@ -18,7 +18,8 @@ namespace dvm {
                 Bool is_static_method;
 
             public:
-                AbsMethod(Class *return_type, const std::string &name, const std::string &signature, Bool is_native_method, Bool is_static_method);
+                AbsMethod(Class *return_type, const std::string &name, const std::string &signature,
+                          Bool is_native_method, Bool is_static_method);
 
                 virtual ~AbsMethod() = default;
 
@@ -32,7 +33,7 @@ namespace dvm {
 
                 const std::string &get_name() override;
 
-                void invoke(runtime::VMContext &context) override = 0;
+                Object *invoke(runtime::VMContext &context) override = 0;
             };
         }
     }
