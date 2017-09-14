@@ -7,6 +7,7 @@
 #include <core/exceptions.hpp>
 #include <core/errorcodes.hpp>
 #include <core/memory.hpp>
+#include <algorithm>
 
 namespace dvm {
     namespace core {
