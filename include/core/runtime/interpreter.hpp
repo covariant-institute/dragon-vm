@@ -6,18 +6,6 @@
 namespace dvm {
     namespace core {
         namespace runtime {
-            class opcode_provider;
-
-            class interpreter;
-
-            class opcode_provider {
-            public:
-                virtual VMOpcodes get_next_opcode() = 0;
-            };
-
-            class interpreter {
-
-            };
         }
     }
 }
