@@ -62,6 +62,8 @@ add_library(dragon_vm_core SHARED
         include/core/dcx/dcx_file.hpp
         include/core/dcx/dcx_linker.hpp
 
+        include/core/platform/dl.hpp
+
         src/core/vm-main.cpp
         src/core/heap.cpp
         src/core/stack.cpp
@@ -87,7 +89,8 @@ add_library(dragon_vm_core SHARED
         src/core/dcx/dcx_reader.cpp
         src/core/dcx/dcx_file.cpp
         src/core/dcx/dcx_linker.cpp
-        )
+
+        src/core/platform/dl.cpp)
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)
