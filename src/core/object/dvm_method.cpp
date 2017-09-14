@@ -14,7 +14,8 @@ namespace dvm {
                       method_length(length) {
             }
 
-            void DvmMethod::invoke(runtime::VMContext &context) {
+            object::Object *DvmMethod::invoke(runtime::VMContext &context) {
+                return context.null_object();
             }
         }
     }

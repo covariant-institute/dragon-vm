@@ -12,6 +12,7 @@ namespace dvm {
             static void vm_init_classes(VMContext &context) {
                 using namespace dvm::core::object;
                 Class *object = Class::define_bootstrap_class(context, "Object", 0, 1);
+                Class::define_class(context, object, "Void", 0, 1);
                 Class::define_class(context, object, "Int8", 0, 2);
                 Class::define_class(context, object, "Int16", 0, 2);
                 Class::define_class(context, object, "Int32", 0, 2);
@@ -115,7 +116,11 @@ namespace dvm {
 
             CREATOR_COMMON_IMPLEMENT(Byte, byte);
 
-            CREATOR_COMMON_IMPLEMENT(Bool, bool);
+            CREATOR_COMMON_IMPLEMENT(Bool, bool)
+
+            object::Object *VMContext::null_object() {
+                return object::Object::null_object();
+            };
 
 #undef CREATOR_COMMON_IMPLEMENT
 

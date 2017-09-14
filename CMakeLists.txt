@@ -50,6 +50,7 @@ add_library(dragon_vm_core SHARED
         include/core/runtime/vm_register.hpp
         include/core/runtime/vm_register_common.hpp
         include/core/runtime/vm_register_visitor.hpp
+        include/core/runtime/thread.hpp
 
         include/core/object/method.hpp
         include/core/object/class.hpp
@@ -57,9 +58,13 @@ add_library(dragon_vm_core SHARED
 
         include/core/dcx/dcx_file_info.hpp
         include/core/dcx/dcx_reader.hpp
+        include/core/dcx/byte_ordered_reader.hpp
+        include/core/dcx/dcx_file.hpp
+        include/core/dcx/dcx_linker.hpp
 
         src/core/vm-main.cpp
         src/core/heap.cpp
+        src/core/stack.cpp
         src/core/memory.cpp
         src/core/runtime/interpreter.cpp
         src/core/config.cpp
@@ -70,15 +75,19 @@ add_library(dragon_vm_core SHARED
         src/core/runtime/vm_context.cpp
 
         src/core/object/class.cpp
+        src/core/object/object.cpp
         src/core/object/method.cpp
         src/core/object/abs_method.hpp
         src/core/object/abs_method.cpp
         src/core/object/dvm_method.cpp
         src/core/object/dvm_method.hpp
+        src/core/object/native_method.hpp
+        src/core/object/native_method.cpp
 
         src/core/dcx/dcx_reader.cpp
-        include/core/dcx/byte_ordered_reader.hpp
-        src/core/stack.cpp include/core/dcx/dcx_file.hpp src/core/dcx/dcx_file.cpp include/core/dcx/dcx_linker.hpp src/core/dcx/dcx_linker.cpp include/core/runtime/thread.hpp src/core/object/native_method.hpp src/core/object/native_method.cpp)
+        src/core/dcx/dcx_file.cpp
+        src/core/dcx/dcx_linker.cpp
+        )
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)

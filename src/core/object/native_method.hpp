@@ -17,7 +17,7 @@ namespace dvm {
                     if (callable != nullptr) {
                         return callable(context);
                     }
-                    return nullptr;
+                    return context.null_object();
                 }
             };
 

@@ -38,7 +38,7 @@ namespace dvm {
 
         object::Object* Stack::new_instance(const object::Class *prototype) {
             if (prototype == nullptr) {
-                return nullptr;
+                return object::Object::null_object();
             }
 
             auto *uninitialized = allocate_on_stack(prototype->calculate_needed_size());

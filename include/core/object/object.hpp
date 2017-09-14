@@ -17,17 +17,18 @@ namespace dvm {
 
                 /* Keep it last */
                 Slot slots[0];
+
+                inline bool is_null() const {
+                    return prototype == nullptr;
+                }
+
+                static Object *null_object();
             };
 
             inline void ensure_object_valid(Object *object) {
                 if (object == nullptr) {
                     throw dvm::core::exception(DVM_INVALID_OBJECT_MEMORY);
                 }
-            }
-
-            inline bool is_uninitialized(Object *object) {
-                ensure_object_valid(object);
-                return object->prototype == nullptr;
             }
         }
 
