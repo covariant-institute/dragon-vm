@@ -93,7 +93,7 @@ int main(int argc, const char **argv) {
     UInt32 return_type_id = write_string_constant(fp, "Int32");
     UInt32 method_name_id = write_string_constant(fp, "dvm_main");
     UInt32 method_signature_id = write_string_constant(fp, "(X)");
-    UInt32 method_signature_2_id = write_string_constant(fp, "(K)");
+    UInt32 method_signature_2_id = write_string_constant(fp, "(N)");
 
     // Write class "Main"
     write_class_entry(fp, parent_class_name_id, class_name_id, 0, 1);

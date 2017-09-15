@@ -2,6 +2,7 @@
 // Created by kiva on 2017/9/13.
 //
 #include "native_method.hpp"
+#include <core/platform/dl.hpp>
 
 namespace dvm {
     namespace core {
@@ -9,8 +10,8 @@ namespace dvm {
 
             namespace resolver {
                 NativeMethodCallable::Type resolve_native(const std::string &name, const std::string &signature) {
-                    // TODO find symbol in executable e.g. *.so *.dylib and *.dll
-                    return nullptr;
+                    // TODO Convert method name and signature name to symbol name
+                    return (NativeMethodCallable::Type) dl::DLInterface().find_symbol(name);
                 }
             }
 

@@ -11,22 +11,26 @@ elseif (COMPILER_SUPPORTS_CXX0X)
 else()
     message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
+set(CMAKE_CXX_STANDARD 11)
+include_directories(include)
 
 try_run(IS_LITTLE_ENDIAN COMPILE_RESULT ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/build-test/check-le-or-be.c)
 if (IS_LITTLE_ENDIAN)
     add_definitions(-DDVM_LITTLE_ENDIAN=1)
 endif ()
 
-set(CMAKE_CXX_STANDARD 11)
-
-include_directories(include)
-
-set(SOURCE_FILES
-        include/*
-        src/*)
+if (WIN32)
+    add_definitions(-DDVM_PLATFORM_WINDOWS)
+    aux_source_directory(src/core/platform/windows DVM_PLATFORM_SRC)
+elseif (UNIX)
+    add_definitions(-DDVM_PLATFORM_UNIX)
+    aux_source_directory(src/core/platform/unix DVM_PLATFORM_SRC)
+else()
+    message(STATUS "Cannot detect current system, disabling platform dependent features.")
+endif()
 
 # Pure Garbage Collector
-add_library(dragon_vm_gc SHARED
+add_library(dragon_vm_gc
         src/gc/pure_gc.cpp
         include/gc/pure_gc.hpp
         include/gc/gc_provider.hpp)
@@ -62,7 +66,7 @@ add_library(dragon_vm_core SHARED
         include/core/dcx/dcx_file.hpp
         include/core/dcx/dcx_linker.hpp
 
-        include/core/platform/dl.hpp
+        include/core/platform/dl_commom.hpp
 
         src/core/vm-main.cpp
         src/core/heap.cpp
@@ -90,7 +94,8 @@ add_library(dragon_vm_core SHARED
         src/core/dcx/dcx_file.cpp
         src/core/dcx/dcx_linker.cpp
 
-        src/core/platform/dl.cpp)
+        ${DVM_PLATFORM_SRC}
+        )
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)

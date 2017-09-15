@@ -19,3 +19,6 @@
 #define DVM_RUNTIME_CLASS_NOT_FOUND "Class not found."
 #define DVM_RUNTIME_METHOD_NOT_FOUND "Method not found."
 #define DVM_RUNTIME_CONSTANT_NOT_FOUND "Constant not found."
+
+#define DVM_DL_NOT_OPEN "Cannot open library."
+#define DVM_DL_NOT_FOUND "Symbol not found."
