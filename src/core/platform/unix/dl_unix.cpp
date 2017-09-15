@@ -5,7 +5,9 @@
 #ifdef DVM_PLATFORM_UNIX
 
 // for RTLD_DEFAULT
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE
+#endif
 
 #include <core/platform/unix/dl_unix.hpp>
 #include <dlfcn.h>
