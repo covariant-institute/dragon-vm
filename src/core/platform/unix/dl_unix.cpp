@@ -2,6 +2,8 @@
 // Created by kiva on 2017/9/15.
 //
 
+#ifdef DVM_PLATFORM_UNIX
+
 // for RTLD_DEFAULT
 #define _GNU_SOURCE
 
@@ -25,7 +27,7 @@ namespace dvm {
             }
 
             void UnixDLInterface::open(const std::string &file) {
-                DLHandler handler = dlopen(file.c_str(), RTLD_LAZY);
+                DLHandler handler = ::dlopen(file.c_str(), RTLD_LAZY);
                 if (handler == nullptr) {
                     throw dvm::core::exception(DVM_DL_NOT_OPEN);
                 }
@@ -36,10 +38,10 @@ namespace dvm {
                 DLSymbol sym = nullptr;
 
                 // Clear errors
-                (void) dlerror();
+                (void) ::dlerror();
 
                 sym = dlsym(handler != nullptr ? handler : RTLD_DEFAULT, symbol_name.c_str());
-                const char *error = dlerror();
+                const char *error = ::dlerror();
 
                 if (error == nullptr) {
                     return sym;
@@ -50,10 +52,12 @@ namespace dvm {
 
             void UnixDLInterface::close() {
                 if (handler != nullptr) {
-                    dlclose(handler);
+                    ::dlclose(handler);
                     handler = nullptr;
                 }
             }
         }
     }
 }
+
+#endif

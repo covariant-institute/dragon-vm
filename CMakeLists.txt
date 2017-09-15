@@ -67,6 +67,7 @@ add_library(dragon_vm_core SHARED
         include/core/dcx/dcx_linker.hpp
 
         include/core/platform/dl_commom.hpp
+        include/core/platform/dl.hpp
 
         src/core/vm-main.cpp
         src/core/heap.cpp

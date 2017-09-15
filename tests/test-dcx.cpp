@@ -6,6 +6,7 @@
 #include <core/dcx/dcx_file.hpp>
 #include <core/object/method.hpp>
 #include <core/runtime/vm_context.hpp>
+#include <cassert>
 
 
 using namespace dvm::core::dcx;
@@ -23,16 +24,14 @@ int main(int argc, const char **argv) {
     VMContext context(dcx);
 
     auto obj = context.find_class("Main")->new_instance();
-    printf("%s\n", obj->prototype->name->c_str());
+    assert(obj != nullptr);
 
     auto method = context.resolve_method("dvm_main", "(N)");
-    printf("%s @ %s, is_native: %s\n", method->get_name().c_str(), method->get_signature().c_str(),
-           method->is_native() ? "true" : "false");
+    assert(method->is_native() == dvm::core::True);
     // Try invoke our native method
     method->invoke(context);
 
     method = context.resolve_method("dvm_main", "(X)");
-    printf("%s @ %s, is_native: %s\n", method->get_name().c_str(), method->get_signature().c_str(),
-           method->is_native() ? "true" : "false");
+    assert(method->is_native() == dvm::core::False);
     return 0;
 }

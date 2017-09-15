@@ -1,28 +1,27 @@
 //
 // Created by kiva on 2017/9/15.
 //
-
-#ifdef DVM_PLATFORM_UNIX
-
 #pragma once
+
+#ifdef DVM_PLATFORM_WINDOWS
 
 #include <core/platform/dl_commom.hpp>
 
 namespace dvm {
     namespace core {
         namespace dl {
-            class UnixDLInterface {
+            class WindowsDLInterface {
             private:
                 DLHandler handler;
 
             public:
-                UnixDLInterface();
+                WindowsDLInterface();
 
-                UnixDLInterface(const UnixDLInterface &) = delete;
+                WindowsDLInterface(const WindowsDLInterface &) = delete;
 
-                explicit UnixDLInterface(const std::string &file);
+                explicit WindowsDLInterface(const std::string &file);
 
-                ~UnixDLInterface();
+                ~WindowsDLInterface();
 
                 void open(const std::string &file);
 
