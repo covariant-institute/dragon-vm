@@ -2,8 +2,16 @@ cmake_minimum_required(VERSION 3.2)
 project(dragon_vm)
 
 
-SET(CMAKE_C_COMPILER "/mingw64/bin/gcc.exe")
-SET(CMAKE_CXX_COMPILER "/mingw64/bin/g++.exe")
+if($ENV{MSYSTEM} STREQUAL "MINGW64") 
+    message("use msys64 envirenment.")
+    message($ENV{MSYSTEM})
+    SET(CMAKE_C_COMPILER "/mingw64/bin/gcc.exe")
+    SET(CMAKE_CXX_COMPILER "/mingw64/bin/g++.exe")
+elseif($ENV{MSYSTEM} STREQUAL "MINGW32")
+    SET(CMAKE_C_COMPILER "/mingw32/bin/gcc.exe")
+    SET(CMAKE_CXX_COMPILER "/mingw32/bin/g++.exe")
+endif()
+
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
 CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
