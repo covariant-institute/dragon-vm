@@ -8,12 +8,13 @@ namespace dvm {
     namespace core {
 
         Stack::~Stack() {
-            dvm_free(ss);
+            dvm_free(memory);
         }
 
-        Stack::Stack(SizeT size) : ss(dvm_malloc(size)) {
-            sp = reinterpret_cast<Byte *>(ss) + size;
+        Stack::Stack(SizeT size) : memory(dvm_malloc(size)) {
+            sp = reinterpret_cast<Byte *>(memory) + size;
             sl = sp;
+            bp = sp;
         }
 
         object::Object *dvm::core::Stack::peek() {
@@ -22,7 +23,7 @@ namespace dvm {
         }
 
         object::Object *Stack::allocate_on_stack(SizeT size) {
-            if (sp - reinterpret_cast<Byte *>(ss) < size + sizeof(SizeT)) {
+            if (sp - reinterpret_cast<Byte *>(memory) < size + sizeof(SizeT)) {
                 throw dvm::core::exception(DVM_MEMORY_STACK_OVERFLOW);
             }
 

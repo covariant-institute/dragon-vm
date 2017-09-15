@@ -13,10 +13,13 @@ namespace dvm {
         class Stack final {
         private:
             // stack start
-            void *ss = nullptr;
+            void *memory = nullptr;
 
             // stack pointer
             Byte *sp = nullptr;
+
+            // frame pointer
+            Byte *bp = nullptr;
 
             // stack limit
             Byte *sl = nullptr;
