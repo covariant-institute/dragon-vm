@@ -32,7 +32,7 @@ int main(int argc, const char **argv) {
     fflush(stdout);
 
     int *program = (int *) malloc(sizeof(int) * (code_count + code_edge_expand));
-    bzero(program, sizeof(int) * (code_count + code_edge_expand));
+    memset(program,0, sizeof(int) * (code_count + code_edge_expand));
 
     for (int reg = 0; reg < reg_count; ++reg) {
         int i = reg * 3;

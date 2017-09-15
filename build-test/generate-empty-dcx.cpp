@@ -91,7 +91,7 @@ int main(int argc, const char **argv) {
     // Write method "dvm_main"
     SizeT length = 128;
     auto *body = (Byte *) malloc(sizeof(Byte) * length);
-    bzero(reinterpret_cast<void *>(body), length);
+    memset(reinterpret_cast<void *>(body),0, length);
     write_method_entry(fp, method_name_id, method_signature_id, body, length);
 
     fclose(fp);
