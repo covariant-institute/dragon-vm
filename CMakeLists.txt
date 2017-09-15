@@ -141,3 +141,10 @@ add_executable(exp-threaded-interpreter
 
 add_executable(exp-universal-memory
         experimental-tests/universal-memory/test.cpp)
+
+if (WIN32)
+elseif (UNIX)
+    target_link_libraries(dragon_vm_core -ldl)
+else()
+    message(STATUS "Cannot detect current system, disabling platform dependent features.")
+endif()
