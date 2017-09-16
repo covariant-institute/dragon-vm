@@ -1,7 +1,7 @@
 ## Opcodes in Dragon VM
 
-Mnemonic | Opcode (in hex) | Opcode (in binary) | Other bytes ([count]: [operand labels]) | Stack ([before] -> [after]) | Description 
----------|-----------------|--------------------|-----------------------------------------|-----------------------------|-------------
+| Mnemonic | Opcode (in hex) | Opcode (in binary) | Other bytes ([count]: [operand labels]) | Stack ([before] -> [after]) | Description |
+|:--------:|:---------------:|:------------------:|:---------------------------------------:|:---------------------------:|:-----------:|
 nop|0|0|other bytes|stack|desc
 new_instance|1|1|other bytes|stack|desc
 new_instance_stack|2|2|other bytes|stack|desc
