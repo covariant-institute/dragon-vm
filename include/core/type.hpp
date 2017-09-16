@@ -17,7 +17,6 @@ namespace dvm {
 
         using Byte = UInt8;
         using Bool = Byte;
-        using Link = Byte *;
 
         using Float = float;
         using Double = double;

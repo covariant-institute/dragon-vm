@@ -14,13 +14,17 @@ namespace dvm {
 
 #define OPCODE(X) X
 
-#define TYPED_OPCODES_PREFIX(PREFIX) \
+#define INTS_OPCODES_PREFIX(PREFIX) \
             OPCODE(PREFIX##_i32), \
-            OPCODE(PREFIX##_i64), \
-            OPCODE(PREFIX##_u32), \
-            OPCODE(PREFIX##_u64), \
+            OPCODE(PREFIX##_i64)
+
+#define FLOATS_OPCODES_PREFIX(PREFIX) \
             OPCODE(PREFIX##_f32), \
             OPCODE(PREFIX##_f64)
+
+#define TYPED_OPCODES_PREFIX(PREFIX) \
+            INTS_OPCODES_PREFIX(PREFIX), \
+            FLOATS_OPCODES_PREFIX(PREFIX)
 
             enum class VMOpcodes : VMOpcode {
 #include "opcodes_def.hpp.inc"
@@ -38,6 +42,8 @@ namespace dvm {
 #include "opcodes_def.hpp.inc"
             };
 
+#undef FLOATS_OPCODES_PREFIX
+#undef INTS_OPCODES_PREFIX
 #undef TYPED_OPCODES_PREFIX
 #undef OPCODE
         }

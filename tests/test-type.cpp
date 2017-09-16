@@ -4,23 +4,22 @@
 #include <cstdio>
 #include <core/object/object.hpp>
 
-#define print_size(T) \
+#define P(T) \
     printf("sizeof(" #T ") = %zd\n", sizeof(T))
 
 int main() {
     using namespace dvm::core;
-    print_size(Int8);
-    print_size(UInt8);
-    print_size(Int16);
-    print_size(UInt16);
-    print_size(Int32);
-    print_size(UInt32);
-    print_size(Int64);
-    print_size(UInt64);
-    print_size(Byte);
-    print_size(Bool);
-    print_size(Link);
-    print_size(Float);
-    print_size(Double);
-    print_size(dvm::core::object::Object);
+    P(Int8);
+    P(UInt8);
+    P(Int16);
+    P(UInt16);
+    P(Int32);
+    P(UInt32);
+    P(Int64);
+    P(UInt64);
+    P(Byte);
+    P(Bool);
+    P(Float);
+    P(Double);
+    P(dvm::core::object::Object);
 }

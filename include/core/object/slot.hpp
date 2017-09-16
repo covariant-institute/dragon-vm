@@ -17,9 +17,6 @@ namespace dvm {
                     Int32 i32;
                     Int64 i64;
 
-                    UInt32 u32;
-                    UInt64 u64;
-
                     Float f32;
                     Double f64;
 
@@ -28,16 +25,16 @@ namespace dvm {
 
 #define SETTER_GENERATOR(TYPE, MEMBER) \
                 void set_##MEMBER(TYPE value) { \
-                    (MEMBER) = value; \
+                    (MEMBER) = (TYPE) (value); \
                 }
 
                 SETTER_GENERATOR(Int32, i32)
 
                 SETTER_GENERATOR(Int64, i64)
 
-                SETTER_GENERATOR(UInt32, u32)
+                SETTER_GENERATOR(UInt32, i32)
 
-                SETTER_GENERATOR(UInt64, u64)
+                SETTER_GENERATOR(UInt64, i64)
 
                 SETTER_GENERATOR(Float, f32)
 

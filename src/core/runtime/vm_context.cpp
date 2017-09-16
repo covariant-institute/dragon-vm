@@ -100,9 +100,9 @@ namespace dvm {
 
             CREATOR_COMMON_IMPLEMENT(Int64, i64);
 
-            CREATOR_COMMON_IMPLEMENT(UInt32, u32);
+            CREATOR_COMMON_IMPLEMENT(UInt32, i32);
 
-            CREATOR_COMMON_IMPLEMENT(UInt64, u64);
+            CREATOR_COMMON_IMPLEMENT(UInt64, i64);
 
             CREATOR_COMMON_IMPLEMENT(Float, f32);
 
