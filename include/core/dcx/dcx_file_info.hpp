@@ -13,12 +13,19 @@ namespace dvm {
             /**
              * 常量池
              */
+            enum DcxFileConstantType {
+                CONSTANT_CLASS,
+                CONSTANT_STRING,
+            };
+
             struct DcxFileConstantPoolHeader {
-                UInt32 constant_entries;
+                UInt16 constant_entries;
+                UInt8 unused[2];
             };
 
             struct DcxFileConstantEntryHeader {
-                UInt32 constant_id;
+                UInt16 constant_id;
+                UInt16 constant_type;
                 UInt32 constant_data_size;
             };
 
@@ -31,14 +38,15 @@ namespace dvm {
              * 类定义
              */
             struct DcxFileClassPoolHeader {
-                UInt32 class_entries;
+                UInt16 class_entries;
+                UInt8 unused[2];
             };
 
             struct DcxFileClassEntryHeader {
-                UInt32 class_name_id;
-                UInt32 parent_class_name_id;
-                UInt32 class_slot_count;
-                UInt32 member_slot_count;
+                UInt16 class_name_id;
+                UInt16 parent_class_name_id;
+                UInt16 class_slot_count;
+                UInt16 member_slot_count;
             };
 
             struct DcxFileClassEntry {
@@ -49,14 +57,15 @@ namespace dvm {
              * 方法定义
              */
             struct DcxFileMethodPoolHeader {
-                UInt32 method_entries;
+                UInt16 method_entries;
+                UInt8 unused[2];
             };
 
             struct DcxFileMethodEntryHeader {
-                UInt32 method_name_id;
-                UInt32 method_signature_id;
-                UInt32 method_return_type_name_id;
-                UInt32 method_length;
+                UInt16 method_name_id;
+                UInt16 method_signature_id;
+                UInt16 method_return_type_name_id;
+                UInt32 method_body_size;
                 Bool method_is_native;
                 Bool method_is_static;
             };

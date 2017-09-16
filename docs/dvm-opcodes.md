@@ -3,7 +3,7 @@
 | Mnemonic | Opcode (in hex) | Opcode (in binary) | Other bytes ([count]: [operand labels]) | Stack ([before] -> [after]) | Description |
 |:--------:|:---------------:|:------------------:|:---------------------------------------:|:---------------------------:|:-----------:|
 | nop                    |   00   |   0000 0000   |        | [No Change] | do nothing |
-| new_instance           |   01   |   0000 0001   |        | -> | desc |
+| new_instance           |   01   |   0000 0001   | 2: indexbyte1, indexbyte2   | -> object | Create an instance of a class, which is identified by *#index*(`indexbyte1 << 8 + indexbyte2`)|
 | invoke_method          |   02   |   0000 0010   |        | -> | desc |
 | push_null              |   03   |   0000 0011   |        | -> | desc |
 | push_i32               |   04   |   0000 0100   |        | -> | desc |

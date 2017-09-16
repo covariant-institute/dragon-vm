@@ -109,10 +109,10 @@ namespace dvm {
                 }
 
                 if (ByteOrderedReader::read<DcxFileMethodEntryHeader>(dcx_file, &entry.header)) {
-                    entry.method_body = (Byte *) dvm_malloc(sizeof(Byte) * entry.header.method_length);
+                    entry.method_body = (Byte *) dvm_malloc(sizeof(Byte) * entry.header.method_body_size);
 
                     return ByteOrderedReader::read_bytes(dcx_file, entry.method_body,
-                                                         entry.header.method_length);
+                                                         entry.header.method_body_size);
                 }
                 return false;
             }

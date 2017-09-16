@@ -50,7 +50,8 @@ Exactly speaking, `constant pool` is `string constant pool`, only string constan
 Pool element:
 ```c++
 struct DcxFileConstantEntryHeader {
-    UInt32 constant_id;
+    UInt16 constant_id;
+    UInt16 constant_type;
     UInt32 constant_data_size;
 };
 struct DcxFileConstantEntry {
@@ -59,6 +60,7 @@ struct DcxFileConstantEntry {
 };
 ```
 * `constant_data`: C-style string.
+* `constant_type`: If this constant is a class name, you should set this property to `CONSTANT_CLASS`, or it should be `CONSTANT_STRING`.
 * `constant_data_size`: the length of string.
 
 #### Class Pool
@@ -67,10 +69,10 @@ Class definitions are here.
 Pool element:
 ```c++
 struct DcxFileClassEntryHeader {
-    UInt32 class_name_id;
-    UInt32 parent_class_name_id;
-    UInt32 class_slot_count;
-    UInt32 member_slot_count;
+    UInt16 class_name_id;
+    UInt16 parent_class_name_id;
+    UInt16 class_slot_count;
+    UInt16 member_slot_count;
 };
 
 struct DcxFileClassEntry {
@@ -88,10 +90,10 @@ Method definitions are here:
 Pool element:
 ```c++
 struct DcxFileMethodEntryHeader {
-    UInt32 method_name_id;
-    UInt32 method_signature_id;
-    UInt32 method_return_type_name_id;
-    UInt32 method_length;
+    UInt16 method_name_id;
+    UInt16 method_signature_id;
+    UInt16 method_return_type_name_id;
+    UInt32 method_body_size;
     Bool method_is_native;
     Bool method_is_static;
 };

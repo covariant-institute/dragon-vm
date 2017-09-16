@@ -23,15 +23,23 @@ namespace dvm {
 
             void DcxLinker::validate_method(DcxFileMethodEntry &entry) {
                 if (!entry.header.method_is_native &&
-                    (entry.header.method_length == 0 || entry.method_body == nullptr)) {
+                    (entry.header.method_body_size == 0 || entry.method_body == nullptr)) {
                     throw dvm::core::exception(DVM_DCX_LINKING_INVALID_METHOD);
                 }
             }
 
             void DcxLinker::link(runtime::VMContext &context, std::shared_ptr<DcxFile> dcx_file) {
-                link_constant(context, dcx_file);
+                std::vector<UInt16> link_after_class{ };
+
+                link_constant(context, dcx_file, link_after_class);
                 link_class(context, dcx_file);
                 link_method(context, dcx_file);
+
+                std::for_each(link_after_class.begin(), link_after_class.end(),
+                              [&](UInt16 class_name_id) {
+                                  auto constant = context.find_class(context.find_constant(class_name_id));
+                                  context.register_constant(class_name_id, constant);
+                              });
             }
 
             void DcxLinker::link_class(runtime::VMContext &context, std::shared_ptr<DcxFile> dcx_file) {
@@ -72,15 +80,19 @@ namespace dvm {
 
                                   Method::register_method(context, return_type_class, name, signature,
                                                           entry.header.method_is_static, entry.method_body,
-                                                          entry.header.method_length);
+                                                          entry.header.method_body_size);
                               });
             }
 
-            void DcxLinker::link_constant(runtime::VMContext &context, std::shared_ptr<DcxFile> dcx_file) {
+            void DcxLinker::link_constant(runtime::VMContext &context, std::shared_ptr<DcxFile> dcx_file,
+                                          std::vector<UInt16> &class_constants) {
                 std::for_each(dcx_file->constant_pool.begin(), dcx_file->constant_pool.end(),
                               [&](DcxFileConstantEntry &entry) {
                                   context.register_constant(entry.header.constant_id,
                                                             constant_to_string(entry));
+                                  if (entry.header.constant_type == CONSTANT_CLASS) {
+                                      class_constants.push_back(entry.header.constant_id);
+                                  }
                               });
             }
         }

@@ -68,13 +68,17 @@ namespace dvm {
                 }
             }
 
-            void VMContext::register_constant(UInt32 constant_id, const std::string &data) {
-                constant_map[constant_id] = data;
+            void VMContext::register_constant(UInt16 constant_id, const std::string &data) {
+                constant_string_map[constant_id] = data;
             }
 
-            const std::string &VMContext::find_constant(UInt32 constant_id) const {
+            void VMContext::register_constant(UInt16 constant_id, object::Class *constant) {
+                constant_class_map[constant_id] = constant;
+            };
+
+            const std::string &VMContext::find_constant(UInt16 constant_id) const {
                 try {
-                    return constant_map.at(constant_id);
+                    return constant_string_map.at(constant_id);
 
                 } catch (const std::out_of_range &e) {
                     throw dvm::core::exception(DVM_RUNTIME_CONSTANT_NOT_FOUND);
@@ -106,7 +110,7 @@ namespace dvm {
 
             object::Object *VMContext::null_object() {
                 return object::Object::null_object();
-            };
+            }
 
 #undef CREATOR_COMMON_IMPLEMENT
 

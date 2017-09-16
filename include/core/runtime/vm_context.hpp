@@ -22,7 +22,8 @@ namespace dvm {
             private:
                 std::unordered_map<std::string, object::Class *> class_map;
                 std::unordered_map<std::string, std::unordered_map<std::string, object::Method *>> method_map;
-                std::unordered_map<UInt32, std::string> constant_map;
+                std::unordered_map<UInt16, std::string> constant_string_map;
+                std::unordered_map<UInt16, object::Class *> constant_class_map;
 
             public:
                 VMContext();
@@ -43,9 +44,11 @@ namespace dvm {
                 object::Method *resolve_method(const std::string &method_name,
                                                const std::string &signature) const;
 
-                void register_constant(UInt32 constant_id, const std::string &data);
+                void register_constant(UInt16 constant_id, const std::string &data);
 
-                const std::string &find_constant(UInt32 constant_id) const;
+                void register_constant(UInt16 constant_id, object::Class *constant);
+
+                const std::string &find_constant(UInt16 constant_id) const;
 
 #define CREATOR_SIGNATURE(TYPE) \
             object::Object* new_##TYPE(TYPE value)

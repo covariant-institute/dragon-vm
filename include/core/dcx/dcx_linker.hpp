@@ -17,7 +17,8 @@ namespace dvm {
 
                 static void validate_method(DcxFileMethodEntry &entry);
 
-                static void link_constant(runtime::VMContext &context, std::shared_ptr<DcxFile> dcx_file);
+                static void link_constant(runtime::VMContext &context, std::shared_ptr<DcxFile> dcx_file,
+                                          std::vector<UInt16> &class_constants);
 
                 static void link_class(runtime::VMContext &context, std::shared_ptr<DcxFile> dcx_file);
 
