@@ -24,12 +24,6 @@ namespace dvm {
 
         using SizeT = UInt64;
 
-        /**
-         * 我们用了 UInt64 作为 stack 和 heap 大小的类型
-         * 与虚拟机中寻址保持一致，Addr 也用 UInt64
-         */
-        using Addr = UInt64;
-
         constexpr Bool True = static_cast<Bool>(true);
         constexpr Bool False = static_cast<Bool>(false);
 
@@ -47,9 +41,8 @@ namespace dvm {
 
             TYPE_ID_FLOAT = 9,
             TYPE_ID_DOUBLE = 10,
-            TYPE_ID_LINK = 11,
 
-            TYPE_ID_OBJECT = 12,
+            TYPE_ID_OBJECT = 11,
         };
 
         template <typename T>
@@ -126,13 +119,6 @@ namespace dvm {
         struct type_id_converter<Double> {
             constexpr static type_identifier get_type_id() {
                 return type_identifier::TYPE_ID_DOUBLE;
-            }
-        };
-
-        template <>
-        struct type_id_converter<Link> {
-            constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_LINK;
             }
         };
     }

@@ -70,14 +70,6 @@ namespace dvm {
                 SETTER_GENERATOR(Object*, object, type_identifier::TYPE_ID_OBJECT)
 
 #undef SETTER_GENERATOR
-
-                inline void set_byte(Byte value) {
-                    set_u8(value);
-                }
-
-                inline void set_bool(Bool value) {
-                    set_byte(value);
-                }
             };
         }
     }

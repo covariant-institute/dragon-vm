@@ -21,8 +21,6 @@ namespace dvm {
                 Class::define_class(context, object, "UInt16", 0, 2);
                 Class::define_class(context, object, "UInt32", 0, 2);
                 Class::define_class(context, object, "UInt64", 0, 2);
-                Class::define_class(context, object, "Bool", 0, 2);
-                Class::define_class(context, object, "Byte", 0, 2);
                 Class::define_class(context, object, "Float", 0, 2);
                 Class::define_class(context, object, "Double", 0, 2);
             }
@@ -113,10 +111,6 @@ namespace dvm {
             CREATOR_COMMON_IMPLEMENT(Float, f32);
 
             CREATOR_COMMON_IMPLEMENT(Double, f64);
-
-            CREATOR_COMMON_IMPLEMENT(Byte, byte);
-
-            CREATOR_COMMON_IMPLEMENT(Bool, bool)
 
             object::Object *VMContext::null_object() {
                 return object::Object::null_object();

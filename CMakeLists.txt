@@ -14,7 +14,7 @@ endif()
 set(CMAKE_CXX_STANDARD 11)
 include_directories(include)
 
-try_run(IS_LITTLE_ENDIAN COMPILE_RESULT ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/build-test/check-le-or-be.c)
+try_run(IS_LITTLE_ENDIAN COMPILE_RESULT ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/tools/check-le-or-be.c)
 if (IS_LITTLE_ENDIAN)
     add_definitions(-DDVM_LITTLE_ENDIAN=1)
 endif ()
@@ -45,11 +45,11 @@ add_library(dragon_vm_core SHARED
         include/core/type.hpp
         include/core/utils.hpp
         include/core/dvm.hpp
-        include/core/runtime/interpreter.hpp
-        include/core/runtime/opcodes.hpp
         include/core/exceptions.hpp
         include/core/errorcodes.hpp
 
+        include/core/runtime/interpreter.hpp
+        include/core/runtime/opcodes.hpp
         include/core/runtime/vm_context.hpp
         include/core/runtime/vm_register.hpp
         include/core/runtime/vm_register_common.hpp
@@ -73,10 +73,10 @@ add_library(dragon_vm_core SHARED
         src/core/heap.cpp
         src/core/stack.cpp
         src/core/memory.cpp
-        src/core/runtime/interpreter.cpp
         src/core/config.cpp
         src/core/heap.cpp
 
+        src/core/runtime/interpreter.cpp
         src/core/runtime/vm_register.cpp
         src/core/runtime/vm_register_visitor.cpp
         src/core/runtime/vm_context.cpp
@@ -128,7 +128,8 @@ add_executable(test-dcx tests/test-dcx.cpp)
 target_link_libraries(test-dcx dragon_vm_core)
 
 # Build tools
-add_executable(generate-empty-dcx build-test/generate-empty-dcx.cpp)
+add_executable(generate-empty-dcx tools/generate-empty-dcx.cpp)
+add_executable(generate-opcode-table tools/generate-opcode-table.cpp)
 
 # Experimental test cases
 add_executable(exp-threaded-interpreter

@@ -5,48 +5,45 @@
 namespace dvm {
     namespace core {
         namespace runtime {
-            using VMOpcode = UInt32;
-
-#define TYPED_OPCODES(PREFIX) \
-            PREFIX##_I8, \
-            PREFIX##_I16, \
-            PREFIX##_I32, \
-            PREFIX##_I64, \
-            PREFIX##_U8, \
-            PREFIX##_U16, \
-            PREFIX##_U32, \
-            PREFIX##_U64, \
-            PREFIX##_F32, \
-            PREFIX##_F64, \
-            PREFIX##_BYTE, \
-            PREFIX##_BOOL, \
-            PREFIX##_OBJECT
-
             /**
-             * 为了方便我们使用 Threaded-Interpretation，指令一律用 UInt32
+             * 为了方便我们使用 Threaded-Interpretation，指令一律用 UInt8
              */
+            using VMOpcode = UInt8;
+
+            using VMOpcodeName = const char *;
+
+#define OPCODE(X) X
+#define TYPED_OPCODES(PREFIX) \
+            OPCODE(PREFIX##_i8), \
+            OPCODE(PREFIX##_i16), \
+            OPCODE(PREFIX##_i32), \
+            OPCODE(PREFIX##_i64), \
+            OPCODE(PREFIX##_u8), \
+            OPCODE(PREFIX##_u16), \
+            OPCODE(PREFIX##_u32), \
+            OPCODE(PREFIX##_u64), \
+            OPCODE(PREFIX##_f32), \
+            OPCODE(PREFIX##_f64), \
+            OPCODE(PREFIX##_object)
+
             enum class VMOpcodes : VMOpcode {
-                NOP = 0,
-
-                NEW_INSTANCE,
-                NEW_INSTANCE_STACK,
-
-                INVOKE_METHOD,
-
-                TYPED_OPCODES(PUSH),
-                TYPED_OPCODES(POP),
-
-                TYPED_OPCODES(SET_SLOT),
-                TYPED_OPCODES(SET_CLASS_SLOT),
-                TYPED_OPCODES(GET_SLOT),
-                TYPED_OPCODES(GET_CLASS_SLOT),
+#include "opcodes_def.hpp.inc"
 
                 VM_OPCODES_NUMBER,
             };
 
             constexpr UInt32 VM_OPCODES_NUMBER = static_cast<UInt32>(VMOpcodes::VM_OPCODES_NUMBER);
 
+
+#undef OPCODE
+#define OPCODE(X) #X
+
+            constexpr VMOpcodeName VM_OPCODE_NAMES[VM_OPCODES_NUMBER] = {
+#include "opcodes_def.hpp.inc"
+            };
+
 #undef TYPED_OPCODES
+#undef OPCODE
         }
     }
 }

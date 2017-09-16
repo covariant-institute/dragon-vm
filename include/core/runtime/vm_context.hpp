@@ -70,10 +70,6 @@ namespace dvm {
 
                 CREATOR_SIGNATURE(Double);
 
-                CREATOR_SIGNATURE(Byte);
-
-                CREATOR_SIGNATURE(Bool);
-
                 object::Object *null_object();
 
 #undef CREATOR_SIGNATURE
