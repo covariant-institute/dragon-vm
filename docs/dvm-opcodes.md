@@ -2,73 +2,73 @@
 
 | Mnemonic | Opcode (in hex) | Opcode (in binary) | Other bytes ([count]: [operand labels]) | Stack ([before] -> [after]) | Description |
 |:--------:|:---------------:|:------------------:|:---------------------------------------:|:---------------------------:|:-----------:|
-nop|0|0|other bytes|stack|desc
-new_instance|1|1|other bytes|stack|desc
-new_instance_stack|2|2|other bytes|stack|desc
-invoke_method|3|3|other bytes|stack|desc
-push_i8|4|4|other bytes|stack|desc
-push_i16|5|5|other bytes|stack|desc
-push_i32|6|6|other bytes|stack|desc
-push_i64|7|7|other bytes|stack|desc
-push_u8|8|8|other bytes|stack|desc
-push_u16|9|9|other bytes|stack|desc
-push_u32|a|a|other bytes|stack|desc
-push_u64|b|b|other bytes|stack|desc
-push_f32|c|c|other bytes|stack|desc
-push_f64|d|d|other bytes|stack|desc
-push_object|e|e|other bytes|stack|desc
-pop_i8|f|f|other bytes|stack|desc
-pop_i16|10|10|other bytes|stack|desc
-pop_i32|11|11|other bytes|stack|desc
-pop_i64|12|12|other bytes|stack|desc
-pop_u8|13|13|other bytes|stack|desc
-pop_u16|14|14|other bytes|stack|desc
-pop_u32|15|15|other bytes|stack|desc
-pop_u64|16|16|other bytes|stack|desc
-pop_f32|17|17|other bytes|stack|desc
-pop_f64|18|18|other bytes|stack|desc
-pop_object|19|19|other bytes|stack|desc
-set_slot_i8|1a|1a|other bytes|stack|desc
-set_slot_i16|1b|1b|other bytes|stack|desc
-set_slot_i32|1c|1c|other bytes|stack|desc
-set_slot_i64|1d|1d|other bytes|stack|desc
-set_slot_u8|1e|1e|other bytes|stack|desc
-set_slot_u16|1f|1f|other bytes|stack|desc
-set_slot_u32|20|20|other bytes|stack|desc
-set_slot_u64|21|21|other bytes|stack|desc
-set_slot_f32|22|22|other bytes|stack|desc
-set_slot_f64|23|23|other bytes|stack|desc
-set_slot_object|24|24|other bytes|stack|desc
-set_class_slot_i8|25|25|other bytes|stack|desc
-set_class_slot_i16|26|26|other bytes|stack|desc
-set_class_slot_i32|27|27|other bytes|stack|desc
-set_class_slot_i64|28|28|other bytes|stack|desc
-set_class_slot_u8|29|29|other bytes|stack|desc
-set_class_slot_u16|2a|2a|other bytes|stack|desc
-set_class_slot_u32|2b|2b|other bytes|stack|desc
-set_class_slot_u64|2c|2c|other bytes|stack|desc
-set_class_slot_f32|2d|2d|other bytes|stack|desc
-set_class_slot_f64|2e|2e|other bytes|stack|desc
-set_class_slot_object|2f|2f|other bytes|stack|desc
-get_slot_i8|30|30|other bytes|stack|desc
-get_slot_i16|31|31|other bytes|stack|desc
-get_slot_i32|32|32|other bytes|stack|desc
-get_slot_i64|33|33|other bytes|stack|desc
-get_slot_u8|34|34|other bytes|stack|desc
-get_slot_u16|35|35|other bytes|stack|desc
-get_slot_u32|36|36|other bytes|stack|desc
-get_slot_u64|37|37|other bytes|stack|desc
-get_slot_f32|38|38|other bytes|stack|desc
-get_slot_f64|39|39|other bytes|stack|desc
-get_slot_object|3a|3a|other bytes|stack|desc
-get_class_slot_i8|3b|3b|other bytes|stack|desc
-get_class_slot_i16|3c|3c|other bytes|stack|desc
-get_class_slot_i32|3d|3d|other bytes|stack|desc
-get_class_slot_i64|3e|3e|other bytes|stack|desc
-get_class_slot_u8|3f|3f|other bytes|stack|desc
-get_class_slot_u16|40|40|other bytes|stack|desc
-get_class_slot_u32|41|41|other bytes|stack|desc
-get_class_slot_u64|42|42|other bytes|stack|desc
-get_class_slot_f32|43|43|other bytes|stack|desc
-get_class_slot_f64|44|44|other bytes|stack|desc
-get_class_slot_object|45|45|other bytes|stack|desc
+nop|00|0000 0000| | -> |desc
+new_instance|01|0000 0001| | -> |desc
+new_instance_stack|02|0000 0010| | -> |desc
+invoke_method|03|0000 0011| | -> |desc
+push_i8|04|0000 0100| | -> |desc
+push_i16|05|0000 0101| | -> |desc
+push_i32|06|0000 0110| | -> |desc
+push_i64|07|0000 0111| | -> |desc
+push_u8|08|0000 1000| | -> |desc
+push_u16|09|0000 1001| | -> |desc
+push_u32|0a|0000 1010| | -> |desc
+push_u64|0b|0000 1011| | -> |desc
+push_f32|0c|0000 1100| | -> |desc
+push_f64|0d|0000 1101| | -> |desc
+push_object|0e|0000 1110| | -> |desc
+pop_i8|0f|0000 1111| | -> |desc
+pop_i16|10|0001 0000| | -> |desc
+pop_i32|11|0001 0001| | -> |desc
+pop_i64|12|0001 0010| | -> |desc
+pop_u8|13|0001 0011| | -> |desc
+pop_u16|14|0001 0100| | -> |desc
+pop_u32|15|0001 0101| | -> |desc
+pop_u64|16|0001 0110| | -> |desc
+pop_f32|17|0001 0111| | -> |desc
+pop_f64|18|0001 1000| | -> |desc
+pop_object|19|0001 1001| | -> |desc
+set_slot_i8|1a|0001 1010| | -> |desc
+set_slot_i16|1b|0001 1011| | -> |desc
+set_slot_i32|1c|0001 1100| | -> |desc
+set_slot_i64|1d|0001 1101| | -> |desc
+set_slot_u8|1e|0001 1110| | -> |desc
+set_slot_u16|1f|0001 1111| | -> |desc
+set_slot_u32|20|0010 0000| | -> |desc
+set_slot_u64|21|0010 0001| | -> |desc
+set_slot_f32|22|0010 0010| | -> |desc
+set_slot_f64|23|0010 0011| | -> |desc
+set_slot_object|24|0010 0100| | -> |desc
+set_class_slot_i8|25|0010 0101| | -> |desc
+set_class_slot_i16|26|0010 0110| | -> |desc
+set_class_slot_i32|27|0010 0111| | -> |desc
+set_class_slot_i64|28|0010 1000| | -> |desc
+set_class_slot_u8|29|0010 1001| | -> |desc
+set_class_slot_u16|2a|0010 1010| | -> |desc
+set_class_slot_u32|2b|0010 1011| | -> |desc
+set_class_slot_u64|2c|0010 1100| | -> |desc
+set_class_slot_f32|2d|0010 1101| | -> |desc
+set_class_slot_f64|2e|0010 1110| | -> |desc
+set_class_slot_object|2f|0010 1111| | -> |desc
+get_slot_i8|30|0011 0000| | -> |desc
+get_slot_i16|31|0011 0001| | -> |desc
+get_slot_i32|32|0011 0010| | -> |desc
+get_slot_i64|33|0011 0011| | -> |desc
+get_slot_u8|34|0011 0100| | -> |desc
+get_slot_u16|35|0011 0101| | -> |desc
+get_slot_u32|36|0011 0110| | -> |desc
+get_slot_u64|37|0011 0111| | -> |desc
+get_slot_f32|38|0011 1000| | -> |desc
+get_slot_f64|39|0011 1001| | -> |desc
+get_slot_object|3a|0011 1010| | -> |desc
+get_class_slot_i8|3b|0011 1011| | -> |desc
+get_class_slot_i16|3c|0011 1100| | -> |desc
+get_class_slot_i32|3d|0011 1101| | -> |desc
+get_class_slot_i64|3e|0011 1110| | -> |desc
+get_class_slot_u8|3f|0011 1111| | -> |desc
+get_class_slot_u16|40|0100 0000| | -> |desc
+get_class_slot_u32|41|0100 0001| | -> |desc
+get_class_slot_u64|42|0100 0010| | -> |desc
+get_class_slot_f32|43|0100 0011| | -> |desc
+get_class_slot_f64|44|0100 0100| | -> |desc
+get_class_slot_object|45|0100 0101| | -> |desc
