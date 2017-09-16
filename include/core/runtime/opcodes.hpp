@@ -20,8 +20,7 @@ namespace dvm {
             OPCODE(PREFIX##_u32), \
             OPCODE(PREFIX##_u64), \
             OPCODE(PREFIX##_f32), \
-            OPCODE(PREFIX##_f64), \
-            OPCODE(PREFIX##_object)
+            OPCODE(PREFIX##_f64)
 
             enum class VMOpcodes : VMOpcode {
 #include "opcodes_def.hpp.inc"
