@@ -92,17 +92,9 @@ namespace dvm {
                 return object; \
             }
 
-            CREATOR_COMMON_IMPLEMENT(Int8, i8);
-
-            CREATOR_COMMON_IMPLEMENT(Int16, i16);
-
             CREATOR_COMMON_IMPLEMENT(Int32, i32);
 
             CREATOR_COMMON_IMPLEMENT(Int64, i64);
-
-            CREATOR_COMMON_IMPLEMENT(UInt8, u8);
-
-            CREATOR_COMMON_IMPLEMENT(UInt16, u16);
 
             CREATOR_COMMON_IMPLEMENT(UInt32, u32);
 

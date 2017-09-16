@@ -13,13 +13,10 @@ namespace dvm {
             using VMOpcodeName = const char *;
 
 #define OPCODE(X) X
-#define TYPED_OPCODES(PREFIX) \
-            OPCODE(PREFIX##_i8), \
-            OPCODE(PREFIX##_i16), \
+
+#define TYPED_OPCODES_PREFIX(PREFIX) \
             OPCODE(PREFIX##_i32), \
             OPCODE(PREFIX##_i64), \
-            OPCODE(PREFIX##_u8), \
-            OPCODE(PREFIX##_u16), \
             OPCODE(PREFIX##_u32), \
             OPCODE(PREFIX##_u64), \
             OPCODE(PREFIX##_f32), \
@@ -42,7 +39,7 @@ namespace dvm {
 #include "opcodes_def.hpp.inc"
             };
 
-#undef TYPED_OPCODES
+#undef TYPED_OPCODES_PREFIX
 #undef OPCODE
         }
     }

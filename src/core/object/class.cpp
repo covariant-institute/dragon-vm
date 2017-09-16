@@ -64,7 +64,6 @@ namespace dvm {
                 uninitialized->prototype = this;
 
                 // Parent object instantiation
-                uninitialized->slots[0].slot_type = type_identifier::TYPE_ID_OBJECT;
                 if (this->parent != nullptr) {
                     uninitialized->slots[0].object = this->parent->new_instance();
                 } else {

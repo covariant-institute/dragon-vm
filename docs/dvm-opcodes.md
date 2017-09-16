@@ -2,73 +2,49 @@
 
 | Mnemonic | Opcode (in hex) | Opcode (in binary) | Other bytes ([count]: [operand labels]) | Stack ([before] -> [after]) | Description |
 |:--------:|:---------------:|:------------------:|:---------------------------------------:|:---------------------------:|:-----------:|
-nop|00|0000 0000| | -> |desc
-new_instance|01|0000 0001| | -> |desc
-new_instance_stack|02|0000 0010| | -> |desc
-invoke_method|03|0000 0011| | -> |desc
-push_i8|04|0000 0100| | -> |desc
-push_i16|05|0000 0101| | -> |desc
-push_i32|06|0000 0110| | -> |desc
-push_i64|07|0000 0111| | -> |desc
-push_u8|08|0000 1000| | -> |desc
-push_u16|09|0000 1001| | -> |desc
-push_u32|0a|0000 1010| | -> |desc
-push_u64|0b|0000 1011| | -> |desc
-push_f32|0c|0000 1100| | -> |desc
-push_f64|0d|0000 1101| | -> |desc
-push_object|0e|0000 1110| | -> |desc
-pop_i8|0f|0000 1111| | -> |desc
-pop_i16|10|0001 0000| | -> |desc
-pop_i32|11|0001 0001| | -> |desc
-pop_i64|12|0001 0010| | -> |desc
-pop_u8|13|0001 0011| | -> |desc
-pop_u16|14|0001 0100| | -> |desc
-pop_u32|15|0001 0101| | -> |desc
-pop_u64|16|0001 0110| | -> |desc
-pop_f32|17|0001 0111| | -> |desc
-pop_f64|18|0001 1000| | -> |desc
-pop_object|19|0001 1001| | -> |desc
-set_slot_i8|1a|0001 1010| | -> |desc
-set_slot_i16|1b|0001 1011| | -> |desc
-set_slot_i32|1c|0001 1100| | -> |desc
-set_slot_i64|1d|0001 1101| | -> |desc
-set_slot_u8|1e|0001 1110| | -> |desc
-set_slot_u16|1f|0001 1111| | -> |desc
-set_slot_u32|20|0010 0000| | -> |desc
-set_slot_u64|21|0010 0001| | -> |desc
-set_slot_f32|22|0010 0010| | -> |desc
-set_slot_f64|23|0010 0011| | -> |desc
-set_slot_object|24|0010 0100| | -> |desc
-set_class_slot_i8|25|0010 0101| | -> |desc
-set_class_slot_i16|26|0010 0110| | -> |desc
-set_class_slot_i32|27|0010 0111| | -> |desc
-set_class_slot_i64|28|0010 1000| | -> |desc
-set_class_slot_u8|29|0010 1001| | -> |desc
-set_class_slot_u16|2a|0010 1010| | -> |desc
-set_class_slot_u32|2b|0010 1011| | -> |desc
-set_class_slot_u64|2c|0010 1100| | -> |desc
-set_class_slot_f32|2d|0010 1101| | -> |desc
-set_class_slot_f64|2e|0010 1110| | -> |desc
-set_class_slot_object|2f|0010 1111| | -> |desc
-get_slot_i8|30|0011 0000| | -> |desc
-get_slot_i16|31|0011 0001| | -> |desc
-get_slot_i32|32|0011 0010| | -> |desc
-get_slot_i64|33|0011 0011| | -> |desc
-get_slot_u8|34|0011 0100| | -> |desc
-get_slot_u16|35|0011 0101| | -> |desc
-get_slot_u32|36|0011 0110| | -> |desc
-get_slot_u64|37|0011 0111| | -> |desc
-get_slot_f32|38|0011 1000| | -> |desc
-get_slot_f64|39|0011 1001| | -> |desc
-get_slot_object|3a|0011 1010| | -> |desc
-get_class_slot_i8|3b|0011 1011| | -> |desc
-get_class_slot_i16|3c|0011 1100| | -> |desc
-get_class_slot_i32|3d|0011 1101| | -> |desc
-get_class_slot_i64|3e|0011 1110| | -> |desc
-get_class_slot_u8|3f|0011 1111| | -> |desc
-get_class_slot_u16|40|0100 0000| | -> |desc
-get_class_slot_u32|41|0100 0001| | -> |desc
-get_class_slot_u64|42|0100 0010| | -> |desc
-get_class_slot_f32|43|0100 0011| | -> |desc
-get_class_slot_f64|44|0100 0100| | -> |desc
-get_class_slot_object|45|0100 0101| | -> |desc
+| nop                    |   00   |   0000 0000   |        | [No Change] | do nothing |
+| new_instance           |   01   |   0000 0001   |        | -> | desc |
+| invoke_method          |   02   |   0000 0010   |        | -> | desc |
+| push_null              |   03   |   0000 0011   |        | -> | desc |
+| push_i32               |   04   |   0000 0100   |        | -> | desc |
+| push_i64               |   05   |   0000 0101   |        | -> | desc |
+| push_u32               |   06   |   0000 0110   |        | -> | desc |
+| push_u64               |   07   |   0000 0111   |        | -> | desc |
+| push_f32               |   08   |   0000 1000   |        | -> | desc |
+| push_f64               |   09   |   0000 1001   |        | -> | desc |
+| push_object            |   0a   |   0000 1010   |        | -> | desc |
+| pop_i32                |   0b   |   0000 1011   |        | -> | desc |
+| pop_i64                |   0c   |   0000 1100   |        | -> | desc |
+| pop_u32                |   0d   |   0000 1101   |        | -> | desc |
+| pop_u64                |   0e   |   0000 1110   |        | -> | desc |
+| pop_f32                |   0f   |   0000 1111   |        | -> | desc |
+| pop_f64                |   10   |   0001 0000   |        | -> | desc |
+| pop_object             |   11   |   0001 0001   |        | -> | desc |
+| set_slot_i32           |   12   |   0001 0010   |        | -> | desc |
+| set_slot_i64           |   13   |   0001 0011   |        | -> | desc |
+| set_slot_u32           |   14   |   0001 0100   |        | -> | desc |
+| set_slot_u64           |   15   |   0001 0101   |        | -> | desc |
+| set_slot_f32           |   16   |   0001 0110   |        | -> | desc |
+| set_slot_f64           |   17   |   0001 0111   |        | -> | desc |
+| set_slot_object        |   18   |   0001 1000   |        | -> | desc |
+| set_class_slot_i32     |   19   |   0001 1001   |        | -> | desc |
+| set_class_slot_i64     |   1a   |   0001 1010   |        | -> | desc |
+| set_class_slot_u32     |   1b   |   0001 1011   |        | -> | desc |
+| set_class_slot_u64     |   1c   |   0001 1100   |        | -> | desc |
+| set_class_slot_f32     |   1d   |   0001 1101   |        | -> | desc |
+| set_class_slot_f64     |   1e   |   0001 1110   |        | -> | desc |
+| set_class_slot_object  |   1f   |   0001 1111   |        | -> | desc |
+| get_slot_i32           |   20   |   0010 0000   |        | -> | desc |
+| get_slot_i64           |   21   |   0010 0001   |        | -> | desc |
+| get_slot_u32           |   22   |   0010 0010   |        | -> | desc |
+| get_slot_u64           |   23   |   0010 0011   |        | -> | desc |
+| get_slot_f32           |   24   |   0010 0100   |        | -> | desc |
+| get_slot_f64           |   25   |   0010 0101   |        | -> | desc |
+| get_slot_object        |   26   |   0010 0110   |        | -> | desc |
+| get_class_slot_i32     |   27   |   0010 0111   |        | -> | desc |
+| get_class_slot_i64     |   28   |   0010 1000   |        | -> | desc |
+| get_class_slot_u32     |   29   |   0010 1001   |        | -> | desc |
+| get_class_slot_u64     |   2a   |   0010 1010   |        | -> | desc |
+| get_class_slot_f32     |   2b   |   0010 1011   |        | -> | desc |
+| get_class_slot_f64     |   2c   |   0010 1100   |        | -> | desc |
+| get_class_slot_object  |   2d   |   0010 1101   |        | -> | desc |

@@ -18,12 +18,9 @@ int main() {
     auto *prototype_int32 = Class::find_class(context, "Int32");
     auto *i32 = s.new_instance(prototype_int32);
     assert(i32->prototype == prototype_int32);
-    assert(i32->slots[0].slot_type == type_identifier::TYPE_ID_OBJECT);
     assert(i32->slots[0].object->prototype == Class::find_class(context, "Object"));
-    assert(i32->slots[1].slot_type == type_identifier::TYPE_ID_UNSPECIFIC);
 
     i32->slots[1].set_i32(52019);
-    assert(i32->slots[1].slot_type == type_identifier::TYPE_ID_INT32);
 
     auto *another_i32 = s.new_instance(prototype_int32);
     another_i32->slots[1].set_i32(1234);
