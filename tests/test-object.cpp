@@ -24,7 +24,7 @@ int main() {
     assert(i32->slots[1].i32 == 100);
 
     Object *u64 = context.new_UInt64(UINT64_MAX);
-    assert(u64->slots[1].u64 == UINT64_MAX);
+    assert(u64->slots[1].i64 == UINT64_MAX);
 
     Object *boolean = context.new_Int32(False);
     assert(boolean->slots[1].i32 == False);
