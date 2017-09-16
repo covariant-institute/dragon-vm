@@ -7,11 +7,11 @@
 | new_instance           |   01   |   0000 0001   | 2: indexbyte1, indexbyte2 | -> object | create an instance of a class, which is identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) in constant pool. |
 | invoke_method          |   02   |   0000 0010   | 4: nameindex1, nameindex2, sigindex1, sigindex2 | object, [arg1, arg2, ...] -> [result] | invoke method on object and puts the result on the stack (might be void); the method is identified by nameindex(`nameindex1 << 8 + nameindex2`) and sigindex(`sigindex1 << 8 + sigindex2`) in constant pool. |
 | ldc_null               |   03   |   0000 0011   |        | -> null | push a ***null*** object onto the stack |
-| ldc_i32                |   04   |   0000 0100   | 4: byte1, byte2, byte3, byte4 | -> value | push an ***#int32()***(`byte1 << 24 + byte2 << 16 + byte3 << 8 + byte4`) onto the stack |
+| ldc_i32                |   04   |   0000 0100   | 4: byte1, byte2, byte3, byte4 | -> value | push an ***#int32***(`byte1 << 24 + byte2 << 16 + byte3 << 8 + byte4`) onto the stack |
 | ldc_i64                |   05   |   0000 0101   |        | int32h, int32l -> value | push a ***#int64***(`int32h << 32 + int32l`) |
-| ldc_u32                |   06   |   0000 0110   | 4: byte1, byte2, byte3, byte4 | -> value | push a ***#uint32()***(`byte1 << 24 + byte2 << 16 + byte3 << 8 + byte4`) onto the stack |
+| ldc_u32                |   06   |   0000 0110   | 4: byte1, byte2, byte3, byte4 | -> value | push a ***#uint32***(`byte1 << 24 + byte2 << 16 + byte3 << 8 + byte4`) onto the stack |
 | ldc_u64                |   07   |   0000 0111   |        | uint32h, uint32l -> value | push a ***#uint64***(`uint32h << 32 + uint32l`) |
-| ldc_f32                |   08   |   0000 1000   | 4: byte1, byte2, byte3, byte4 | -> value | push a ***#float()***(`byte1 << 24 + byte2 << 16 + byte3 << 8 + byte4`) onto the stack |
+| ldc_f32                |   08   |   0000 1000   | 4: byte1, byte2, byte3, byte4 | -> value | push a ***#float***(`byte1 << 24 + byte2 << 16 + byte3 << 8 + byte4`) onto the stack |
 | ldc_f64                |   09   |   0000 1001   |        | -> value | desc |
 | pop                    |   0a   |   0000 1010   |        | value -> | drop the top of stack |
 | ld_i32                 |   0b   |   0000 1011   | 1: index | -> value | load an int32 from register ***#index***  |
