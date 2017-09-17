@@ -25,7 +25,6 @@ namespace dvm {
             class VMThread : public Thread {
             private:
                 Stack thread_stack;
-                VMOpcode *pc;
             };
         }
     }

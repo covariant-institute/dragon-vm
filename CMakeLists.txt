@@ -19,6 +19,11 @@ if (IS_LITTLE_ENDIAN)
     add_definitions(-DDVM_LITTLE_ENDIAN=1)
 endif ()
 
+try_run(IS_THREADED COMPILE_RESULT ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/tools/check-threaded.cpp)
+if (IS_THREADED)
+    add_definitions(-DDVM_INTERPRETATION_THREADED)
+endif ()
+
 if (WIN32)
     add_definitions(-DDVM_PLATFORM_WINDOWS)
     aux_source_directory(src/core/platform/windows DVM_PLATFORM_SRC)

@@ -2,6 +2,20 @@
 
 #include "core/type.hpp"
 
+#define OPCODE(X) X,
+
+#define INTS_OPCODES_PREFIX(PREFIX) \
+            OPCODE(PREFIX##_i32) \
+            OPCODE(PREFIX##_i64)
+
+#define FLOATS_OPCODES_PREFIX(PREFIX) \
+            OPCODE(PREFIX##_f32) \
+            OPCODE(PREFIX##_f64)
+
+#define TYPED_OPCODES_PREFIX(PREFIX) \
+            INTS_OPCODES_PREFIX(PREFIX) \
+            FLOATS_OPCODES_PREFIX(PREFIX)
+
 namespace dvm {
     namespace core {
         namespace runtime {
@@ -12,23 +26,8 @@ namespace dvm {
 
             using VMOpcodeName = const char *;
 
-#define OPCODE(X) X
-
-#define INTS_OPCODES_PREFIX(PREFIX) \
-            OPCODE(PREFIX##_i32), \
-            OPCODE(PREFIX##_i64)
-
-#define FLOATS_OPCODES_PREFIX(PREFIX) \
-            OPCODE(PREFIX##_f32), \
-            OPCODE(PREFIX##_f64)
-
-#define TYPED_OPCODES_PREFIX(PREFIX) \
-            INTS_OPCODES_PREFIX(PREFIX), \
-            FLOATS_OPCODES_PREFIX(PREFIX)
-
             enum class VMOpcodes : VMOpcode {
 #include "opcodes_def.hpp.inc"
-
                 VM_OPCODES_NUMBER,
             };
 
@@ -36,16 +35,17 @@ namespace dvm {
 
 
 #undef OPCODE
-#define OPCODE(X) #X
+#define OPCODE(X) #X,
 
             constexpr VMOpcodeName VM_OPCODE_NAMES[VM_OPCODES_NUMBER] = {
 #include "opcodes_def.hpp.inc"
             };
 
+        }
+    }
+}
+
 #undef FLOATS_OPCODES_PREFIX
 #undef INTS_OPCODES_PREFIX
 #undef TYPED_OPCODES_PREFIX
 #undef OPCODE
-        }
-    }
-}
