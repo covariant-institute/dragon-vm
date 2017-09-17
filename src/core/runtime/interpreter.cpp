@@ -8,7 +8,7 @@
 
 #define OPCODE(X) opcode_jump_table[static_cast<Int32>(VMOpcodes::X)] = &&OPCODE_HANDLER_NAME(X);
 #define OPCODE_IMPL(name) OPCODE_HANDLER_NAME(name):
-#define OPCODE_NEXT goto *jump_table[*pc++];
+#define OPCODE_NEXT goto *opcode_jump_table[*pc++];
 
 #else
 
@@ -35,6 +35,7 @@ namespace dvm {
         namespace runtime {
             Interpreter::Interpreter() : pc(nullptr) {
                 memset(opcode_jump_table, '\0', sizeof(opcode_jump_table));
+                setup_opcode_handler();
             }
 
             void Interpreter::load_code(VMOpcode *code) {
@@ -42,9 +43,14 @@ namespace dvm {
             }
 
             void Interpreter::exec() {
+                if (pc == nullptr) {
+                    throw dvm::core::exception(DVM_RUNTIME_INVALID_CODE);
+                }
+
 #ifdef DVM_INTERPRETATION_THREADED
                 threaded(opcode_jump_table);
 #else
+                OPCODE_NEXT;
 #endif
             } // Interpreter::exec()
 
@@ -66,6 +72,7 @@ namespace dvm {
 
                     // 用跳转标签初始化跳转表
 #include <core/runtime/opcodes_def.hpp.inc>
+                return;
 #else
 
                 // 非 threaded 模式下的跳转表初始化

@@ -132,6 +132,9 @@ target_link_libraries(test-method dragon_vm_core)
 add_executable(test-dcx tests/test-dcx.cpp)
 target_link_libraries(test-dcx dragon_vm_core)
 
+add_executable(test-interpreter tests/test-interpreter.cpp)
+target_link_libraries(test-interpreter dragon_vm_core)
+
 # Build tools
 add_executable(generate-empty-dcx tools/generate-empty-dcx.cpp)
 add_executable(generate-opcode-table tools/generate-opcode-table.cpp)
