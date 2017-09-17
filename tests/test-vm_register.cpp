@@ -16,8 +16,8 @@ int main() {
     VMRegisterHolder regs;
 
     auto i32 = Class::find_class(context, "Int32")->new_instance();
-    i32->slots[1].i32 = 10086;
+    i32->slots[1].set(10086);
     regs.get_register(VMRegisterName::R0).set(i32);
 
-    assert(regs.get_register<VMRegisterName::R0>().get()->slots[1].i32 == 10086);
+    assert(regs.get_register<VMRegisterName::R0>().get()->slots[1].data.i32 == 10086);
 }

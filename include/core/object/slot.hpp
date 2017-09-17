@@ -6,6 +6,8 @@
 #include <core/type.hpp>
 #include <core/exceptions.hpp>
 #include <core/errorcodes.hpp>
+#include <core/object/type_id_converter.hpp>
+#include <core/utils.hpp>
 
 namespace dvm {
     namespace core {
@@ -13,6 +15,10 @@ namespace dvm {
             struct Object;
 
             struct Slot {
+            private:
+                type_identifier slot_type;
+
+            public:
                 union {
                     Int32 i32;
                     Int64 i64;
@@ -21,28 +27,35 @@ namespace dvm {
                     Double f64;
 
                     Object *object;
-                };
+                } data;
 
-#define SETTER_GENERATOR(TYPE, MEMBER) \
-                void set_##MEMBER(TYPE value) { \
-                    (MEMBER) = (TYPE) (value); \
+                inline type_identifier get_type() const {
+                    return slot_type;
                 }
 
-                SETTER_GENERATOR(Int32, i32)
+                inline void set_type(type_identifier new_type) {
+                    if (new_type == type_identifier::TYPE_ID_UNSPECIFIC ||
+                        (slot_type != type_identifier::TYPE_ID_UNSPECIFIC
+                         && slot_type != new_type)) {
+                        throw dvm::core::exception(DVM_UNSATISFIED_SLOT_TYPE);
+                    }
+                    slot_type = new_type;
+                }
 
-                SETTER_GENERATOR(Int64, i64)
+                template <typename T>
+                inline T get() const {
+                    if (slot_type == type_identifier::TYPE_ID_UNSPECIFIC) {
+                        throw dvm::core::exception(DVM_UNSATISFIED_SLOT_TYPE);
+                    }
 
-                SETTER_GENERATOR(UInt32, i32)
+                    return *reinterpret_cast<const T *>(&data);
+                }
 
-                SETTER_GENERATOR(UInt64, i64)
-
-                SETTER_GENERATOR(Float, f32)
-
-                SETTER_GENERATOR(Double, f64)
-
-                SETTER_GENERATOR(Object*, object)
-
-#undef SETTER_GENERATOR
+                template <typename T>
+                inline void set(const T &t) {
+                    set_type(type_id_converter<T>::get_type_id());
+                    *reinterpret_cast<T *>(&data) = t;
+                }
             };
         }
     }

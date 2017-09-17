@@ -21,7 +21,7 @@ int main() {
     auto method = context.resolve_method("dvm_native_hello", "()");
     auto ret = method->invoke(context);
     assert(ret);
-    assert(ret->slots[1].i32 == 122);
+    assert(ret->slots[1].get<dvm::core::Int32>() == 122);
     return 0;
 }
 

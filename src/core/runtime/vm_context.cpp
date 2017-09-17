@@ -88,25 +88,25 @@ namespace dvm {
 #define CREATOR_SIGNATURE(TYPE) \
             object::Object* VMContext::new_##TYPE(TYPE value)
 
-#define CREATOR_COMMON_IMPLEMENT(TYPE, SLOT_SETTER) \
+#define CREATOR_COMMON_IMPLEMENT(TYPE) \
             CREATOR_SIGNATURE(TYPE) { \
                 object::Object *object = this->find_class(#TYPE)->new_instance(); \
                 object::ensure_object_valid(object); \
-                object->slots[1].set_##SLOT_SETTER(value); \
+                object->slots[1].set<TYPE>(value); \
                 return object; \
             }
 
-            CREATOR_COMMON_IMPLEMENT(Int32, i32);
+            CREATOR_COMMON_IMPLEMENT(Int32);
 
-            CREATOR_COMMON_IMPLEMENT(Int64, i64);
+            CREATOR_COMMON_IMPLEMENT(Int64);
 
-            CREATOR_COMMON_IMPLEMENT(UInt32, i32);
+            CREATOR_COMMON_IMPLEMENT(UInt32);
 
-            CREATOR_COMMON_IMPLEMENT(UInt64, i64);
+            CREATOR_COMMON_IMPLEMENT(UInt64);
 
-            CREATOR_COMMON_IMPLEMENT(Float, f32);
+            CREATOR_COMMON_IMPLEMENT(Float);
 
-            CREATOR_COMMON_IMPLEMENT(Double, f64);
+            CREATOR_COMMON_IMPLEMENT(Double);
 
             object::Object *VMContext::null_object() {
                 return object::Object::null_object();

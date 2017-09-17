@@ -1,3 +1,4 @@
 #pragma once
 
-#define array_length(a) (sizeof(a) / sizeof(a[0]))
+#define dvm_offset_of(TYPE, MEMBER) \
+    ((size_t) &((TYPE *) nullptr)->MEMBER)

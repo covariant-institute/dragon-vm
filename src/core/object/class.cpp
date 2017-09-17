@@ -65,9 +65,9 @@ namespace dvm {
 
                 // Parent object instantiation
                 if (this->parent != nullptr) {
-                    uninitialized->slots[0].object = this->parent->new_instance();
+                    uninitialized->slots[0].set(this->parent->new_instance());
                 } else {
-                    uninitialized->slots[0].object = uninitialized;
+                    uninitialized->slots[0].set(uninitialized);
                 }
 
                 return uninitialized;

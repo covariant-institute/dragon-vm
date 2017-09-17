@@ -8,6 +8,7 @@
 #include <core/object/class.hpp>
 #include <core/exceptions.hpp>
 #include <core/errorcodes.hpp>
+#include <core/object/type_id_converter.hpp>
 
 namespace dvm {
     namespace core {
@@ -31,19 +32,5 @@ namespace dvm {
                 }
             }
         }
-
-        template <>
-        struct type_id_converter<object::Object> {
-            constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_OBJECT;
-            }
-        };
-
-        template <>
-        struct type_id_converter<object::Object *> {
-            constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_OBJECT;
-            }
-        };
     }
 }

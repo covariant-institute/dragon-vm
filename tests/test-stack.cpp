@@ -11,23 +11,23 @@ int main() {
     using namespace dvm::core;
     using namespace dvm::core::object;
     using namespace dvm::core::runtime;
-    VMContext context{};
+    VMContext context{ };
 
     Stack s(dvm::core::config::STACK_DEFAULT_SIZE);
 
     auto *prototype_int32 = Class::find_class(context, "Int32");
     auto *i32 = s.new_instance(prototype_int32);
     assert(i32->prototype == prototype_int32);
-    assert(i32->slots[0].object->prototype == Class::find_class(context, "Object"));
+    assert(i32->slots[0].get<Object *>()->prototype == Class::find_class(context, "Object"));
 
-    i32->slots[1].set_i32(52019);
+    i32->slots[1].set(52019);
 
     auto *another_i32 = s.new_instance(prototype_int32);
-    another_i32->slots[1].set_i32(1234);
+    another_i32->slots[1].set(1234);
     s.pop();
 
     i32 = s.peek();
-    assert(i32->slots[1].i32 == 52019);
+    assert(i32->slots[1].data.i32 == 52019);
 
     return 0;
 }
