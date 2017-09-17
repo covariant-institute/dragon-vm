@@ -135,6 +135,7 @@ target_link_libraries(test-dcx dragon_vm_core)
 # Build tools
 add_executable(generate-empty-dcx tools/generate-empty-dcx.cpp)
 add_executable(generate-opcode-table tools/generate-opcode-table.cpp)
+add_executable(generate-opcode-impl tools/generate-opcode-impl.cpp)
 
 # Experimental test cases
 add_executable(exp-threaded-interpreter

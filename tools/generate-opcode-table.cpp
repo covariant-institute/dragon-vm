@@ -3,6 +3,7 @@
 //
 
 #include <core/runtime/opcodes.hpp>
+using namespace dvm::core::runtime;
 
 void binary(unsigned char n) {
     for (int shift = sizeof(unsigned char) * 8 - 1; shift >= 0; shift--) {
@@ -18,8 +19,6 @@ void binary(unsigned char n) {
 }
 
 int main() {
-    using namespace dvm::core::runtime;
-
     printf("| Mnemonic | Opcode (in hex) | Opcode (in binary) | Other bytes ([count]: [operand labels]) | Stack ([before] -> [after]) | Description |\n");
     printf("|:--------:|:---------------:|:------------------:|:---------------------------------------:|:---------------------------:|:-----------:|\n");
 

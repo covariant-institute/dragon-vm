@@ -8,17 +8,13 @@
 
 #define OPCODE(X) opcode_jump_table[static_cast<Int32>(VMOpcodes::X)] = &&OPCODE_HANDLER_NAME(X);
 #define OPCODE_IMPL(name) OPCODE_HANDLER_NAME(name):
-#define OPCODE_RETURN goto *jump_table[*pc++];
-#define OPCODE_NEXT OPCODE_RETURN
-#define BREAK ((VMOpcode *)(-1))
+#define OPCODE_NEXT goto *jump_table[*pc++];
 
 #else
 
 #define OPCODE(X) opcode_jump_table[static_cast<Int32>(VMOpcodes::X)] = &Interpreter::OPCODE_HANDLER_NAME(X);
-#define OPCODE_IMPL(name) void OPCODE_HANDLER_NAME(name)() {
-#define OPCODE_RETURN return;
-#define OPCODE_NEXT }
-#define BREAK ((VMOpcode *)(-1))
+#define OPCODE_IMPL(name) void Interpreter::OPCODE_HANDLER_NAME(name)()
+#define OPCODE_NEXT (this->*opcode_jump_table[*pc++])();
 
 #endif
 
@@ -37,7 +33,7 @@
 namespace dvm {
     namespace core {
         namespace runtime {
-            Interpreter::Interpreter() : pc(BREAK) {
+            Interpreter::Interpreter() : pc(nullptr) {
                 memset(opcode_jump_table, '\0', sizeof(opcode_jump_table));
             }
 
@@ -85,6 +81,370 @@ namespace dvm {
                 /**
                  * TODO: 在这里实现每个指令
                  */
+                OPCODE_IMPL(nop)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(new_instance)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(invoke_method)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(ldc_null)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(ldc_i32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(ldc_i64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(ldc_f32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(ldc_f64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(pop)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(ld_i32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(ld_i64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(ld_f32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(ld_f64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(ld_object)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(st_i32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(st_i64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(st_f32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(st_f64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(st_object)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(add_i32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(add_i64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(add_f32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(add_f64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(sub_i32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(sub_i64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(sub_f32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(sub_f64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(mul_i32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(mul_i64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(mul_f32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(mul_f64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(div_i32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(div_i64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(div_f32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(div_f64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(remain_i32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(remain_i64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(remain_f32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(remain_f64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(neg_i32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(neg_i64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(neg_f32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(neg_f64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(shl_i32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(shl_i64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(shr_i32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(shr_i64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(ushl_i32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(ushl_i64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(ushr_i32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(ushr_i64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(and_i32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(and_i64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(or_i32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(or_i64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(xor_i32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(xor_i64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(i32_to_i32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(i32_to_i64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(i32_to_f32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(i32_to_f64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(i64_to_i32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(i64_to_i64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(i64_to_f32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(i64_to_f64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(f32_to_i32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(f32_to_i64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(f32_to_f32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(f32_to_f64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(f64_to_i32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(f64_to_i64)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(f64_to_f32)
+                {
+                    OPCODE_NEXT;
+                }
+
+                OPCODE_IMPL(f64_to_f64)
+                {
+                    OPCODE_NEXT;
+                }
 
 #ifdef DVM_INTERPRETATION_THREADED
             } // Interpreter::threaded()
