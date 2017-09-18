@@ -8,13 +8,13 @@
 
 #define OPCODE(X) opcode_jump_table[static_cast<Int32>(VMOpcodes::X)] = &&OPCODE_HANDLER_NAME(X);
 #define OPCODE_IMPL(name) OPCODE_HANDLER_NAME(name):
-#define OPCODE_NEXT goto *opcode_jump_table[*pc++];
+#define OPCODE_NEXT goto *opcode_jump_table[*thread->pc++];
 
 #else
 
 #define OPCODE(X) opcode_jump_table[static_cast<Int32>(VMOpcodes::X)] = &Interpreter::OPCODE_HANDLER_NAME(X);
 #define OPCODE_IMPL(name) void Interpreter::OPCODE_HANDLER_NAME(name)()
-#define OPCODE_NEXT (this->*opcode_jump_table[*pc++])();
+#define OPCODE_NEXT (this->*opcode_jump_table[*thread->pc++])();
 
 #endif
 
@@ -33,22 +33,18 @@
 namespace dvm {
     namespace core {
         namespace runtime {
-            Interpreter::Interpreter() : pc(nullptr) {
+            Interpreter::Interpreter() {
                 memset(opcode_jump_table, '\0', sizeof(opcode_jump_table));
                 setup_opcode_handler();
             }
 
-            void Interpreter::load_code(VMOpcode *code) {
-                this->pc = code;
-            }
-
-            void Interpreter::exec() {
-                if (pc == nullptr) {
-                    throw dvm::core::exception(DVM_RUNTIME_INVALID_CODE);
-                }
+            void Interpreter::exec(Thread *thread) {
+//                if (pc == nullptr) {
+//                    throw dvm::core::exception(DVM_RUNTIME_INVALID_CODE);
+//                }
 
 #ifdef DVM_INTERPRETATION_THREADED
-                threaded(opcode_jump_table);
+                threaded(thread, opcode_jump_table);
 #else
                 OPCODE_NEXT;
 #endif
@@ -62,10 +58,10 @@ namespace dvm {
                 // 用一个参数区分是初始化还是跳转
 
 #ifdef DVM_INTERPRETATION_THREADED
-                threaded(nullptr);
+                threaded(nullptr, nullptr);
             } // Interpreter::setup_opcode_handler()
 
-            void Interpreter::threaded(void **jump_table) {
+            void Interpreter::threaded(Thread *thread, void **jump_table) {
                 if (jump_table != nullptr) {
                     OPCODE_NEXT;
                 }

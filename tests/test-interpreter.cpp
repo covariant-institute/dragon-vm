@@ -28,6 +28,6 @@ int main() {
 #include <core/runtime/opcodes_def.hpp.inc>
     };
 
-    interpreter.load_code(code);
-    interpreter.exec();
+//    interpreter.load_code(code);
+//    interpreter.exec();
 }
