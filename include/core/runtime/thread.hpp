@@ -19,12 +19,11 @@ namespace dvm {
              * TODO: Thread and Thread Pool
              */
             class Thread {
-            public:
-            };
+                friend class Interpreter;
 
-            class VMThread : public Thread {
             private:
-                Stack thread_stack;
+                VMOpcode *pc;
+                Stack stack;
             };
         }
     }
