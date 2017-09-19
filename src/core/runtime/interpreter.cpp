@@ -2,7 +2,8 @@
 // Created by kiva on 2017/8/28.
 //
 
-#include "core/runtime/interpreter.hpp"
+#include <core/runtime/interpreter.hpp>
+#include <core/runtime/thread.hpp>
 
 #ifdef DVM_INTERPRETATION_THREADED
 

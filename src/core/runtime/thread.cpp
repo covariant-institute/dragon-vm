@@ -16,6 +16,10 @@ namespace dvm {
             void Thread::set_runnable(Byte *code) {
                 this->pc = code;
             }
+
+            void Thread::run() {
+                interpreter.exec(this);
+            }
         }
     }
 }

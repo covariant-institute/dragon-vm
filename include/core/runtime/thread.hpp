@@ -5,7 +5,8 @@
 #pragma once
 
 #include <core/stack.hpp>
-#include "opcodes.hpp"
+#include <core/runtime/opcodes.hpp>
+#include <core/runtime/interpreter.hpp>
 
 namespace dvm {
     namespace core {
@@ -22,6 +23,7 @@ namespace dvm {
                 friend class Interpreter;
 
             private:
+                Interpreter interpreter;
                 VMOpcode *pc;
                 Stack stack;
 
@@ -33,6 +35,8 @@ namespace dvm {
                 ~Thread();
 
                 void set_runnable(Byte *code);
+
+                void run();
             };
         }
     }

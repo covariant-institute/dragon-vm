@@ -2,7 +2,6 @@
 
 #include <core/runtime/opcodes.hpp>
 #include <core/runtime/vm_context.hpp>
-#include <core/runtime/thread.hpp>
 
 #define OPCODE_HANDLER_NAME(X) opcode_handler_##X
 #ifdef DVM_INTERPRETATION_THREADED
@@ -35,7 +34,11 @@
 namespace dvm {
     namespace core {
         namespace runtime {
+            class Thread;
+
             class Interpreter {
+                friend class Thread;
+
             private:
 #ifdef DVM_INTERPRETATION_THREADED
                 void *opcode_jump_table[VM_OPCODES_NUMBER];
@@ -45,6 +48,8 @@ namespace dvm {
 #endif
 
                 void setup_opcode_handler();
+
+                void exec(Thread *thread);
 
 #ifdef DVM_INTERPRETATION_THREADED
 
@@ -56,8 +61,6 @@ namespace dvm {
 
             public:
                 Interpreter();
-
-                void exec(Thread *thread);
             };
         }
     }
