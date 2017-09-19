@@ -76,3 +76,9 @@
 | f64_to_i64             |   46   |   0100 0110   |        | value → result | convert a double to int64 |
 | f64_to_f32             |   47   |   0100 0111   |        | value → result | convert a double to float |
 | f64_to_f64             |   48   |   0100 1000   |        | value → result | useless, should not appear in any class file |
+| ret                    |   49   |   0100 1001   |        | -> | desc |
+| ret_object             |   4a   |   0100 1010   |        | -> | desc |
+| ret_i32                |   4b   |   0100 1011   |        | -> | desc |
+| ret_i64                |   4c   |   0100 1100   |        | -> | desc |
+| ret_f32                |   4d   |   0100 1101   |        | -> | desc |
+| ret_f64                |   4e   |   0100 1110   |        | -> | desc |

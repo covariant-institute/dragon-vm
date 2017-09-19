@@ -24,6 +24,15 @@ namespace dvm {
             private:
                 VMOpcode *pc;
                 Stack stack;
+
+            public:
+                Thread();
+
+                Thread(const Thread &) = delete;
+
+                ~Thread();
+
+                void set_runnable(Byte *code);
             };
         }
     }

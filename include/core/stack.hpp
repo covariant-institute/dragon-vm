@@ -33,7 +33,7 @@ namespace dvm {
             object::Object *allocate_on_stack(SizeT size);
 
         public:
-            Stack() = delete;
+            Stack() = default;
 
             Stack(const Stack &) = delete;
 

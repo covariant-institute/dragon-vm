@@ -28,6 +28,7 @@ int main() {
 #include <core/runtime/opcodes_def.hpp.inc>
     };
 
-//    interpreter.load_code(code);
-//    interpreter.exec();
+    Thread thread;
+    thread.set_runnable(code);
+    interpreter.exec(&thread);
 }

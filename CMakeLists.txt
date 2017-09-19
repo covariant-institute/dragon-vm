@@ -101,7 +101,7 @@ add_library(dragon_vm_core SHARED
         src/core/dcx/dcx_linker.cpp
 
         ${DVM_PLATFORM_SRC}
-        include/core/object/type_id_converter.hpp)
+        include/core/object/type_id_converter.hpp src/core/runtime/thread.cpp)
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)
