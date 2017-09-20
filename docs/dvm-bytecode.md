@@ -17,11 +17,11 @@
 | ld_f32                 |   0b   |   0000 1011   | 1: index | → value | load a float from register ***#index***  |
 | ld_f64                 |   0c   |   0000 1100   | 1: index | → value | load a double from register ***#index***  |
 | ld_object              |   0d   |   0000 1101   | 1: index | → value | load an object from register ***#index***  |
-| st_i32                 |   0e   |   0000 1110   | 1: index | value → | store an int32 to register ***#index***  |
-| st_i64                 |   0f   |   0000 1111   | 1: index | value → | store an int64 to register ***#index***  |
-| st_f32                 |   10   |   0001 0000   | 1: index | value → | store a float to register ***#index***  |
-| st_f64                 |   11   |   0001 0001   | 1: index | value → | store a double to register ***#index***  |
-| st_object              |   12   |   0001 0010   | 1: index | value → | store an object to register ***#index***  |
+| st_i32                 |   0e   |   0000 1110   | 1: index | [No Change] | store an int32 to register ***#index***  |
+| st_i64                 |   0f   |   0000 1111   | 1: index | [No Change] | store an int64 to register ***#index***  |
+| st_f32                 |   10   |   0001 0000   | 1: index | [No Change] | store a float to register ***#index***  |
+| st_f64                 |   11   |   0001 0001   | 1: index | [No Change] | store a double to register ***#index***  |
+| st_object              |   12   |   0001 0010   | 1: index | [No Change] | store an object to register ***#index***  |
 | add_i32                |   13   |   0001 0011   |        | value1, value2 → result | add two int32s |
 | add_i64                |   14   |   0001 0100   |        | value1, value2 → result | add two int64s |
 | add_f32                |   15   |   0001 0101   |        | value1, value2 → result | add two floats |
