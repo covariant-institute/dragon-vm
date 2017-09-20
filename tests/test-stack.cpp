@@ -15,11 +15,11 @@ int main() {
 
     Stack s(dvm::core::config::STACK_DEFAULT_SIZE);
 
-    auto *prototype_int32 = Class::find_class(context, "Int32");
+    auto *prototype_int32 = context.find_class("Int32");
 
     auto *i32 = prototype_int32->new_instance();
     assert(i32->prototype == prototype_int32);
-    assert(i32->slots[0].get<Object *>()->prototype == Class::find_class(context, "Object"));
+    assert(i32->slots[0].get<Object *>()->prototype == context.find_class("Object"));
     i32->slots[1].set<Int32>(52019);
 
     s.push_object_ref(i32);
