@@ -27,13 +27,13 @@ namespace dvm {
             return sp + sizeof(SizeT);
         }
 
-        object::Object *Stack::new_object(const object::Class *prototype) {
-            if (prototype == nullptr) {
-                return object::Object::null_object();
-            }
-
-            auto *uninitialized = allocate_on_stack(prototype->calculate_needed_size());
-            return prototype->new_instance(reinterpret_cast<object::Object *>(uninitialized));
-        }
+//        object::Object *Stack::new_object(const object::Class *prototype) {
+//            if (prototype == nullptr) {
+//                return object::Object::null_object();
+//            }
+//
+//            auto *uninitialized = allocate_on_stack(prototype->calculate_needed_size());
+//            return prototype->new_instance(reinterpret_cast<object::Object *>(uninitialized));
+//        }
     }
 }

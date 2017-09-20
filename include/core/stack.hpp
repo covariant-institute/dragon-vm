@@ -62,18 +62,25 @@ namespace dvm {
                 return *reinterpret_cast<T *>(sp + sizeof(SizeT));
             }
 
+
             object::Object *peek_object() const {
                 ensure_stack_not_empty();
-                return reinterpret_cast<object::Object *>(sp + sizeof(SizeT));
+                auto **ref = reinterpret_cast<object::Object **>(sp + sizeof(SizeT));
+                return ref != nullptr ? *ref : nullptr;
             }
 
-            void push_object(object::Object *obj) {
+            void push_object_ref(object::Object *obj) {
                 // push the address of the object as a reference
                 Byte *ref = allocate_on_stack(sizeof(object::Object *));
                 *reinterpret_cast<object::Object **>(ref) = obj;
             }
 
-            object::Object *new_object(const object::Class *prototype);
+//            object::Object *peek_object() const {
+//                ensure_stack_not_empty();
+//                return reinterpret_cast<object::Object *>(sp + sizeof(SizeT));
+//            }
+
+//            object::Object *new_object(const object::Class *prototype);
         };
     }
 }
