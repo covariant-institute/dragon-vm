@@ -45,7 +45,10 @@ namespace dvm {
                 return sp == sl;
             }
 
-            void pop();
+            void pop() {
+                ensure_stack_not_empty();
+                sp += *reinterpret_cast<SizeT *>(sp) + sizeof(SizeT);
+            }
 
             template <typename T>
             void push(T &&t) {
@@ -64,7 +67,13 @@ namespace dvm {
                 return reinterpret_cast<object::Object *>(sp + sizeof(SizeT));
             }
 
-            object::Object *new_instance(const object::Class *prototype);
+            void push_object(object::Object *obj) {
+                // push the address of the object as a reference
+                Byte *ref = allocate_on_stack(sizeof(object::Object *));
+                *reinterpret_cast<object::Object **>(ref) = obj;
+            }
+
+            object::Object *new_object(const object::Class *prototype);
         };
     }
 }

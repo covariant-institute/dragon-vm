@@ -60,6 +60,9 @@ namespace dvm {
             }
 
             Object *Class::new_instance(Object *uninitialized) const {
+                // Clear memory
+                memset(reinterpret_cast<void *>(uninitialized), '\0', calculate_needed_size());
+
                 // Copy prototype reference
                 uninitialized->prototype = this;
 
