@@ -11,7 +11,7 @@
 
 #else
 
-#define OPCODE_HANDLER(name) void OPCODE_HANDLER_NAME(name)();
+#define OPCODE_HANDLER(name) void OPCODE_HANDLER_NAME(name)(Thread *thread);
 
 #endif
 
@@ -43,7 +43,7 @@ namespace dvm {
 #ifdef DVM_INTERPRETATION_THREADED
                 void *opcode_jump_table[VM_OPCODES_NUMBER];
 #else
-                using OpcodeHandlerType = void (Interpreter::*)();
+                using OpcodeHandlerType = void (Interpreter::*)(Thread *);
                 OpcodeHandlerType opcode_jump_table[VM_OPCODES_NUMBER];
 #endif
 

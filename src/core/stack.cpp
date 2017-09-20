@@ -17,19 +17,14 @@ namespace dvm {
             bp = sp;
         }
 
-        object::Object *dvm::core::Stack::peek() {
-            ensure_stack_not_empty();
-            return reinterpret_cast<object::Object *>(sp + sizeof(SizeT));
-        }
-
-        object::Object *Stack::allocate_on_stack(SizeT size) {
+        Byte *Stack::allocate_on_stack(SizeT size) {
             if (sp - reinterpret_cast<Byte *>(memory) < size + sizeof(SizeT)) {
                 throw dvm::core::exception(DVM_MEMORY_STACK_OVERFLOW);
             }
 
             sp -= size + sizeof(SizeT);
             *reinterpret_cast<SizeT *>(sp) = size;
-            return reinterpret_cast<object::Object *>(sp + sizeof(SizeT));
+            return sp + sizeof(SizeT);
         }
 
         void Stack::pop() {
@@ -37,13 +32,13 @@ namespace dvm {
             sp += *reinterpret_cast<SizeT *>(sp) + sizeof(SizeT);
         }
 
-        object::Object* Stack::new_instance(const object::Class *prototype) {
+        object::Object *Stack::new_instance(const object::Class *prototype) {
             if (prototype == nullptr) {
                 return object::Object::null_object();
             }
 
             auto *uninitialized = allocate_on_stack(prototype->calculate_needed_size());
-            return prototype->new_instance(uninitialized);
+            return prototype->new_instance(reinterpret_cast<object::Object *>(uninitialized));
         }
     }
 }

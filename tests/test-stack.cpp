@@ -26,8 +26,13 @@ int main() {
     another_i32->slots[1].set(1234);
     s.pop();
 
-    i32 = s.peek();
+    i32 = s.peek_object();
     assert(i32->slots[1].data.i32 == 52019);
+    s.pop();
+
+    s.push<Int32>(10);
+    assert(s.peek<Int32>() == 10);
+    s.pop();
 
     return 0;
 }

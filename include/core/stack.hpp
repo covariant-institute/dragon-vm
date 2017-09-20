@@ -30,7 +30,7 @@ namespace dvm {
                 }
             }
 
-            object::Object *allocate_on_stack(SizeT size);
+            Byte *allocate_on_stack(SizeT size);
 
         public:
             Stack() = default;
@@ -45,9 +45,24 @@ namespace dvm {
                 return sp == sl;
             }
 
-            object::Object *peek();
-
             void pop();
+
+            template <typename T>
+            void push(T &&t) {
+                Byte *byte = allocate_on_stack(sizeof(T));
+                *reinterpret_cast<T *>(byte) = std::forward<T>(t);
+            }
+
+            template <typename T>
+            T peek() const {
+                ensure_stack_not_empty();
+                return *reinterpret_cast<T *>(sp + sizeof(SizeT));
+            }
+
+            object::Object *peek_object() const {
+                ensure_stack_not_empty();
+                return reinterpret_cast<object::Object *>(sp + sizeof(SizeT));
+            }
 
             object::Object *new_instance(const object::Class *prototype);
         };
