@@ -35,13 +35,13 @@ namespace dvm {
 
             exception(exception &&) noexcept = default;
 
-            ~exception() override = default;
+            virtual ~exception() = default;
 
             exception &operator=(const exception &)= default;
 
             exception &operator=(exception &&)= default;
 
-            const char *what() const noexcept override {
+            virtual const char *what() const noexcept override {
                 return this->mWhat.c_str();
             }
         };

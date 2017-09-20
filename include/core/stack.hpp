@@ -30,10 +30,10 @@ namespace dvm {
                 }
             }
 
-            object::Object *allocate_on_stack(SizeT size);
+            Byte *allocate_on_stack(SizeT size);
 
         public:
-            Stack() = delete;
+            Stack() = default;
 
             Stack(const Stack &) = delete;
 
@@ -45,11 +45,42 @@ namespace dvm {
                 return sp == sl;
             }
 
-            object::Object *peek();
+            void pop() {
+                ensure_stack_not_empty();
+                sp += *reinterpret_cast<SizeT *>(sp) + sizeof(SizeT);
+            }
 
-            void pop();
+            template <typename T>
+            void push(T &&t) {
+                Byte *byte = allocate_on_stack(sizeof(T));
+                *reinterpret_cast<T *>(byte) = std::forward<T>(t);
+            }
 
-            object::Object *new_instance(const object::Class *prototype);
+            template <typename T>
+            T peek() const {
+                ensure_stack_not_empty();
+                return *reinterpret_cast<T *>(sp + sizeof(SizeT));
+            }
+
+
+            object::Object *peek_object() const {
+                ensure_stack_not_empty();
+                auto **ref = reinterpret_cast<object::Object **>(sp + sizeof(SizeT));
+                return ref != nullptr ? *ref : nullptr;
+            }
+
+            void push_object_ref(object::Object *obj) {
+                // push the address of the object as a reference
+                Byte *ref = allocate_on_stack(sizeof(object::Object *));
+                *reinterpret_cast<object::Object **>(ref) = obj;
+            }
+
+//            object::Object *peek_object() const {
+//                ensure_stack_not_empty();
+//                return reinterpret_cast<object::Object *>(sp + sizeof(SizeT));
+//            }
+
+//            object::Object *new_object(const object::Class *prototype);
         };
     }
 }

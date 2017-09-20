@@ -5,7 +5,8 @@
 #pragma once
 
 #include <core/stack.hpp>
-#include "opcodes.hpp"
+#include <core/runtime/opcodes.hpp>
+#include <core/runtime/interpreter.hpp>
 
 namespace dvm {
     namespace core {
@@ -19,12 +20,23 @@ namespace dvm {
              * TODO: Thread and Thread Pool
              */
             class Thread {
-            public:
-            };
+                friend class Interpreter;
 
-            class VMThread : public Thread {
             private:
-                Stack thread_stack;
+                Interpreter interpreter;
+                VMOpcode *pc;
+                Stack stack;
+
+            public:
+                Thread();
+
+                Thread(const Thread &) = delete;
+
+                ~Thread();
+
+                void set_runnable(Byte *code);
+
+                void run();
             };
         }
     }

@@ -2,7 +2,7 @@
 // Created by kiva on 2017/9/17.
 //
 
-#include <core/runtime/interpreter.hpp>
+#include <core/runtime/thread.hpp>
 
 #define O(X) static_cast<VMOpcode>(VMOpcodes::X)
 
@@ -22,12 +22,12 @@
 
 int main() {
     using namespace dvm::core::runtime;
-    Interpreter interpreter;
 
-    VMOpcode code[] = {
+    dvm::core::Byte code[] = {
 #include <core/runtime/opcodes_def.hpp.inc>
     };
 
-    interpreter.load_code(code);
-    interpreter.exec();
+    Thread thread;
+    thread.set_runnable(code);
+    thread.run();
 }

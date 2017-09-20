@@ -17,11 +17,11 @@
 | ld_f32                 |   0b   |   0000 1011   | 1: index | → value | load a float from register ***#index***  |
 | ld_f64                 |   0c   |   0000 1100   | 1: index | → value | load a double from register ***#index***  |
 | ld_object              |   0d   |   0000 1101   | 1: index | → value | load an object from register ***#index***  |
-| st_i32                 |   0e   |   0000 1110   | 1: index | value → | store an int32 to register ***#index***  |
-| st_i64                 |   0f   |   0000 1111   | 1: index | value → | store an int64 to register ***#index***  |
-| st_f32                 |   10   |   0001 0000   | 1: index | value → | store a float to register ***#index***  |
-| st_f64                 |   11   |   0001 0001   | 1: index | value → | store a double to register ***#index***  |
-| st_object              |   12   |   0001 0010   | 1: index | value → | store an object to register ***#index***  |
+| st_i32                 |   0e   |   0000 1110   | 1: index | [No Change] | store an int32 to register ***#index***  |
+| st_i64                 |   0f   |   0000 1111   | 1: index | [No Change] | store an int64 to register ***#index***  |
+| st_f32                 |   10   |   0001 0000   | 1: index | [No Change] | store a float to register ***#index***  |
+| st_f64                 |   11   |   0001 0001   | 1: index | [No Change] | store a double to register ***#index***  |
+| st_object              |   12   |   0001 0010   | 1: index | [No Change] | store an object to register ***#index***  |
 | add_i32                |   13   |   0001 0011   |        | value1, value2 → result | add two int32s |
 | add_i64                |   14   |   0001 0100   |        | value1, value2 → result | add two int64s |
 | add_f32                |   15   |   0001 0101   |        | value1, value2 → result | add two floats |
@@ -76,3 +76,42 @@
 | f64_to_i64             |   46   |   0100 0110   |        | value → result | convert a double to int64 |
 | f64_to_f32             |   47   |   0100 0111   |        | value → result | convert a double to float |
 | f64_to_f64             |   48   |   0100 1000   |        | value → result | useless, should not appear in any class file |
+| ret                    |   49   |   0100 1001   |        | -> | return void |
+| ret_object             |   4a   |   0100 1010   |        | object -> [Empty] | return an object |
+| ret_i32                |   4b   |   0100 1011   |        | value -> [Empty] | return an int32 |
+| ret_i64                |   4c   |   0100 1100   |        | value -> [Empty] | return an int64 |
+| ret_f32                |   4d   |   0100 1101   |        | value -> [Empty] | return a float |
+| ret_f64                |   4e   |   0100 1110   |        | value -> [Empty] | return a double |
+| jump                   |   4f   |   0100 1111   | 2: offsetbyte1, offsetbyte2 | [No Change] | goes to another instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_ret               |   50   |   0101 0000   | 2: offsetbyte1, offsetbyte2 | -> offset | goes to another instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) and place the return address on the stack |
+| jump_eq                |   51   |   0101 0001   | 2: offsetbyte1, offsetbyte2 | value -> | if value == 0, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_ne                |   52   |   0101 0010   | 2: offsetbyte1, offsetbyte2 | value -> | if value != 0, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_gt                |   53   |   0101 0011   | 2: offsetbyte1, offsetbyte2 | value -> | if value > 0, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_ge                |   54   |   0101 0100   | 2: offsetbyte1, offsetbyte2 | value -> | if value >= 0, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_lt                |   55   |   0101 0101   | 2: offsetbyte1, offsetbyte2 | value -> | if value < 0, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_le                |   56   |   0101 0110   | 2: offsetbyte1, offsetbyte2 | value -> | if value <= 0, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_not_null          |   57   |   0101 0111   | 2: offsetbyte1, offsetbyte2 | value -> | if value != null, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_eq_i32            |   58   |   0101 1000   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to int32s, if value1 == value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_eq_i64            |   59   |   0101 1001   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to int64s, if value1 == value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_eq_f32            |   5a   |   0101 1010   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to floats, if value1 == value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_eq_f64            |   5b   |   0101 1011   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to doubles, if value1 == value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_ne_i32            |   5c   |   0101 1100   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to int32s, if value1 != value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_ne_i64            |   5d   |   0101 1101   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to int64s, if value1 != value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_ne_f32            |   5e   |   0101 1110   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to floats, if value1 != value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_ne_f64            |   5f   |   0101 1111   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to doubles, if value1 != value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_gt_i32            |   60   |   0110 0000   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to int32s, if value1 > value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_gt_i64            |   61   |   0110 0001   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to int64s, if value1 > value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_gt_f32            |   62   |   0110 0010   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to floats, if value1 > value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_gt_f64            |   63   |   0110 0011   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to doubles, if value1 > value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_ge_i32            |   64   |   0110 0100   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to int32s, if value1 >= value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_ge_i64            |   65   |   0110 0101   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to int64s, if value1 >= value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_ge_f32            |   66   |   0110 0110   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to floats, if value1 >= value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_ge_f64            |   67   |   0110 0111   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to doubles, if value1 >= value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_lt_i32            |   68   |   0110 1000   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to int32s, if value1 < value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_lt_i64            |   69   |   0110 1001   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to int64s, if value1 < value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_lt_f32            |   6a   |   0110 1010   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to floats, if value1 < value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_lt_f64            |   6b   |   0110 1011   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to doubles, if value1 < value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_le_i32            |   6c   |   0110 1100   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to int32s, if value1 <= value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_le_i64            |   6d   |   0110 1101   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to int64s, if value1 <= value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_le_f32            |   6e   |   0110 1110   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to floats, if value1 <= value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_le_f64            |   6f   |   0110 1111   | 2: offsetbyte1, offsetbyte2 | value1, value2 -> | compare to doubles, if value1 <= value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
