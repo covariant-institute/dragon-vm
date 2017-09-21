@@ -23,25 +23,25 @@ namespace dvm {
             void DcxReader::open(const std::string &file_path) {
                 dcx_file = fopen(file_path.c_str(), "rb");
                 if (dcx_file == nullptr) {
-                    throw dvm::core::exception(DVM_DCX_NOT_OPEN);
+                    throw dvm::core::Exception(DVM_DCX_NOT_OPEN);
                 }
 
                 try {
                     fseek(dcx_file, 0, SEEK_SET);
 
                     if (!read_header(dcx_file_info)) {
-                        throw dvm::core::exception(DVM_DCX_INVALID);
+                        throw dvm::core::Exception(DVM_DCX_INVALID);
                     }
 
                     if (!config::validate_version_id(dcx_file_info.file_header.version_id)) {
-                        throw dvm::core::exception(DVM_DCX_INVALID_VERSION_ID);
+                        throw dvm::core::Exception(DVM_DCX_INVALID_VERSION_ID);
                     }
 
                     if (!read_dcx_file_info(dcx_file_info)) {
-                        throw dvm::core::exception(DVM_DCX_INVALID);
+                        throw dvm::core::Exception(DVM_DCX_INVALID);
                     }
 
-                } catch (const dvm::core::exception &what) {
+                } catch (const dvm::core::Exception &what) {
                     close();
                     throw what;
                 }
@@ -55,7 +55,7 @@ namespace dvm {
 
             bool DcxReader::read_header(DcxFileInfo &info) {
                 if (dcx_file == nullptr) {
-                    throw dvm::core::exception(DVM_DCX_NOT_OPEN);
+                    throw dvm::core::Exception(DVM_DCX_NOT_OPEN);
                 }
 
                 return ByteOrderedReader::read<config::VersionID>(dcx_file, &info.file_header.version_id);;
@@ -64,7 +64,7 @@ namespace dvm {
 
             bool DcxReader::read_dcx_file_info(DcxFileInfo &info) {
                 if (dcx_file == nullptr) {
-                    throw dvm::core::exception(DVM_DCX_NOT_OPEN);
+                    throw dvm::core::Exception(DVM_DCX_NOT_OPEN);
                 }
 
                 if (!ByteOrderedReader::read<DcxFileConstantPoolHeader>(dcx_file, &info.constant_pool_header)) {
@@ -80,7 +80,7 @@ namespace dvm {
 
             bool DcxReader::read_constant_entry(DcxFileConstantEntry &entry) {
                 if (dcx_file == nullptr) {
-                    throw dvm::core::exception(DVM_DCX_NOT_OPEN);
+                    throw dvm::core::Exception(DVM_DCX_NOT_OPEN);
                 }
 
                 if (ByteOrderedReader::read<DcxFileConstantEntryHeader>(dcx_file, &entry.header)) {
@@ -97,7 +97,7 @@ namespace dvm {
 
             bool DcxReader::read_class_entry(DcxFileClassEntry &entry) {
                 if (dcx_file == nullptr) {
-                    throw dvm::core::exception(DVM_DCX_NOT_OPEN);
+                    throw dvm::core::Exception(DVM_DCX_NOT_OPEN);
                 }
 
                 return ByteOrderedReader::read<DcxFileClassEntryHeader>(dcx_file, &entry.header);
@@ -105,7 +105,7 @@ namespace dvm {
 
             bool DcxReader::read_method_entry(DcxFileMethodEntry &entry) {
                 if (dcx_file == nullptr) {
-                    throw dvm::core::exception(DVM_DCX_NOT_OPEN);
+                    throw dvm::core::Exception(DVM_DCX_NOT_OPEN);
                 }
 
                 if (ByteOrderedReader::read<DcxFileMethodEntryHeader>(dcx_file, &entry.header)) {

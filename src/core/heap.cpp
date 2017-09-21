@@ -92,8 +92,8 @@ namespace dvm {
             // If found,return.
             if (ptr != nullptr)
                 return ptr;
-            else // There have no usable spaces,throw bad alloc exception.
-                throw dvm::core::exception(DVM_BAD_ALLOC);
+            else // There have no usable spaces,throw bad alloc Exception.
+                throw dvm::core::Exception(DVM_BAD_ALLOC);
         }
 
         void Heap::free(void *ptr) {

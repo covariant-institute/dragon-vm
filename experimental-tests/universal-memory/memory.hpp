@@ -187,7 +187,7 @@ namespace cov {
             // If found,return.
             if (ptr != nullptr)
                 return ptr;
-            else // There have no usable spaces,throw bad alloc exception.
+            else // There have no usable spaces,throw bad alloc Exception.
                 throw std::runtime_error("Bad alloc.");
         }
 

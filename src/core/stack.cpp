@@ -19,7 +19,7 @@ namespace dvm {
 
         Byte *Stack::allocate_on_stack(SizeT size) {
             if (sp - reinterpret_cast<Byte *>(memory) < size + sizeof(SizeT)) {
-                throw dvm::core::exception(DVM_MEMORY_STACK_OVERFLOW);
+                throw dvm::core::Exception(DVM_MEMORY_STACK_OVERFLOW);
             }
 
             sp -= size + sizeof(SizeT);

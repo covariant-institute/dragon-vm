@@ -28,7 +28,7 @@ namespace dvm {
             void WindowsDLInterface::open(const std::string &file) {
                 DLHandler handler = (DLHandler) ::LoadLibrary(file.c_str());
                 if (handler == nullptr) {
-                    throw dvm::core::exception(DVM_DL_NOT_OPEN);
+                    throw dvm::core::Exception(DVM_DL_NOT_OPEN);
                 }
                 this->handler = handler;
             }
@@ -41,7 +41,7 @@ namespace dvm {
                     return sym;
                 }
 
-                throw dvm::core::exception(DVM_DL_NOT_FOUND);
+                throw dvm::core::Exception(DVM_DL_NOT_FOUND);
             }
 
             void WindowsDLInterface::close() {

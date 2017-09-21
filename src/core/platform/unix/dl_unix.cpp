@@ -31,7 +31,7 @@ namespace dvm {
             void UnixDLInterface::open(const std::string &file) {
                 DLHandler handler = ::dlopen(file.c_str(), RTLD_LAZY);
                 if (handler == nullptr) {
-                    throw dvm::core::exception(DVM_DL_NOT_OPEN);
+                    throw dvm::core::Exception(DVM_DL_NOT_OPEN);
                 }
                 this->handler = handler;
             }
@@ -49,7 +49,7 @@ namespace dvm {
                     return sym;
                 }
 
-                throw dvm::core::exception(DVM_DL_NOT_FOUND);
+                throw dvm::core::Exception(DVM_DL_NOT_FOUND);
             }
 
             void UnixDLInterface::close() {

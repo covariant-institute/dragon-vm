@@ -43,7 +43,7 @@ namespace dvm {
 
             void Interpreter::exec(Thread *thread) {
                 if (thread == nullptr || thread->pc == nullptr) {
-                    throw dvm::core::exception(DVM_RUNTIME_INVALID_CODE);
+                    throw dvm::core::Exception(DVM_RUNTIME_INVALID_CODE);
                 }
 
 #ifdef DVM_INTERPRETATION_THREADED

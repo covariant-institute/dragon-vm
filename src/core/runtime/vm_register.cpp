@@ -28,7 +28,7 @@ namespace dvm {
                         return RegisterVisitor(registers + id);
                     }
 
-                    throw dvm::core::exception(DVM_REGISTER_INVALID);
+                    throw dvm::core::Exception(DVM_REGISTER_INVALID);
                 }
             }
         }

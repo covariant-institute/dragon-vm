@@ -37,7 +37,7 @@ namespace dvm {
                     if (new_type == type_identifier::TYPE_ID_UNSPECIFIC ||
                         (slot_type != type_identifier::TYPE_ID_UNSPECIFIC
                          && slot_type != new_type)) {
-                        throw dvm::core::exception(DVM_UNSATISFIED_SLOT_TYPE);
+                        throw dvm::core::Exception(DVM_UNSATISFIED_SLOT_TYPE);
                     }
                     slot_type = new_type;
                 }
@@ -45,7 +45,7 @@ namespace dvm {
                 template <typename T>
                 inline T get() const {
                     if (slot_type == type_identifier::TYPE_ID_UNSPECIFIC) {
-                        throw dvm::core::exception(DVM_UNSATISFIED_SLOT_TYPE);
+                        throw dvm::core::Exception(DVM_UNSATISFIED_SLOT_TYPE);
                     }
 
                     return *reinterpret_cast<const T *>(&data);

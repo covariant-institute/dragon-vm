@@ -49,7 +49,7 @@ namespace dvm {
                     return class_map.at(class_name);
 
                 } catch (const std::out_of_range &e) {
-                    throw dvm::core::exception(DVM_RUNTIME_CLASS_NOT_FOUND);
+                    throw dvm::core::Exception(DVM_RUNTIME_CLASS_NOT_FOUND);
                 }
             }
 
@@ -64,7 +64,7 @@ namespace dvm {
                     return method_map.at(method_name).at(signature);
 
                 } catch (const std::out_of_range &e) {
-                    throw dvm::core::exception(DVM_RUNTIME_METHOD_NOT_FOUND);
+                    throw dvm::core::Exception(DVM_RUNTIME_METHOD_NOT_FOUND);
                 }
             }
 
@@ -81,7 +81,7 @@ namespace dvm {
                     return constant_string_map.at(constant_id);
 
                 } catch (const std::out_of_range &e) {
-                    throw dvm::core::exception(DVM_RUNTIME_CONSTANT_NOT_FOUND);
+                    throw dvm::core::Exception(DVM_RUNTIME_CONSTANT_NOT_FOUND);
                 }
             }
 
