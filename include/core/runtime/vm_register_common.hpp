@@ -18,7 +18,7 @@ namespace dvm {
                 /**
                  * 通用对象寄存器
                  */
-                using VMRegister = object::Object *;
+                using VMRegister = object::Slot;
 
                 /**
                  * 通用对象寄存器数量

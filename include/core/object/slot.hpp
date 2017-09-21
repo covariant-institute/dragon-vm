@@ -56,6 +56,12 @@ namespace dvm {
                     set_type(type_id_converter<T>::get_type_id());
                     *reinterpret_cast<T *>(&data) = t;
                 }
+
+                template <typename T>
+                inline void set_unchecked(const T &t) {
+                    slot_type = type_identifier::TYPE_ID_UNSPECIFIC;
+                    *reinterpret_cast<T *>(&data) = t;
+                }
             };
         }
     }

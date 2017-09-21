@@ -10,7 +10,7 @@ addons:
       - george-edison55-precise-backports
       - ubuntu-toolchain-r-test
     packages:
-      - cmake-data
+      - cmake-lib
       - cmake
       - g++-6
 

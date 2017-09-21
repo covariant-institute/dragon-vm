@@ -11,13 +11,15 @@ int main() {
     using namespace dvm::core::object;
     using namespace dvm::core::runtime;
 
-    VMContext context{};
+    VMContext context{ };
 
     VMRegisterHolder regs;
 
-    auto i32 = Class::find_class(context, "Int32")->new_instance();
+    auto i32 = context.find_class("Int32")->new_instance();
     i32->slots[1].set(10086);
-    regs.get_register(VMRegisterName::R0).set(i32);
 
-    assert(regs.get_register<VMRegisterName::R0>().get()->slots[1].data.i32 == 10086);
+    auto visitor = regs.get_register(VMRegisterName::R0);
+    visitor->set(10086);
+
+    assert(visitor->data.i32 == 10086);
 }

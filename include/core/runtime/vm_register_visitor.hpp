@@ -21,12 +21,8 @@ namespace dvm {
 
                     ~RegisterVisitor() = default;
 
-                    void set(object::Object *object) {
-                        *this->register_ptr = object;
-                    }
-
-                    object::Object* get() {
-                        return *this->register_ptr;
+                    VMRegister *operator->() {
+                        return register_ptr;
                     }
                 };
             }
