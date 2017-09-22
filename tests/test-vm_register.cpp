@@ -8,9 +8,8 @@
 #include <core/object/slot.hpp>
 
 int main() {
-    using namespace dvm::core::runtime::registers;
-    using namespace dvm::core::object;
     using namespace dvm::core::runtime;
+    using namespace dvm::core::object;
 
     VMContext context{ };
 
@@ -19,7 +18,7 @@ int main() {
     auto i32 = context.find_class("Int32")->new_instance();
     i32->slots[1].set(10086);
 
-    auto visitor = regs.get_register(VMRegisterName::R0);
+    auto visitor = regs.get_register(0);
     visitor->set(10086);
 
     assert(visitor->data.i32 == 10086);

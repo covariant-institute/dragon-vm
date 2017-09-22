@@ -165,6 +165,8 @@ namespace dvm {
 
                 OPCODE_IMPL(st_i32)
                 {
+                    UInt8 reg = thread->const_i8();
+                    thread->regs.get_register(reg)->set(thread->stack.peek_pop<Int32>());
                     OPCODE_NEXT(context);
                 }
 

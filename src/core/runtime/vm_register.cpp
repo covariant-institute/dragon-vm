@@ -7,29 +7,25 @@
 namespace dvm {
     namespace core {
         namespace runtime {
-            namespace registers {
-                constexpr size_t get_registers_memory_size() {
-                    return sizeof(VMRegister) * VM_REGISTERS_NUMBER;
+            constexpr size_t get_registers_memory_size() {
+                return sizeof(VMRegister) * VM_REGISTERS_NUMBER;
+            }
+
+            VMRegisterHolder::VMRegisterHolder() : registers(nullptr) {
+                auto memory = static_cast<VMRegister *>(dvm_malloc(get_registers_memory_size()));
+                this->registers = memory;
+            }
+
+            VMRegisterHolder::~VMRegisterHolder() {
+                dvm_free(registers);
+            }
+
+            RegisterVisitor VMRegisterHolder::get_register(VMRegisterID reg) {
+                if (reg < VM_REGISTERS_NUMBER) {
+                    return RegisterVisitor(registers + reg);
                 }
 
-                VMRegisterHolder::VMRegisterHolder() : registers(nullptr) {
-                    auto memory = static_cast<VMRegister *>(dvm_malloc(get_registers_memory_size()));
-                    this->registers = memory;
-                }
-
-                VMRegisterHolder::~VMRegisterHolder() {
-                    dvm_free(registers);
-                }
-
-                RegisterVisitor VMRegisterHolder::get_register(VMRegisterName register_identifier) {
-                    auto id = static_cast<VMRegisterID>(register_identifier);
-
-                    if (id < VM_REGISTERS_NUMBER) {
-                        return RegisterVisitor(registers + id);
-                    }
-
-                    throw dvm::core::Exception(DVM_REGISTER_INVALID);
-                }
+                throw dvm::core::Exception(DVM_REGISTER_INVALID);
             }
         }
     }

@@ -7,6 +7,7 @@
 #include <core/stack.hpp>
 #include <core/runtime/opcodes.hpp>
 #include <core/runtime/interpreter.hpp>
+#include <core/runtime/vm_register.hpp>
 
 namespace dvm {
     namespace core {
@@ -28,6 +29,7 @@ namespace dvm {
             private:
                 Interpreter interpreter;
                 VMOpcode *pc;
+                VMRegisterHolder regs;
                 Stack stack;
 
                 void run_with_context(VMContext *context);
