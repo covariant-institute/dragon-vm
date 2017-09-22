@@ -60,6 +60,8 @@ add_library(dragon_vm_core SHARED
         include/core/runtime/vm_register_common.hpp
         include/core/runtime/vm_register_visitor.hpp
         include/core/runtime/thread.hpp
+        include/core/runtime/utils.hpp
+        include/core/runtime/math.hpp
 
         include/core/object/method.hpp
         include/core/object/class.hpp
@@ -102,7 +104,7 @@ add_library(dragon_vm_core SHARED
         src/core/dcx/dcx_file.cpp
         src/core/dcx/dcx_linker.cpp
 
-        ${DVM_PLATFORM_SRC} include/core/runtime/utils.hpp)
+        ${DVM_PLATFORM_SRC})
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)

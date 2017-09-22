@@ -5,6 +5,7 @@
 #include <core/runtime/interpreter.hpp>
 #include <core/runtime/thread.hpp>
 #include <core/runtime/utils.hpp>
+#include <core/runtime/math.hpp>
 
 #ifdef DVM_INTERPRETATION_THREADED
 
@@ -202,121 +203,145 @@ namespace dvm {
 
                 OPCODE_IMPL(add_i32)
                 {
+                    Utils::math<Int32, MathAdd<Int32> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(add_i64)
                 {
+                    Utils::math<Int64, MathAdd<Int64> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(add_f32)
                 {
+                    Utils::math<Float, MathAdd<Float> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(add_f64)
                 {
+                    Utils::math<Double, MathAdd<Double> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(sub_i32)
                 {
+                    Utils::math<Int32, MathSub<Int32> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(sub_i64)
                 {
+                    Utils::math<Int64, MathSub<Int64> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(sub_f32)
                 {
+                    Utils::math<Float, MathSub<Float> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(sub_f64)
                 {
+                    Utils::math<Double, MathSub<Double> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(mul_i32)
                 {
+                    Utils::math<Int32, MathMul<Int32> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(mul_i64)
                 {
+                    Utils::math<Int64, MathMul<Int64> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(mul_f32)
                 {
+                    Utils::math<Float, MathMul<Float> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(mul_f64)
                 {
+                    Utils::math<Double, MathMul<Double> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(div_i32)
                 {
+                    Utils::math<Int32, MathDiv<Int32> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(div_i64)
                 {
+                    Utils::math<Int64, MathDiv<Int64> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(div_f32)
                 {
+                    Utils::math<Float, MathDiv<Float> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(div_f64)
                 {
+                    Utils::math<Double, MathDiv<Double> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(remain_i32)
                 {
+                    Utils::math<Int32, MathRemain<Int32> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(remain_i64)
                 {
+                    Utils::math<Int64, MathRemain<Int64> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(remain_f32)
                 {
+                    Utils::math<Float, MathRemain<Float> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(remain_f64)
                 {
+                    Utils::math<Double, MathRemain<Double> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(neg_i32)
                 {
+                    Utils::math1<Int32, MathNegate<Int32> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(neg_i64)
                 {
+                    Utils::math1<Int64, MathNegate<Int64> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(neg_f32)
                 {
+                    Utils::math1<Float, MathNegate<Float> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(neg_f64)
                 {
+                    Utils::math1<Double, MathNegate<Double> >(thread);
                     OPCODE_NEXT(context);
                 }
 

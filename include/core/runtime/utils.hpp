@@ -10,9 +10,34 @@
 namespace dvm {
     namespace core {
         namespace runtime {
+
             class Utils {
             public:
+                template <typename T, typename Impl>
+                static inline void math(Thread *thread) {
+                    T &&lhs = thread->stack.peek_pop<T>();
+                    dvm_memory_barrier();
+                    T &&rhs = thread->stack.peek_pop<T>();
 
+                    T &&result = Impl::get_result(std::forward<T>(lhs),
+                                                  std::forward<T>(rhs));
+                    thread->stack.push<T>(std::forward<T>(result));
+                }
+
+                template <typename T, typename Impl>
+                static inline void math1(Thread *thread) {
+                    T &&operand = thread->stack.peek_pop<T>();
+
+                    T &&result = Impl::get_result(std::forward<T>(operand));
+                    thread->stack.push<T>(std::forward<T>(result));
+                }
+
+                template <typename T>
+                static inline T load_reg(Thread *thread) {
+                    UInt8 reg = thread->const_i8();
+
+                    return thread->regs.get_register(reg)->get_unchecked<T>();
+                }
 
                 template <typename T>
                 static inline void store(Thread *thread) {
@@ -33,15 +58,11 @@ namespace dvm {
 
                 template <typename T>
                 static inline void load(Thread *thread) {
-                    UInt8 reg = thread->const_i8();
-                    thread->stack.push(
-                            thread->regs.get_register(reg)->get_unchecked<T>());
+                    thread->stack.push(load_reg<T>(thread));
                 }
 
                 static inline void load_object_ref(Thread *thread) {
-                    UInt8 reg = thread->const_i8();
-                    thread->stack.push_object_ref(
-                            thread->regs.get_register(reg)->get_unchecked<object::Object *>());
+                    thread->stack.push_object_ref(load_reg<object::Object *>(thread));
                 }
             };
         }

@@ -13,7 +13,7 @@
     { \
         using namespace dvm::core; \
         using namespace dvm::core::runtime; \
-        printf(":: Testing on " code_name "\n"); \
+        printf(":: Testing on %s\n", code_name); \
         Byte _c[] = { __VA_ARGS__, RET_CODE }; \
         thread.set_runnable(_c); \
         context.run_thread(&thread); \
@@ -134,4 +134,106 @@ int main() {
       OPCODE(st_object), 0,
       OPCODE(pop),
       OPCODE(ld_object), 0);
+
+    // 1 + 2 + 3
+    T("add_i32 @ 1 + 2 + 3", {
+        assert(thread.get_stack().peek<Int32>() == 6);
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 3,
+      OPCODE(ldc_i32), 0, 0, 0, 2,
+      OPCODE(add_i32),
+      OPCODE(ldc_i32), 0, 0, 0, 1,
+      OPCODE(add_i32));
+
+    // 3 - (2 + 1)
+    T("sub_i32 @ 3 - (2 + 1)", {
+        assert(thread.get_stack().peek<Int32>() == 0);
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 1,
+      OPCODE(ldc_i32), 0, 0, 0, 2,
+      OPCODE(add_i32),
+      OPCODE(ldc_i32), 0, 0, 0, 3,
+      OPCODE(sub_i32));
+
+    // 1 - 2
+    T("sub_i32 @ 1 - 2", {
+        assert(thread.get_stack().peek<Int32>() == -1);
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 2,
+      OPCODE(ldc_i32), 0, 0, 0, 1,
+      OPCODE(sub_i32));
+
+    // 3 * (4 - 2)
+    T("mul_i32 @ 3 * (4 - 2)", {
+        assert(thread.get_stack().peek<Int32>() == 6);
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 2,
+      OPCODE(ldc_i32), 0, 0, 0, 4,
+      OPCODE(sub_i32),
+      OPCODE(ldc_i32), 0, 0, 0, 3,
+      OPCODE(mul_i32));
+
+    // 3 * (2 - 4)
+    T("mul_i32 @ 3 * (2 - 4)", {
+        assert(thread.get_stack().peek<Int32>() == -6);
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 4,
+      OPCODE(ldc_i32), 0, 0, 0, 2,
+      OPCODE(sub_i32),
+      OPCODE(ldc_i32), 0, 0, 0, 3,
+      OPCODE(mul_i32));
+
+    // 12 / (8 - 2)
+    T("div_i32 @ 12 / (8 - 2)", {
+        assert(thread.get_stack().peek<Int32>() == 2);
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 2,
+      OPCODE(ldc_i32), 0, 0, 0, 8,
+      OPCODE(sub_i32),
+      OPCODE(ldc_i32), 0, 0, 0, 12,
+      OPCODE(div_i32));
+
+    // 5 % 3
+    T("remain_i32 @ 5 % 3", {
+        assert(thread.get_stack().peek<Int32>() == 2);
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 3,
+      OPCODE(ldc_i32), 0, 0, 0, 5,
+      OPCODE(remain_i32));
+
+
+    Float f5 = 5.0f;
+    Float f3 = 3.0f;
+    Byte byte5[sizeof(Float)];
+    Byte byte3[sizeof(Float)];
+    memcpy(byte5, &f5, sizeof(Float));
+    memcpy(byte3, &f3, sizeof(Float));
+
+    // 5.0f % 3.0f
+    T("remain_f32 @ 5.0f % 3.0f", {
+        assert(thread.get_stack().peek<Float>() == 2.0f);
+    },
+      OPCODE(ldc_f32), 0, 0, 0, 3,
+      OPCODE(ldc_f32), byte3[0], byte3[1], byte3[2], byte3[3],
+      OPCODE(ldc_f32), byte5[0], byte5[1], byte5[2], byte5[3],
+      OPCODE(remain_f32));
+
+    // - (5 % 3)
+    T("neg_i32 @ - (5 % 3)", {
+        assert(thread.get_stack().peek<Int32>() == -2);
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 3,
+      OPCODE(ldc_i32), 0, 0, 0, 5,
+      OPCODE(remain_i32),
+      OPCODE(neg_i32));
+
+    // - (5.0f % 3.0f)
+    T("neg_f32 @ 5.0f % 3.0f", {
+        assert(thread.get_stack().peek<Float>() == -2.0f);
+    },
+      OPCODE(ldc_f32), 0, 0, 0, 3,
+      OPCODE(ldc_f32), byte3[0], byte3[1], byte3[2], byte3[3],
+      OPCODE(ldc_f32), byte5[0], byte5[1], byte5[2], byte5[3],
+      OPCODE(remain_f32),
+      OPCODE(neg_f32));
 }
