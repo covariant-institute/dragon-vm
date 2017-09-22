@@ -64,6 +64,7 @@ add_library(dragon_vm_core SHARED
         include/core/object/method.hpp
         include/core/object/class.hpp
         include/core/object/slot.hpp
+        include/core/object/type_id_converter.hpp
 
         include/core/dcx/dcx_file_info.hpp
         include/core/dcx/dcx_reader.hpp
@@ -85,6 +86,7 @@ add_library(dragon_vm_core SHARED
         src/core/runtime/vm_register.cpp
         src/core/runtime/vm_register_visitor.cpp
         src/core/runtime/vm_context.cpp
+        src/core/runtime/thread.cpp
 
         src/core/object/class.cpp
         src/core/object/object.cpp
@@ -100,8 +102,7 @@ add_library(dragon_vm_core SHARED
         src/core/dcx/dcx_file.cpp
         src/core/dcx/dcx_linker.cpp
 
-        ${DVM_PLATFORM_SRC}
-        include/core/object/type_id_converter.hpp src/core/runtime/thread.cpp)
+        ${DVM_PLATFORM_SRC})
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)
@@ -155,6 +156,4 @@ add_executable(exp-universal-memory
 if (WIN32)
 elseif (UNIX)
     target_link_libraries(dragon_vm_core -ldl)
-else()
-    message(STATUS "Cannot detect current system, disabling platform dependent features.")
 endif()

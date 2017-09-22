@@ -537,32 +537,12 @@ namespace dvm {
                     OPCODE_NEXT();
                 }
 
-                OPCODE_IMPL(jump_eq_f32)
-                {
-                    OPCODE_NEXT();
-                }
-
-                OPCODE_IMPL(jump_eq_f64)
-                {
-                    OPCODE_NEXT();
-                }
-
                 OPCODE_IMPL(jump_ne_i32)
                 {
                     OPCODE_NEXT();
                 }
 
                 OPCODE_IMPL(jump_ne_i64)
-                {
-                    OPCODE_NEXT();
-                }
-
-                OPCODE_IMPL(jump_ne_f32)
-                {
-                    OPCODE_NEXT();
-                }
-
-                OPCODE_IMPL(jump_ne_f64)
                 {
                     OPCODE_NEXT();
                 }
@@ -577,32 +557,12 @@ namespace dvm {
                     OPCODE_NEXT();
                 }
 
-                OPCODE_IMPL(jump_gt_f32)
-                {
-                    OPCODE_NEXT();
-                }
-
-                OPCODE_IMPL(jump_gt_f64)
-                {
-                    OPCODE_NEXT();
-                }
-
                 OPCODE_IMPL(jump_ge_i32)
                 {
                     OPCODE_NEXT();
                 }
 
                 OPCODE_IMPL(jump_ge_i64)
-                {
-                    OPCODE_NEXT();
-                }
-
-                OPCODE_IMPL(jump_ge_f32)
-                {
-                    OPCODE_NEXT();
-                }
-
-                OPCODE_IMPL(jump_ge_f64)
                 {
                     OPCODE_NEXT();
                 }
@@ -617,16 +577,6 @@ namespace dvm {
                     OPCODE_NEXT();
                 }
 
-                OPCODE_IMPL(jump_lt_f32)
-                {
-                    OPCODE_NEXT();
-                }
-
-                OPCODE_IMPL(jump_lt_f64)
-                {
-                    OPCODE_NEXT();
-                }
-
                 OPCODE_IMPL(jump_le_i32)
                 {
                     OPCODE_NEXT();
@@ -637,12 +587,42 @@ namespace dvm {
                     OPCODE_NEXT();
                 }
 
-                OPCODE_IMPL(jump_le_f32)
+                OPCODE_IMPL(jump_eq_object)
                 {
                     OPCODE_NEXT();
                 }
 
-                OPCODE_IMPL(jump_le_f64)
+                OPCODE_IMPL(jump_ne_object)
+                {
+                    OPCODE_NEXT();
+                }
+
+                OPCODE_IMPL(cmp_i32)
+                {
+                    OPCODE_NEXT();
+                }
+
+                OPCODE_IMPL(cmp_i64)
+                {
+                    OPCODE_NEXT();
+                }
+
+                OPCODE_IMPL(cmp_lt_f32)
+                {
+                    OPCODE_NEXT();
+                }
+
+                OPCODE_IMPL(cmp_lt_f64)
+                {
+                    OPCODE_NEXT();
+                }
+
+                OPCODE_IMPL(cmp_gt_f32)
+                {
+                    OPCODE_NEXT();
+                }
+
+                OPCODE_IMPL(cmp_gt_f64)
                 {
                     OPCODE_NEXT();
                 }

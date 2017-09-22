@@ -40,21 +40,17 @@ namespace dvm {
                 friend class Thread;
 
             private:
-#ifdef DVM_INTERPRETATION_THREADED
-                void *opcode_jump_table[VM_OPCODES_NUMBER];
-#else
-                using OpcodeHandlerType = void (Interpreter::*)(Thread *);
-                OpcodeHandlerType opcode_jump_table[VM_OPCODES_NUMBER];
-#endif
-
                 void setup_opcode_handler();
 
                 void exec(Thread *thread);
 
 #ifdef DVM_INTERPRETATION_THREADED
+                void *opcode_jump_table[VM_OPCODES_NUMBER];
 
                 void threaded(Thread *thread, void **jump_table);
-
+#else
+                using OpcodeHandlerType = void (Interpreter::*)(Thread *);
+                OpcodeHandlerType opcode_jump_table[VM_OPCODES_NUMBER];
 #endif
 
 #include "opcodes_def.hpp.inc"
