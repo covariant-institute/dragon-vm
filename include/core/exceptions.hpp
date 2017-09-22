@@ -17,31 +17,33 @@ namespace dvm {
 
             ++size; // null terminated
             char buffer[size];
-            ::snprintf(buffer, size, format.c_str(), std::forward<args_t>(args)...);
+            ::snprintf(buffer, static_cast<size_t>(size),
+                       format.c_str(),
+                       std::forward<args_t>(args)...);
             return std::string(buffer);
         }
 
-        class exception : public std::exception {
+        class Exception : public std::exception {
         protected:
             std::string mWhat;
         public:
-            exception() = delete;
+            Exception() = delete;
 
             template <typename...args_t>
-            explicit exception(const std::string &what, args_t &&...args) : mWhat(
+            explicit Exception(const std::string &what, args_t &&...args) : mWhat(
                     dvm::core::sprintf(what, std::forward<args_t>(args)...)) { }
 
-            exception(const exception &) = default;
+            Exception(const Exception &) = default;
 
-            exception(exception &&) noexcept = default;
+            Exception(Exception &&) noexcept = default;
 
-            ~exception() override = default;
+            virtual ~Exception() = default;
 
-            exception &operator=(const exception &)= default;
+            Exception &operator=(const Exception &)= default;
 
-            exception &operator=(exception &&)= default;
+            Exception &operator=(Exception &&)= default;
 
-            const char *what() const noexcept override {
+            virtual const char *what() const noexcept override {
                 return this->mWhat.c_str();
             }
         };

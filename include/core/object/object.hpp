@@ -13,6 +13,8 @@
 namespace dvm {
     namespace core {
         namespace object {
+            struct Object;
+
             struct Object {
                 const Class *prototype;
 
@@ -28,7 +30,7 @@ namespace dvm {
 
             inline void ensure_object_valid(Object *object) {
                 if (object == nullptr) {
-                    throw dvm::core::exception(DVM_INVALID_OBJECT_MEMORY);
+                    throw dvm::core::Exception(DVM_INVALID_OBJECT_MEMORY);
                 }
             }
         }

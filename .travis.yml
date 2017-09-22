@@ -10,9 +10,8 @@ addons:
       - george-edison55-precise-backports
       - ubuntu-toolchain-r-test
     packages:
-      - cmake-data
       - cmake
       - g++-6
 
 
-script: export CC=gcc-6 && export CXX=g++-6 && cmake . && make all
+script: export CC=gcc-6 && export CXX=g++-6 && cmake . && make all && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:. && ./test-interpreter

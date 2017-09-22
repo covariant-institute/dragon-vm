@@ -9,27 +9,21 @@
 namespace dvm {
     namespace core {
         namespace runtime {
-            namespace registers {
-                class RegisterVisitor {
-                private:
-                    VMRegister *register_ptr;
+            class RegisterVisitor {
+            private:
+                VMRegister *register_ptr;
 
-                public:
-                    RegisterVisitor(const RegisterVisitor &);
+            public:
+                RegisterVisitor(const RegisterVisitor &);
 
-                    explicit RegisterVisitor(VMRegister *register_ptr);
+                explicit RegisterVisitor(VMRegister *register_ptr);
 
-                    ~RegisterVisitor() = default;
+                ~RegisterVisitor() = default;
 
-                    void set(object::Object *object) {
-                        *this->register_ptr = object;
-                    }
-
-                    object::Object* get() {
-                        return *this->register_ptr;
-                    }
-                };
-            }
+                VMRegister *operator->() {
+                    return register_ptr;
+                }
+            };
         }
     }
 }

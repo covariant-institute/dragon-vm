@@ -27,6 +27,6 @@ int main() {
     for (int i = 0; i < VM_OPCODES_NUMBER; ++i) {
         printf("| %-22s |   %02x   |   ", VM_OPCODE_NAMES[i], i);
         binary((unsigned char) i);
-        printf("   |        | -> | desc |\n");
+        printf("   |        | → | desc |\n");
     }
 }

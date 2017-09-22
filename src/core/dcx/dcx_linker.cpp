@@ -10,21 +10,21 @@ namespace dvm {
         namespace dcx {
             std::string DcxLinker::constant_to_string(const DcxFileConstantEntry &entry) {
                 if (entry.constant_data == nullptr) {
-                    throw dvm::core::exception(DVM_DCX_LINKING_INVALID_NAME);
+                    throw dvm::core::Exception(DVM_DCX_LINKING_INVALID_NAME);
                 }
                 return std::string(reinterpret_cast<const char *>(entry.constant_data));
             }
 
             void DcxLinker::validate_class(DcxFileClassEntry &entry) {
                 if (entry.header.member_slot_count < 1) {
-                    throw dvm::core::exception(DVM_DCX_LINKING_INVALID_CLASS);
+                    throw dvm::core::Exception(DVM_DCX_LINKING_INVALID_CLASS);
                 }
             }
 
             void DcxLinker::validate_method(DcxFileMethodEntry &entry) {
                 if (!entry.header.method_is_native &&
                     (entry.header.method_body_size == 0 || entry.method_body == nullptr)) {
-                    throw dvm::core::exception(DVM_DCX_LINKING_INVALID_METHOD);
+                    throw dvm::core::Exception(DVM_DCX_LINKING_INVALID_METHOD);
                 }
             }
 

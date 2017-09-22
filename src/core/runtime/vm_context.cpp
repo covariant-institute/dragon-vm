@@ -3,6 +3,7 @@
 //
 
 #include <core/runtime/vm_context.hpp>
+#include <core/runtime/thread.hpp>
 #include <core/object/method.hpp>
 #include <core/dcx/dcx_linker.hpp>
 
@@ -49,7 +50,7 @@ namespace dvm {
                     return class_map.at(class_name);
 
                 } catch (const std::out_of_range &e) {
-                    throw dvm::core::exception(DVM_RUNTIME_CLASS_NOT_FOUND);
+                    throw dvm::core::Exception(DVM_RUNTIME_CLASS_NOT_FOUND);
                 }
             }
 
@@ -64,7 +65,7 @@ namespace dvm {
                     return method_map.at(method_name).at(signature);
 
                 } catch (const std::out_of_range &e) {
-                    throw dvm::core::exception(DVM_RUNTIME_METHOD_NOT_FOUND);
+                    throw dvm::core::Exception(DVM_RUNTIME_METHOD_NOT_FOUND);
                 }
             }
 
@@ -81,7 +82,14 @@ namespace dvm {
                     return constant_string_map.at(constant_id);
 
                 } catch (const std::out_of_range &e) {
-                    throw dvm::core::exception(DVM_RUNTIME_CONSTANT_NOT_FOUND);
+                    throw dvm::core::Exception(DVM_RUNTIME_CONSTANT_NOT_FOUND);
+                }
+            }
+
+
+            void VMContext::run_thread(Thread *thread) {
+                if (thread != nullptr) {
+                    thread->run_with_context(this);
                 }
             }
 

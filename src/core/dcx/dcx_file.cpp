@@ -33,7 +33,7 @@ namespace dvm {
                 DcxFileConstantEntry constant_entry{ };
                 for (int i = 0; i < reader.get_constant_entries(); ++i) {
                     if (!reader.read_constant_entry(constant_entry)) {
-                        throw dvm::core::exception(DVM_DCX_LOAD_ERROR);
+                        throw dvm::core::Exception(DVM_DCX_LOAD_ERROR);
                     }
                     constant_pool.push_back(constant_entry);
                 }
@@ -41,7 +41,7 @@ namespace dvm {
                 DcxFileClassEntry class_entry{ };
                 for (int i = 0; i < reader.get_class_entries(); ++i) {
                     if (!reader.read_class_entry(class_entry)) {
-                        throw dvm::core::exception(DVM_DCX_LOAD_ERROR);
+                        throw dvm::core::Exception(DVM_DCX_LOAD_ERROR);
                     }
                     class_pool.push_back(class_entry);
                 }
@@ -49,7 +49,7 @@ namespace dvm {
                 DcxFileMethodEntry method_entry{ };
                 for (int i = 0; i < reader.get_method_entries(); ++i) {
                     if (!reader.read_method_entry(method_entry)) {
-                        throw dvm::core::exception(DVM_DCX_LOAD_ERROR);
+                        throw dvm::core::Exception(DVM_DCX_LOAD_ERROR);
                     }
                     method_pool.push_back(method_entry);
                 }
@@ -58,7 +58,7 @@ namespace dvm {
             }
 
             void DcxFile::load_dcx(Byte *bytes, SizeT length) {
-                throw dvm::core::exception(DVM_DCX_LOAD_ERROR);
+                throw dvm::core::Exception(DVM_DCX_LOAD_ERROR);
             }
 
             std::shared_ptr<DcxFile> DcxFile::open(const std::string &path) {

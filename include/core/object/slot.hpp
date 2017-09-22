@@ -37,7 +37,7 @@ namespace dvm {
                     if (new_type == type_identifier::TYPE_ID_UNSPECIFIC ||
                         (slot_type != type_identifier::TYPE_ID_UNSPECIFIC
                          && slot_type != new_type)) {
-                        throw dvm::core::exception(DVM_UNSATISFIED_SLOT_TYPE);
+                        throw dvm::core::Exception(DVM_UNSATISFIED_SLOT_TYPE);
                     }
                     slot_type = new_type;
                 }
@@ -45,16 +45,27 @@ namespace dvm {
                 template <typename T>
                 inline T get() const {
                     if (slot_type == type_identifier::TYPE_ID_UNSPECIFIC) {
-                        throw dvm::core::exception(DVM_UNSATISFIED_SLOT_TYPE);
+                        throw dvm::core::Exception(DVM_UNSATISFIED_SLOT_TYPE);
                     }
 
-                    return *reinterpret_cast<const T *>(&data);
+                    return get_unchecked<T>();
                 }
 
                 template <typename T>
                 inline void set(const T &t) {
                     set_type(type_id_converter<T>::get_type_id());
                     *reinterpret_cast<T *>(&data) = t;
+                }
+
+                template <typename T>
+                inline void set_unchecked(const T &t) {
+                    slot_type = type_identifier::TYPE_ID_UNSPECIFIC;
+                    set<T>(t);
+                }
+
+                template <typename T>
+                inline T get_unchecked() const {
+                    return *reinterpret_cast<const T *>(&data);
                 }
             };
         }

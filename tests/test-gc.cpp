@@ -9,7 +9,7 @@ struct linked_list {
 };
 
 static void log_ptr(void *p) {
-    printf("free %p, data: %d\n", p, ((linked_list *) p)->data);
+    printf("free %p, lib: %d\n", p, ((linked_list *) p)->data);
 }
 
 static void log_common_ptr(void *p) {

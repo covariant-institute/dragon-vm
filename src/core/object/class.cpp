@@ -43,7 +43,7 @@ namespace dvm {
 
                 if (parent_class->type != type_identifier::TYPE_ID_OBJECT
                     || member_slot_count < 1) {
-                    throw dvm::core::exception(DVM_INVALID_OBJECT_MEMORY);
+                    throw dvm::core::Exception(DVM_INVALID_OBJECT_MEMORY);
                 }
 
                 Class *clazz = define_bootstrap_class(context, name, class_slot_count, member_slot_count);
@@ -60,6 +60,9 @@ namespace dvm {
             }
 
             Object *Class::new_instance(Object *uninitialized) const {
+                // Clear memory
+                memset(reinterpret_cast<void *>(uninitialized), '\0', calculate_needed_size());
+
                 // Copy prototype reference
                 uninitialized->prototype = this;
 

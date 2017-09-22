@@ -13,7 +13,7 @@ namespace dvm {
         void* dvm_malloc(SizeT size) {
             void *memory = ::malloc(static_cast<size_t>(size));
             if (memory == nullptr) {
-                throw dvm::core::exception(DVM_BAD_ALLOC);
+                throw dvm::core::Exception(DVM_BAD_ALLOC);
             }
             return memory;
         }
