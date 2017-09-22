@@ -13,6 +13,7 @@ namespace dvm {
             class Utils {
             public:
 
+
                 template <typename T>
                 static inline void store(Thread *thread) {
                     UInt8 reg = thread->const_i8();

@@ -42,25 +42,21 @@ namespace dvm {
                     return *pc++;
                 }
 
-                inline UInt16 const_i16() {
-                    UInt8 h = const_i8();
+                inline Int16 const_i16() {
+                    UInt8 &&h = const_i8();
                     dvm_memory_barrier();
-                    UInt8 l = const_i8();
+
+                    UInt8 &&l = const_i8();
                     return (h << 8) + l;
                 }
 
                 inline Int32 const_i32() {
-                    UInt8 byte1 = const_i8();
+                    Int16 &&h = const_i16();
                     dvm_memory_barrier();
 
-                    UInt8 byte2 = const_i8();
-                    dvm_memory_barrier();
+                    Int16 &&l = const_i16();
 
-                    UInt8 byte3 = const_i8();
-                    dvm_memory_barrier();
-
-                    UInt8 byte4 = const_i8();
-                    return (byte1 << 24) + (byte2 << 16) + (byte3 << 8) + byte4;
+                    return (h << 16) + l;
                 }
 
                 inline Float const_f32() {
