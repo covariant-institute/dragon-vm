@@ -3,6 +3,7 @@
 //
 
 #include <core/runtime/vm_context.hpp>
+#include <core/runtime/thread.hpp>
 #include <core/object/method.hpp>
 #include <core/dcx/dcx_linker.hpp>
 
@@ -82,6 +83,13 @@ namespace dvm {
 
                 } catch (const std::out_of_range &e) {
                     throw dvm::core::Exception(DVM_RUNTIME_CONSTANT_NOT_FOUND);
+                }
+            }
+
+
+            void VMContext::run_thread(Thread *thread) {
+                if (thread != nullptr) {
+                    thread->run_with_context(this);
                 }
             }
 

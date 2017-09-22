@@ -17,8 +17,8 @@ namespace dvm {
                 this->pc = code;
             }
 
-            void Thread::run() {
-                interpreter.exec(this);
+            void Thread::run_with_context(VMContext *context) {
+                interpreter.exec(this, context);
             }
         }
     }

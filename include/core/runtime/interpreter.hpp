@@ -42,14 +42,14 @@ namespace dvm {
             private:
                 void setup_opcode_handler();
 
-                void exec(Thread *thread);
+                void exec(Thread *thread, VMContext *context);
 
 #ifdef DVM_INTERPRETATION_THREADED
                 void *opcode_jump_table[VM_OPCODES_NUMBER];
 
-                void threaded(Thread *thread, void **jump_table);
+                void threaded(Thread *thread, VMContext *context, void **jump_table);
 #else
-                using OpcodeHandlerType = void (Interpreter::*)(Thread *);
+                using OpcodeHandlerType = void (Interpreter::*)(Thread *, VMContext *);
                 OpcodeHandlerType opcode_jump_table[VM_OPCODES_NUMBER];
 #endif
 

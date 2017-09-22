@@ -17,6 +17,8 @@ namespace dvm {
         }
 
         namespace runtime {
+            class Thread;
+
             // TODO VM Executing Context
             class VMContext {
             private:
@@ -49,6 +51,8 @@ namespace dvm {
                 void register_constant(UInt16 constant_id, object::Class *constant);
 
                 const std::string &find_constant(UInt16 constant_id) const;
+
+                void run_thread(Thread *thread);
 
 #define CREATOR_SIGNATURE(TYPE) \
             object::Object* new_##TYPE(TYPE value)

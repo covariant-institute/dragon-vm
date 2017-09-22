@@ -29,5 +29,5 @@ int main() {
 
     Thread thread;
     thread.set_runnable(code);
-    thread.run();
+    VMContext().run_thread(&thread);
 }
