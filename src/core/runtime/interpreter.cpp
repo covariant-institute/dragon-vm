@@ -104,17 +104,21 @@ namespace dvm {
 
                 OPCODE_IMPL(ldc_null)
                 {
-                    thread->stack.push_object_ref(object::Object::null_object());
+                    thread->stack.push_object_ref(context->null_object());
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ldc_i32)
                 {
+                    thread->stack.push(thread->const_i32());
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ldc_i64)
                 {
+                    auto h = thread->stack.peek_pop<Int32>();
+                    auto l = thread->stack.peek_pop<Int32>();
+                    thread->stack.push<Int64>((static_cast<Int64>(h) << 32) + l);
                     OPCODE_NEXT(context);
                 }
 
@@ -130,6 +134,7 @@ namespace dvm {
 
                 OPCODE_IMPL(pop)
                 {
+                    thread->stack.pop();
                     OPCODE_NEXT(context);
                 }
 

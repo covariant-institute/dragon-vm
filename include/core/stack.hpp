@@ -62,6 +62,12 @@ namespace dvm {
                 return *reinterpret_cast<T *>(sp + sizeof(SizeT));
             }
 
+            template <typename T>
+            T peek_pop() {
+                T ret = peek<T>();
+                pop();
+                return ret;
+            }
 
             object::Object *peek_object() const {
                 ensure_stack_not_empty();

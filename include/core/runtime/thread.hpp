@@ -41,7 +41,7 @@ namespace dvm {
                     UInt8 h = const_i8();
                     dvm_memory_barrier();
                     UInt8 l = const_i8();
-                    return h << 8 + l;
+                    return (h << 8) + l;
                 }
 
                 inline Int32 const_i32() {
@@ -55,7 +55,7 @@ namespace dvm {
                     dvm_memory_barrier();
 
                     UInt8 byte4 = const_i8();
-                    return byte1 << 24 + byte2 << 16 + byte3 << 8 + byte4;
+                    return (byte1 << 24) + (byte2 << 16) + (byte3 << 8) + byte4;
                 }
 
             public:
@@ -66,6 +66,10 @@ namespace dvm {
                 ~Thread();
 
                 void set_runnable(Byte *code);
+
+                inline Stack& get_stack() {
+                    return stack;
+                }
             };
         }
     }

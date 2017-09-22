@@ -3,31 +3,44 @@
 //
 
 #include <core/runtime/thread.hpp>
+#include <cassert>
 
-#define O(X) static_cast<VMOpcode>(VMOpcodes::X)
+#define OPCODE(X) static_cast<dvm::core::runtime::VMOpcode>(dvm::core::runtime::VMOpcodes::X)
 
-#define OPCODE(X) O(X),
-
-#define INTS_OPCODES_PREFIX(PREFIX) \
-            OPCODE(PREFIX##_i32) \
-            OPCODE(PREFIX##_i64)
-
-#define FLOATS_OPCODES_PREFIX(PREFIX) \
-            OPCODE(PREFIX##_f32) \
-            OPCODE(PREFIX##_f64)
-
-#define TYPED_OPCODES_PREFIX(PREFIX) \
-            INTS_OPCODES_PREFIX(PREFIX) \
-            FLOATS_OPCODES_PREFIX(PREFIX)
+#define T(code_name, condition_area, ...) \
+    { \
+        using namespace dvm::core; \
+        using namespace dvm::core::runtime; \
+        printf(":: Testing " code_name "\n"); \
+        Byte _c[] = { __VA_ARGS__, OPCODE(ret) }; \
+        thread.set_runnable(_c); \
+        context.run_thread(&thread); \
+        condition_area; \
+        printf(":: Passed\n"); \
+    }
 
 int main() {
     using namespace dvm::core::runtime;
 
-    dvm::core::Byte code[] = {
-#include <core/runtime/opcodes_def.hpp.inc>
-    };
-
+    VMContext context;
     Thread thread;
-    thread.set_runnable(code);
-    VMContext().run_thread(&thread);
+
+    T("ldc_null", {
+        assert(thread.get_stack().peek_object() == context.null_object());
+    }, OPCODE(ldc_null));
+
+    T("ldc_i32", {
+        assert(thread.get_stack().peek<Int32>() == (1 << 24) + (2 << 16) + (3 << 8) + 4);
+    }, OPCODE(ldc_i32), 1, 2, 3, 4);
+
+    T("ldc_i64", {
+        Int32 h = (1 << 24) + (2 << 16) + (3 << 8) + 4;
+        Int32 l = (5 << 24) + (6 << 16) + (7 << 8) + 8;
+        assert(thread.get_stack().peek<Int64>() == (static_cast<Int64>(h) << 32) + l);
+    }, OPCODE(ldc_i32), 5, 6, 7, 8, OPCODE(ldc_i32), 1, 2, 3, 4, OPCODE(ldc_i64));
+
+    T("pop", {
+        // after dropping Int32, we have a null object
+        assert(thread.get_stack().peek_object() == context.null_object());
+    }, OPCODE(ldc_null), OPCODE(ldc_i32), 0, 0, 0, 0, OPCODE(pop));
 }
