@@ -48,7 +48,7 @@ namespace dvm {
                         throw dvm::core::Exception(DVM_UNSATISFIED_SLOT_TYPE);
                     }
 
-                    return *reinterpret_cast<const T *>(&data);
+                    return get_unchecked<T>();
                 }
 
                 template <typename T>
@@ -60,7 +60,12 @@ namespace dvm {
                 template <typename T>
                 inline void set_unchecked(const T &t) {
                     slot_type = type_identifier::TYPE_ID_UNSPECIFIC;
-                    *reinterpret_cast<T *>(&data) = t;
+                    set<T>(t);
+                }
+
+                template <typename T>
+                inline T get_unchecked() const {
+                    return *reinterpret_cast<const T *>(&data);
                 }
             };
         }

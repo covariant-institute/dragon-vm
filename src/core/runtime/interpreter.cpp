@@ -4,6 +4,7 @@
 
 #include <core/runtime/interpreter.hpp>
 #include <core/runtime/thread.hpp>
+#include <core/runtime/utils.hpp>
 
 #ifdef DVM_INTERPRETATION_THREADED
 
@@ -124,6 +125,7 @@ namespace dvm {
 
                 OPCODE_IMPL(ldc_f32)
                 {
+                    thread->stack.push(thread->const_f32());
                     OPCODE_NEXT(context);
                 }
 
@@ -140,53 +142,61 @@ namespace dvm {
 
                 OPCODE_IMPL(ld_i32)
                 {
+                    Utils::load<Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ld_i64)
                 {
+                    Utils::load<Int64>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ld_f32)
                 {
+                    Utils::load<Float>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ld_f64)
                 {
+                    Utils::load<Double>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ld_object)
                 {
+                    Utils::load_object_ref(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(st_i32)
                 {
-                    UInt8 reg = thread->const_i8();
-                    thread->regs.get_register(reg)->set(thread->stack.peek_pop<Int32>());
+                    Utils::store<Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(st_i64)
                 {
+                    Utils::store<Int64>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(st_f32)
                 {
+                    Utils::store<Float>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(st_f64)
                 {
+                    Utils::store<Double>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(st_object)
                 {
+                    Utils::store_object_ref(thread);
                     OPCODE_NEXT(context);
                 }
 

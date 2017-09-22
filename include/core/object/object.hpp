@@ -13,6 +13,8 @@
 namespace dvm {
     namespace core {
         namespace object {
+            struct Object;
+
             struct Object {
                 const Class *prototype;
 

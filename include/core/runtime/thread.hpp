@@ -24,6 +24,9 @@ namespace dvm {
              */
             class Thread {
                 friend class Interpreter;
+
+                friend class Utils;
+
                 friend class VMContext;
 
             private:
@@ -60,6 +63,25 @@ namespace dvm {
                     return (byte1 << 24) + (byte2 << 16) + (byte3 << 8) + byte4;
                 }
 
+                inline Float const_f32() {
+                    union {
+                        Float f;
+                        UInt8 bits[sizeof(Float)];
+                    } c{ };
+
+                    c.bits[0] = const_i8();
+                    dvm_memory_barrier();
+
+                    c.bits[1] = const_i8();
+                    dvm_memory_barrier();
+
+                    c.bits[2] = const_i8();
+                    dvm_memory_barrier();
+
+                    c.bits[3] = const_i8();
+                    return c.f;
+                }
+
             public:
                 Thread();
 
@@ -69,8 +91,12 @@ namespace dvm {
 
                 void set_runnable(Byte *code);
 
-                inline Stack& get_stack() {
+                inline Stack &get_stack() {
                     return stack;
+                }
+
+                inline VMRegisterHolder &get_registers() {
+                    return regs;
                 }
             };
         }

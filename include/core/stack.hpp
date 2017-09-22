@@ -75,18 +75,17 @@ namespace dvm {
                 return ref != nullptr ? *ref : nullptr;
             }
 
+            object::Object *peek_object_pop() {
+                object::Object *ret = peek_object();
+                pop();
+                return ret;
+            }
+
             void push_object_ref(object::Object *obj) {
                 // push the address of the object as a reference
                 Byte *ref = allocate_on_stack(sizeof(object::Object *));
                 *reinterpret_cast<object::Object **>(ref) = obj;
             }
-
-//            object::Object *peek_object() const {
-//                ensure_stack_not_empty();
-//                return reinterpret_cast<object::Object *>(sp + sizeof(SizeT));
-//            }
-
-//            object::Object *new_object(const object::Class *prototype);
         };
     }
 }

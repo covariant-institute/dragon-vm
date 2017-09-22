@@ -5,9 +5,9 @@
 #include <core/runtime/vm_register.hpp>
 #include <core/runtime/vm_context.hpp>
 #include <cassert>
-#include <core/object/slot.hpp>
 
 int main() {
+    using namespace dvm::core;
     using namespace dvm::core::runtime;
     using namespace dvm::core::object;
 
@@ -25,4 +25,11 @@ int main() {
 
     visitor->set_unchecked(static_cast<dvm::core::UInt32>('Z'));
     assert(visitor->data.i32 == 'Z');
+
+    Stack s(config::STACK_DEFAULT_SIZE);
+    s.push_object_ref(context.new_Double(3.14));
+    visitor->set_unchecked(s.peek_pop<object::Object *>());
+    auto obj = visitor->get<object::Object *>();
+    assert(obj->slots[1].get<Double>() == 3.14);
+    return 0;
 }

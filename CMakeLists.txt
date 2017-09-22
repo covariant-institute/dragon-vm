@@ -102,7 +102,7 @@ add_library(dragon_vm_core SHARED
         src/core/dcx/dcx_file.cpp
         src/core/dcx/dcx_linker.cpp
 
-        ${DVM_PLATFORM_SRC})
+        ${DVM_PLATFORM_SRC} include/core/runtime/utils.hpp)
 
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)
