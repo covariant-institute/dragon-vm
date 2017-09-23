@@ -21,9 +21,9 @@ namespace dvm {
 
                 template <typename LhsType, typename Impl, typename RhsType = LhsType>
                 static inline void math(Thread *thread) {
-                    LhsType &&lhs = std::move(thread->stack.peek_pop<LhsType>());
+                    LhsType &&lhs = thread->stack.peek_pop<LhsType>();
                     dvm_memory_barrier();
-                    RhsType &&rhs = std::move(thread->stack.peek_pop<RhsType>());
+                    RhsType &&rhs = thread->stack.peek_pop<RhsType>();
 
                     LhsType &&result = Impl::get_result(std::forward<LhsType>(lhs),
                                                         std::forward<RhsType>(rhs));
