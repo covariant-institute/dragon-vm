@@ -141,6 +141,41 @@ namespace dvm {
                     return lhs ^ rhs;
                 }
             };
+
+            struct CompareResult {
+                static constexpr Int32 RESULT_EQ = 0;
+                static constexpr Int32 RESULT_LHS = 1;
+                static constexpr Int32 RESULT_RHS = -1;
+                static constexpr Int32 RESULT_OK = 0;
+                static constexpr Int32 RESULT_NOT = 1;
+            };
+
+            template <typename LhsType, typename RhsType = LhsType>
+            struct MathCompare {
+                static inline Int32 get_result(LhsType &&lhs, RhsType &&rhs) {
+                    if (lhs == rhs) {
+                        return CompareResult::RESULT_EQ;
+                    }
+                    if (lhs > rhs) {
+                        return CompareResult::RESULT_LHS;
+                    }
+                    return CompareResult::RESULT_RHS;
+                }
+            };
+
+            template <typename LhsType, typename RhsType = LhsType>
+            struct MathCompareLessThan {
+                static inline Int32 get_result(LhsType &&lhs, RhsType &&rhs) {
+                    return lhs < rhs ? CompareResult::RESULT_OK : CompareResult::RESULT_NOT;
+                }
+            };
+
+            template <typename LhsType, typename RhsType = LhsType>
+            struct MathCompareGreaterThan {
+                static inline Int32 get_result(LhsType &&lhs, RhsType &&rhs) {
+                    return lhs > rhs ? CompareResult::RESULT_OK : CompareResult::RESULT_NOT;
+                }
+            };
         }
     }
 }

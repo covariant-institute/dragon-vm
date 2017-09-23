@@ -15,6 +15,7 @@ namespace dvm {
 
             void Thread::set_runnable(Byte *code) {
                 this->pc = code;
+                this->code_base = code;
             }
 
             void Thread::run_with_context(VMContext *context) {

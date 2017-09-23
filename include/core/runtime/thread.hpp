@@ -31,6 +31,7 @@ namespace dvm {
 
             private:
                 Interpreter interpreter;
+                Byte *code_base;
                 VMOpcode *pc;
                 VMRegisterHolder regs;
                 Stack stack;

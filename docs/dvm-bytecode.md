@@ -105,12 +105,12 @@
 | jump_le_i64            |   63   |   0110 0011   | 2: offsetbyte1, offsetbyte2 | value1, value2 → | compare two int64s, if value1 <= value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
 | jump_eq_object         |   64   |   0110 0100   | 2: offsetbyte1, offsetbyte2 | value1, value2 → | compare two objects, if references are equal, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
 | jump_ne_object         |   65   |   0110 0101   | 2: offsetbyte1, offsetbyte2 | value1, value2 → | compare two objects, if references are not equal, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| cmp_i32                |   66   |   0110 0110   |        | value1, value2 → result | compare two int32s, push 0 if the two int32s are the same, 1 if value1 is greater than value2, -1 otherwise |
-| cmp_i64                |   67   |   0110 0111   |        | value1, value2 → result | compare two int64s, push 0 if the two int64s are the same, 1 if value1 is greater than value2, -1 otherwise |
-| cmp_lt_f32             |   68   |   0110 1000   |        | value1, value2 → result | compare two floats, push 0 if value1 < value2 |
-| cmp_lt_f64             |   69   |   0110 1001   |        | value1, value2 → result | compare two doubles, push 0 if value1 < value2 |
-| cmp_gt_f32             |   6a   |   0110 1010   |        | value1, value2 → result | compare two floats, push 0 if value1 > value2 |
-| cmp_gt_f64             |   6b   |   0110 1011   |        | value1, value2 → result | compare two doubles, push 0 if value1 > value2 |
+| cmp_i32                |   66   |   0110 0110   |        | value1, value2 → result | compare two int32s, push 0 if the two int32s are the same, 1 if value1 > value2, -1 otherwise |
+| cmp_i64                |   67   |   0110 0111   |        | value1, value2 → result | compare two int64s, push 0 if the two int64s are the same, 1 if value1 > value2, -1 otherwise |
+| cmp_lt_f32             |   68   |   0110 1000   |        | value1, value2 → result | compare two floats, push 0 if value1 < value2, 1 otherwise |
+| cmp_lt_f64             |   69   |   0110 1001   |        | value1, value2 → result | compare two doubles, push 0 if value1 < value2, 1 otherwise |
+| cmp_gt_f32             |   6a   |   0110 1010   |        | value1, value2 → result | compare two floats, push 0 if value1 > value2, 1 otherwise |
+| cmp_gt_f64             |   6b   |   0110 1011   |        | value1, value2 → result | compare two doubles, push 0 if value1 > value2, 1 otherwise |
 | stp_i32                |   6c   |   0110 1100   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store an int32 from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
 | stp_i64                |   6d   |   0110 1101   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store an int64 from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
 | stp_f32                |   6e   |   0110 1110   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store a float from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |

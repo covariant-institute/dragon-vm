@@ -19,23 +19,24 @@ namespace dvm {
                     thread->stack.push<ToType>(std::forward<ToType>(from));
                 }
 
-                template <typename LhsType, typename Impl, typename RhsType = LhsType>
+                template <typename LhsType, typename Impl,
+                        typename RhsType = LhsType, typename ResultType = LhsType>
                 static inline void math(Thread *thread) {
                     LhsType &&lhs = thread->stack.peek_pop<LhsType>();
                     dvm_memory_barrier();
                     RhsType &&rhs = thread->stack.peek_pop<RhsType>();
 
-                    LhsType &&result = Impl::get_result(std::forward<LhsType>(lhs),
+                    ResultType &&result = Impl::get_result(std::forward<LhsType>(lhs),
                                                         std::forward<RhsType>(rhs));
-                    thread->stack.push<LhsType>(std::forward<LhsType>(result));
+                    thread->stack.push<ResultType>(std::forward<ResultType>(result));
                 }
 
-                template <typename LhsType, typename Impl>
+                template <typename LhsType, typename Impl, typename ResultType = LhsType>
                 static inline void math1(Thread *thread) {
                     LhsType &&operand = thread->stack.peek_pop<LhsType>();
 
-                    LhsType &&result = Impl::get_result(std::forward<LhsType>(operand));
-                    thread->stack.push<LhsType>(std::forward<LhsType>(result));
+                    ResultType &&result = Impl::get_result(std::forward<LhsType>(operand));
+                    thread->stack.push<ResultType>(std::forward<ResultType>(result));
                 }
 
                 template <typename T>

@@ -668,31 +668,37 @@ namespace dvm {
 
                 OPCODE_IMPL(cmp_i32)
                 {
+                    Utils::math<Int32, MathCompare<Int32>, Int32, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(cmp_i64)
                 {
+                    Utils::math<Int64, MathCompare<Int64>, Int64, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(cmp_lt_f32)
                 {
+                    Utils::math<Float, MathCompareLessThan<Float>, Float, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(cmp_lt_f64)
                 {
+                    Utils::math<Double, MathCompareLessThan<Double>, Double, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(cmp_gt_f32)
                 {
+                    Utils::math<Float, MathCompareGreaterThan<Float>, Float, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(cmp_gt_f64)
                 {
+                    Utils::math<Double, MathCompareGreaterThan<Double>, Double, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
