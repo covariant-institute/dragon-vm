@@ -25,7 +25,7 @@ namespace dvm {
 
                 ~VMRegisterHolder();
 
-                RegisterVisitor get_register(VMRegisterID id);
+                RegisterVisitor operator[](VMRegisterID id);
             };
         }
     }

@@ -20,7 +20,7 @@ namespace dvm {
                 dvm_free(registers);
             }
 
-            RegisterVisitor VMRegisterHolder::get_register(VMRegisterID reg) {
+            RegisterVisitor VMRegisterHolder::operator[](VMRegisterID reg) {
                 if (reg < VM_REGISTERS_NUMBER) {
                     return RegisterVisitor(registers + reg);
                 }

@@ -77,13 +77,13 @@ int main() {
       OPCODE(pop_i32));
 
     T("st_i32", {
-        assert(thread.get_registers().get_register(0)->get_unchecked<Int32>() == 1);
+        assert(thread.get_registers()[0]->get_unchecked<Int32>() == 1);
     },
       OPCODE(ldc_i32), 0, 0, 0, 1,
       OPCODE(st_i32), 0);
 
     T("st_i64", {
-        assert(thread.get_registers().get_register(0)->get_unchecked<Int64>() == i64);
+        assert(thread.get_registers()[0]->get_unchecked<Int64>() == i64);
     },
       OPCODE(ldc_i32), 5, 6, 7, 8,
       OPCODE(ldc_i32), 1, 2, 3, 4,
@@ -91,13 +91,13 @@ int main() {
       OPCODE(st_i64), 0);
 
     T("st_f32", {
-        assert(thread.get_registers().get_register(0)->get_unchecked<Float>() == f32);
+        assert(thread.get_registers()[0]->get_unchecked<Float>() == f32);
     },
       OPCODE(ldc_f32), fbytes[0], fbytes[1], fbytes[2], fbytes[3],
       OPCODE(st_f32), 0);
 
     T("st_object", {
-        auto obj = thread.get_registers().get_register(0)->get_unchecked<object::Object *>();
+        auto obj = thread.get_registers()[0]->get_unchecked<object::Object *>();
         assert(obj == context.null_object());
     },
       OPCODE(ldc_null),
@@ -347,4 +347,12 @@ int main() {
     },
       OPCODE(ldc_i32), 0, 0, 0, 3,
       OPCODE(i32_to_i64));
+
+    T("stp_i32", {
+        assert(thread.get_registers()[4]->get_unchecked<Int32>() == 2);
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 1, /* bp - 1 * sizeof(Int32) */
+      OPCODE(ldc_i32), 0, 0, 0, 2, /* bp - 2 * sizeof(Int32) */
+      OPCODE(ldc_i32), 0, 0, 0, 3, /* bp - 3 * sizeof(Int32) */
+      OPCODE(stp_i32), 0, sizeof(Int32) * 2, 4);
 }

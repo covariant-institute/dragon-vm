@@ -136,6 +136,15 @@ namespace dvm {
             }
 
             template <typename T>
+            inline T *at(UInt16 offset) {
+                return current_frame()->at<T>(offset);
+            }
+
+            inline object::Object **at_object(UInt16 offset) {
+                return current_frame()->at<object::Object *>(offset);
+            }
+
+            template <typename T>
             inline void pop() {
                 current_frame()->pop<T>();
             }

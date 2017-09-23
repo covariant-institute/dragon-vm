@@ -698,26 +698,31 @@ namespace dvm {
 
                 OPCODE_IMPL(stp_i32)
                 {
+                    Utils::store_at<Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(stp_i64)
                 {
+                    Utils::store_at<Int64>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(stp_f32)
                 {
+                    Utils::store_at<Float>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(stp_f64)
                 {
+                    Utils::store_at<Double>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(stp_object)
                 {
+                    Utils::store_object_ref_at(thread);
                     OPCODE_NEXT(context);
                 }
 

@@ -40,26 +40,41 @@ namespace dvm {
 
                 template <typename T>
                 static inline T load_reg(Thread *thread) {
-                    UInt8 &&reg = thread->const_i8();
+                    UInt8 &&reg = thread->const_u8();
 
-                    return thread->regs.get_register(reg)->get_unchecked<T>();
+                    return thread->regs[reg]->get_unchecked<T>();
                 }
 
                 template <typename T>
                 static inline void store(Thread *thread) {
-                    UInt8 &&reg = thread->const_i8();
+                    UInt8 &&reg = thread->const_u8();
 
                     // Do not use peek_pop()
                     // st_* instructions do not drop stack elements
-                    thread->regs.get_register(reg)->set_unchecked(thread->stack.peek<T>());
+                    thread->regs[reg]->set_unchecked(thread->stack.peek<T>());
                 }
 
                 static inline void store_object_ref(Thread *thread) {
-                    UInt8 &&reg = thread->const_i8();
+                    UInt8 &&reg = thread->const_u8();
 
                     // Do not use peek_object_pop()
                     // st_* instructions do not drop stack elements
-                    thread->regs.get_register(reg)->set_unchecked(thread->stack.peek_object());
+                    thread->regs[reg]->set_unchecked(thread->stack.peek_object());
+                }
+
+                template <typename T>
+                static inline void store_at(Thread *thread) {
+                    UInt16 &&offset = thread->const_u16();
+                    UInt8 &&reg = thread->const_u8();
+
+                    thread->regs[reg]->set_unchecked(*thread->stack.at<T>(offset));
+                }
+
+                static inline void store_object_ref_at(Thread *thread) {
+                    UInt16 &&offset = thread->const_u16();
+                    UInt8 &&reg = thread->const_u8();
+
+                    thread->regs[reg]->set_unchecked(*thread->stack.at_object(offset));
                 }
 
                 template <typename T>

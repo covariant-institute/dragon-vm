@@ -18,7 +18,7 @@ int main() {
     auto i32 = context.find_class("Int32")->new_instance();
     i32->slots[1].set(10086);
 
-    auto visitor = regs.get_register(0);
+    auto visitor = regs[0];
     visitor->set(10086);
 
     assert(visitor->data.i32 == 10086);
