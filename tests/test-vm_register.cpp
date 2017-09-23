@@ -27,6 +27,7 @@ int main() {
     assert(visitor->data.i32 == 'Z');
 
     Stack s(config::STACK_DEFAULT_SIZE);
+    s.new_frame();
     s.push_object_ref(context.new_Double(3.14));
     visitor->set_unchecked(s.peek_pop<object::Object *>());
     auto obj = visitor->get<object::Object *>();

@@ -8,23 +8,35 @@ namespace dvm {
     namespace core {
 
         Stack::~Stack() {
+            frames.clear();
             dvm_free(memory);
         }
 
-        Stack::Stack(SizeT size) : memory(dvm_malloc(size)) {
-            sp = reinterpret_cast<Byte *>(memory) + size;
-            sl = sp;
-            bp = sp;
+        Stack::Stack(SizeT size) : memory(static_cast<Byte *>(dvm_malloc(size))) {
+            sp = memory + size;
         }
 
-        Byte *Stack::allocate_on_stack(SizeT size) {
-            if (sp - reinterpret_cast<Byte *>(memory) < size + sizeof(SizeT)) {
-                throw dvm::core::Exception(DVM_MEMORY_STACK_OVERFLOW);
-            }
+        void Stack::new_frame() {
+            auto *addr = static_cast<Byte *>(dvm_malloc(sizeof(Frame)));
+            auto *frame = new(addr) Frame(sp);
+            frames.push_back(frame);
+        }
 
+        void Stack::remove_top_frame() {
+            Frame *frame = current_frame();
+            dvm_free(frame);
+        }
+
+        Byte *Frame::allocate(SizeT size) {
+            // TODO: Check frame size
             sp -= size + sizeof(SizeT);
             *reinterpret_cast<SizeT *>(sp) = size;
             return sp + sizeof(SizeT);
         }
+
+        Frame::Frame(Byte *bp) : bp(bp), sp(bp) {
+        }
+
+        Frame::~Frame() = default;
     }
 }

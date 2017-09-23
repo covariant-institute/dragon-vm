@@ -48,11 +48,17 @@ namespace dvm {
                     throw dvm::core::Exception(DVM_RUNTIME_INVALID_CODE);
                 }
 
+                // Create new frame for this execution
+                thread->stack.new_frame();
+
 #ifdef DVM_INTERPRETATION_THREADED
                 threaded(thread, context, opcode_jump_table);
 #else
                 OPCODE_NEXT(context);
 #endif
+
+                // Execution done, clean up stack.
+                thread->stack.remove_top_frame();
             } // Interpreter::exec()
 
             void Interpreter::setup_opcode_handler() {

@@ -14,6 +14,7 @@ int main() {
     VMContext context{ };
 
     Stack s(dvm::core::config::STACK_DEFAULT_SIZE);
+    s.new_frame();
 
     auto *prototype_int32 = context.find_class("Int32");
 
@@ -45,5 +46,6 @@ int main() {
     assert(s.peek<Int32>() == 10);
     s.pop(); // int32
 
+    s.remove_top_frame();
     return 0;
 }
