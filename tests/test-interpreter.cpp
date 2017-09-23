@@ -66,13 +66,13 @@ int main() {
     },
       OPCODE(ldc_f32), fbytes[0], fbytes[1], fbytes[2], fbytes[3]);
 
-    T("pop", {
+    T("pop_i32", {
         // after dropping Int32, we have a null object
         assert(thread.get_stack().peek_object() == context.null_object());
     },
       OPCODE(ldc_null),
       OPCODE(ldc_i32), 0, 0, 0, 0,
-      OPCODE(pop));
+      OPCODE(pop_i32));
 
     T("st_i32", {
         assert(thread.get_registers().get_register(0)->get_unchecked<Int32>() == 1);
@@ -106,7 +106,7 @@ int main() {
     },
       OPCODE(ldc_i32), 0, 0, 0, 1,
       OPCODE(st_i32), 0,
-      OPCODE(pop),
+      OPCODE(pop_i32),
       OPCODE(ld_i32), 0);
 
     T("ld_i64", {
@@ -116,7 +116,7 @@ int main() {
       OPCODE(ldc_i32), 1, 2, 3, 4,
       OPCODE(ldc_i64),
       OPCODE(st_i64), 0,
-      OPCODE(pop),
+      OPCODE(pop_i64),
       OPCODE(ld_i64), 0);
 
     T("ld_f32", {
@@ -124,7 +124,7 @@ int main() {
     },
       OPCODE(ldc_f32), fbytes[0], fbytes[1], fbytes[2], fbytes[3],
       OPCODE(st_f32), 0,
-      OPCODE(pop),
+      OPCODE(pop_f32),
       OPCODE(ld_f32), 0);
 
     T("ld_object", {
@@ -133,7 +133,7 @@ int main() {
     },
       OPCODE(ldc_null),
       OPCODE(st_object), 0,
-      OPCODE(pop),
+      OPCODE(pop_object),
       OPCODE(ld_object), 0);
 
     // 1 + 2 + 3

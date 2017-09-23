@@ -9,15 +9,14 @@ namespace dvm {
     namespace core {
         namespace object {
             struct NativeMethodCallable {
-                using Type = object::Object *(*)(runtime::VMContext &context);
+                using Type = void(*)(runtime::VMContext &context);
 
                 Type callable;
 
-                object::Object *operator()(runtime::VMContext &context) {
+                void operator()(runtime::VMContext &context) {
                     if (callable != nullptr) {
-                        return callable(context);
+                        callable(context);
                     }
-                    return context.null_object();
                 }
             };
 
@@ -31,7 +30,7 @@ namespace dvm {
 
                 ~NativeMethod() override;
 
-                object::Object *invoke(runtime::VMContext &context) override;
+                void invoke(runtime::VMContext &context) override;
             };
         }
     }

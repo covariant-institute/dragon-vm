@@ -37,43 +37,48 @@ namespace dvm {
             }
 
         public:
-            void pop() {
+            template <typename T>
+            inline void pop() {
                 ensure_not_empty();
-                sp += *reinterpret_cast<SizeT *>(sp) + sizeof(SizeT);
+                sp += sizeof(T);
             }
 
             template <typename T>
-            void push(T &&t) {
+            inline void push(T &&t) {
                 Byte *byte = allocate(sizeof(T));
                 *reinterpret_cast<T *>(byte) = std::forward<T>(t);
             }
 
             template <typename T>
-            T peek() const {
+            inline T peek() const {
                 ensure_not_empty();
-                return *reinterpret_cast<T *>(sp + sizeof(SizeT));
+                return *reinterpret_cast<T *>(sp);
             }
 
             template <typename T>
-            T peek_pop() {
+            inline T peek_pop() {
                 T ret = peek<T>();
-                pop();
+                pop<T>();
                 return ret;
             }
 
-            object::Object *peek_object() const {
+            inline void pop_object() {
+                pop<object::Object *>();
+            }
+
+            inline object::Object *peek_object() const {
                 ensure_not_empty();
-                auto **ref = reinterpret_cast<object::Object **>(sp + sizeof(SizeT));
+                auto **ref = reinterpret_cast<object::Object **>(sp);
                 return ref != nullptr ? *ref : nullptr;
             }
 
-            object::Object *peek_object_pop() {
+            inline object::Object *peek_object_pop() {
                 object::Object *ret = peek_object();
-                pop();
+                pop_object();
                 return ret;
             }
 
-            void push_object_ref(object::Object *obj) {
+            inline void push_object_ref(object::Object *obj) {
                 // push the address of the object as a reference
                 Byte *ref = allocate(sizeof(object::Object *));
                 *reinterpret_cast<object::Object **>(ref) = obj;
@@ -110,39 +115,44 @@ namespace dvm {
 
             void remove_top_frame();
 
-            Frame *current_frame() const {
+            inline Frame *current_frame() const {
                 ensure_has_frame();
                 return frames[frames.size() - 1];
             }
 
-            void pop() {
-                current_frame()->pop();
+            template <typename T>
+            inline void pop() {
+                current_frame()->pop<T>();
             }
 
             template <typename T>
-            void push(T &&t) {
+            inline void push(T &&t) {
                 current_frame()->push<T>(std::forward<T>(t));
             }
 
             template <typename T>
-            T peek() const {
+            inline T peek() const {
                 return current_frame()->peek<T>();
             }
 
             template <typename T>
-            T peek_pop() {
+            inline T peek_pop() {
                 return current_frame()->peek_pop<T>();
             }
 
-            object::Object *peek_object() const {
+            inline void pop_object() {
+                current_frame()->pop_object();
+            }
+
+            inline object::Object *peek_object() const {
                 return current_frame()->peek_object();
             }
 
-            object::Object *peek_object_pop() {
+            inline object::Object *peek_object_pop() {
                 return current_frame()->peek_object_pop();
             }
 
-            void push_object_ref(object::Object *obj) {
+            inline void push_object_ref(object::Object *obj) {
                 current_frame()->push_object_ref(obj);
             }
         };

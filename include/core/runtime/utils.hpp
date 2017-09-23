@@ -70,6 +70,15 @@ namespace dvm {
                 static inline void load_object_ref(Thread *thread) {
                     thread->stack.push_object_ref(load_reg<object::Object *>(thread));
                 }
+
+                template <typename T>
+                static inline void pop(Thread *thread) {
+                    thread->stack.pop<T>();
+                }
+
+                static inline void pop_object(Thread *thread) {
+                    thread->stack.pop_object();
+                }
             };
         }
     }

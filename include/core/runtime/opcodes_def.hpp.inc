@@ -6,8 +6,8 @@ OPCODE(invoke_method)
 OPCODE(ldc_null)
 TYPED_OPCODES_PREFIX(ldc)
 
-/* pop: drop stack top */
-OPCODE(pop)
+/* sys: system call */
+OPCODE(sys)
 
 /* ld: register to stack */
 TYPED_OPCODES_PREFIX(ld)
@@ -64,3 +64,10 @@ INTS_OPCODES_PREFIX(cmp)
 FLOATS_OPCODES_PREFIX(cmp_lt)
 FLOATS_OPCODES_PREFIX(cmp_gt)
 
+/* stp: any stack to register */
+TYPED_OPCODES_PREFIX(stp)
+OPCODE(stp_object)
+
+/* pop: drop the top of stack */
+TYPED_OPCODES_PREFIX(pop)
+OPCODE(pop_object)

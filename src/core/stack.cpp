@@ -29,9 +29,8 @@ namespace dvm {
 
         Byte *Frame::allocate(SizeT size) {
             // TODO: Check frame size
-            sp -= size + sizeof(SizeT);
-            *reinterpret_cast<SizeT *>(sp) = size;
-            return sp + sizeof(SizeT);
+            sp -= size;
+            return sp;
         }
 
         Frame::Frame(Byte *bp) : bp(bp), sp(bp) {

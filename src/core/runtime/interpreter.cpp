@@ -141,9 +141,9 @@ namespace dvm {
                     OPCODE_NEXT(context);
                 }
 
-                OPCODE_IMPL(pop)
+                OPCODE_IMPL(sys)
                 {
-                    thread->stack.pop();
+                    // TODO: System Call
                     OPCODE_NEXT(context);
                 }
 
@@ -699,6 +699,61 @@ namespace dvm {
 
                 OPCODE_IMPL(cmp_gt_f64)
                 {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(stp_i32)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(stp_i64)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(stp_f32)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(stp_f64)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(stp_object)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(pop_i32)
+                {
+                    Utils::pop<Int32>(thread);
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(pop_i64)
+                {
+                    Utils::pop<Int64>(thread);
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(pop_f32)
+                {
+                    Utils::pop<Float>(thread);
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(pop_f64)
+                {
+                    Utils::pop<Double>(thread);
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(pop_object)
+                {
+                    Utils::pop_object(thread);
                     OPCODE_NEXT(context);
                 }
 

@@ -11,7 +11,7 @@
 | ldc_i64                |   05   |   0000 0101   |        | int32h, int32l → value | push a ***#int64***(`int32h << 32 + int32l`) |
 | ldc_f32                |   06   |   0000 0110   | 4: byte1, byte2, byte3, byte4 | → value | push a ***#float***(`byte1 << 24 + byte2 << 16 + byte3 << 8 + byte4`) onto the stack |
 | ldc_f64                |   07   |   0000 0111   |        | **TODO** → **TODO** | **TODO** |
-| pop                    |   08   |   0000 1000   |        | value → | discard the top of stack |
+| sys                    |   08   |   0000 1000   |        | value → | discard the top of stack |
 | ld_i32                 |   09   |   0000 1001   | 1: index | → value | load an int32 from register ***#index***  |
 | ld_i64                 |   0a   |   0000 1010   | 1: index | → value | load an int64 from register ***#index***  |
 | ld_f32                 |   0b   |   0000 1011   | 1: index | → value | load a float from register ***#index***  |
@@ -111,3 +111,13 @@
 | cmp_lt_f64             |   69   |   0110 1001   |        | value1, value2 → result | compare two doubles, push 0 if value1 < value2 |
 | cmp_gt_f32             |   6a   |   0110 1010   |        | value1, value2 → result | compare two floats, push 0 if value1 > value2 |
 | cmp_gt_f64             |   6b   |   0110 1011   |        | value1, value2 → result | compare two doubles, push 0 if value1 > value2 |
+| stp_i32                |   6c   |   0110 1100   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store an int32 from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
+| stp_i64                |   6d   |   0110 1101   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store an int64 from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
+| stp_f32                |   6e   |   0110 1110   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store a float from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
+| stp_f64                |   6f   |   0110 1111   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store a double from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
+| stp_object             |   70   |   0111 0000   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store an object from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
+| pop_i32                |   71   |   0111 0001   |        | value → | discard the top of stack |
+| pop_i64                |   72   |   0111 0010   |        | value → | discard the top of stack |
+| pop_f32                |   73   |   0111 0011   |        | value → | discard the top of stack |
+| pop_f64                |   74   |   0111 0100   |        | value → | discard the top of stack |
+| pop_object             |   75   |   0111 0101   |        | value → | discard the top of stack |
