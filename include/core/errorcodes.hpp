@@ -14,12 +14,14 @@
 #define DVM_DCX_LINKING_INVALID_METHOD "Invalid method."
 
 #define DVM_MEMORY_STACK_OVERFLOW "Stack overflow."
+#define DVM_MEMORY_STACK_INVALID_ACCESS "Invalid access."
 #define DVM_MEMORY_STACK_EMPTY "Empty stack."
 
 #define DVM_RUNTIME_CLASS_NOT_FOUND "Class not found."
 #define DVM_RUNTIME_METHOD_NOT_FOUND "Method not found."
 #define DVM_RUNTIME_CONSTANT_NOT_FOUND "Constant not found."
 #define DVM_RUNTIME_INVALID_CODE "Invalid bytecode"
+#define DVM_RUNTIME_DIVIDE_BY_ZERO "Divide by zero"
 
 #define DVM_DL_NOT_OPEN "Cannot open library."
 

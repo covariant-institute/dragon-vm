@@ -12,7 +12,7 @@ namespace dvm {
 
             class Method {
             public:
-                virtual Object *invoke(runtime::VMContext &context) = 0;
+                virtual void invoke(runtime::VMContext &context) = 0;
 
                 virtual Bool is_native() = 0;
 

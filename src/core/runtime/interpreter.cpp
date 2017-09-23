@@ -5,6 +5,7 @@
 #include <core/runtime/interpreter.hpp>
 #include <core/runtime/thread.hpp>
 #include <core/runtime/utils.hpp>
+#include <core/runtime/math.hpp>
 
 #ifdef DVM_INTERPRETATION_THREADED
 
@@ -134,9 +135,9 @@ namespace dvm {
                     OPCODE_NEXT(context);
                 }
 
-                OPCODE_IMPL(pop)
+                OPCODE_IMPL(sys)
                 {
-                    thread->stack.pop();
+                    // TODO: System Call
                     OPCODE_NEXT(context);
                 }
 
@@ -202,191 +203,229 @@ namespace dvm {
 
                 OPCODE_IMPL(add_i32)
                 {
+                    Utils::math<Int32, MathAdd<Int32> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(add_i64)
                 {
+                    Utils::math<Int64, MathAdd<Int64> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(add_f32)
                 {
+                    Utils::math<Float, MathAdd<Float> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(add_f64)
                 {
+                    Utils::math<Double, MathAdd<Double> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(sub_i32)
                 {
+                    Utils::math<Int32, MathSub<Int32> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(sub_i64)
                 {
+                    Utils::math<Int64, MathSub<Int64> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(sub_f32)
                 {
+                    Utils::math<Float, MathSub<Float> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(sub_f64)
                 {
+                    Utils::math<Double, MathSub<Double> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(mul_i32)
                 {
+                    Utils::math<Int32, MathMul<Int32> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(mul_i64)
                 {
+                    Utils::math<Int64, MathMul<Int64> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(mul_f32)
                 {
+                    Utils::math<Float, MathMul<Float> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(mul_f64)
                 {
+                    Utils::math<Double, MathMul<Double> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(div_i32)
                 {
+                    Utils::math<Int32, MathDiv<Int32> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(div_i64)
                 {
+                    Utils::math<Int64, MathDiv<Int64> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(div_f32)
                 {
+                    Utils::math<Float, MathDiv<Float> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(div_f64)
                 {
+                    Utils::math<Double, MathDiv<Double> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(remain_i32)
                 {
+                    Utils::math<Int32, MathRemain<Int32> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(remain_i64)
                 {
+                    Utils::math<Int64, MathRemain<Int64> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(remain_f32)
                 {
+                    Utils::math<Float, MathRemain<Float> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(remain_f64)
                 {
+                    Utils::math<Double, MathRemain<Double> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(neg_i32)
                 {
+                    Utils::math1<Int32, MathNegate<Int32> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(neg_i64)
                 {
+                    Utils::math1<Int64, MathNegate<Int64> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(neg_f32)
                 {
+                    Utils::math1<Float, MathNegate<Float> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(neg_f64)
                 {
+                    Utils::math1<Double, MathNegate<Double> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(shl_i32)
                 {
+                    Utils::math<Int32, MathShiftLeft<Int32>, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(shl_i64)
                 {
+                    Utils::math<Int64, MathShiftLeft<Int64>, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(shr_i32)
                 {
+                    Utils::math<Int32, MathShiftRight<Int32>, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(shr_i64)
                 {
+                    Utils::math<Int64, MathShiftRight<Int64>, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ushl_i32)
                 {
+                    Utils::math<Int32, MathShiftLeftUnsigned<Int32>, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ushl_i64)
                 {
+                    Utils::math<Int64, MathShiftLeftUnsigned<Int64>, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ushr_i32)
                 {
+                    Utils::math<Int32, MathShiftRightUnsigned<Int32>, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ushr_i64)
                 {
+                    Utils::math<Int64, MathShiftRightUnsigned<Int64>, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(and_i32)
                 {
+                    Utils::math<Int32, MathAnd<Int32> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(and_i64)
                 {
+                    Utils::math<Int64, MathAnd<Int64> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(or_i32)
                 {
+                    Utils::math<Int32, MathOr<Int32> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(or_i64)
                 {
+                    Utils::math<Int64, MathOr<Int64> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(xor_i32)
                 {
+                    Utils::math<Int32, MathXor<Int32> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(xor_i64)
                 {
+                    Utils::math<Int64, MathXor<Int64> >(thread);
                     OPCODE_NEXT(context);
                 }
 
@@ -397,21 +436,25 @@ namespace dvm {
 
                 OPCODE_IMPL(i32_to_i64)
                 {
+                    Utils::cast<Int32, Int64>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(i32_to_f32)
                 {
+                    Utils::cast<Int32, Float>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(i32_to_f64)
                 {
+                    Utils::cast<Int32, Double>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(i64_to_i32)
                 {
+                    Utils::cast<Int64, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
@@ -422,21 +465,25 @@ namespace dvm {
 
                 OPCODE_IMPL(i64_to_f32)
                 {
+                    Utils::cast<Int64, Float>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(i64_to_f64)
                 {
+                    Utils::cast<Int64, Double>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(f32_to_i32)
                 {
+                    Utils::cast<Float, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(f32_to_i64)
                 {
+                    Utils::cast<Float, Int64>(thread);
                     OPCODE_NEXT(context);
                 }
 
@@ -447,21 +494,25 @@ namespace dvm {
 
                 OPCODE_IMPL(f32_to_f64)
                 {
+                    Utils::cast<Float, Double>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(f64_to_i32)
                 {
+                    Utils::cast<Double, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(f64_to_i64)
                 {
+                    Utils::cast<Double, Int64>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(f64_to_f32)
                 {
+                    Utils::cast<Double, Float>(thread);
                     OPCODE_NEXT(context);
                 }
 
@@ -617,31 +668,97 @@ namespace dvm {
 
                 OPCODE_IMPL(cmp_i32)
                 {
+                    Utils::math<Int32, MathCompare<Int32>, Int32, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(cmp_i64)
                 {
+                    Utils::math<Int64, MathCompare<Int64>, Int64, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(cmp_lt_f32)
                 {
+                    Utils::math<Float, MathCompareLessThan<Float>, Float, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(cmp_lt_f64)
                 {
+                    Utils::math<Double, MathCompareLessThan<Double>, Double, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(cmp_gt_f32)
                 {
+                    Utils::math<Float, MathCompareGreaterThan<Float>, Float, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(cmp_gt_f64)
                 {
+                    Utils::math<Double, MathCompareGreaterThan<Double>, Double, Int32>(thread);
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(stp_i32)
+                {
+                    Utils::store_at<Int32>(thread);
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(stp_i64)
+                {
+                    Utils::store_at<Int64>(thread);
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(stp_f32)
+                {
+                    Utils::store_at<Float>(thread);
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(stp_f64)
+                {
+                    Utils::store_at<Double>(thread);
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(stp_object)
+                {
+                    Utils::store_object_ref_at(thread);
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(pop_i32)
+                {
+                    Utils::pop<Int32>(thread);
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(pop_i64)
+                {
+                    Utils::pop<Int64>(thread);
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(pop_f32)
+                {
+                    Utils::pop<Float>(thread);
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(pop_f64)
+                {
+                    Utils::pop<Double>(thread);
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(pop_object)
+                {
+                    Utils::pop_object(thread);
                     OPCODE_NEXT(context);
                 }
 

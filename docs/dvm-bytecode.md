@@ -1,7 +1,7 @@
 ## Opcodes in Dragon VM
 
 ### Instructions
-| Mnemonic | Opcode (in hex) | Opcode (in binary) | Other bytes ([count]: [operand labels]) | Stack ([before] → [after]) | Description |
+| Mnemonic | Opcode (in hex) | Opcode (in binary) | Other bytes ([count]: [operand labels]) | Stack ([before] → [after]) ([top], ..., [bottom]) | Description |
 |:--------:|:---------------:|:------------------:|:---------------------------------------:|:---------------------------:|:-----------:|
 | nop                    |   00   |   0000 0000   |        | [No Change] | do nothing |
 | new_instance           |   01   |   0000 0001   | 2: indexbyte1, indexbyte2 | → object | create an instance of a class, which is identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) in constant pool. |
@@ -11,7 +11,7 @@
 | ldc_i64                |   05   |   0000 0101   |        | int32h, int32l → value | push a ***#int64***(`int32h << 32 + int32l`) |
 | ldc_f32                |   06   |   0000 0110   | 4: byte1, byte2, byte3, byte4 | → value | push a ***#float***(`byte1 << 24 + byte2 << 16 + byte3 << 8 + byte4`) onto the stack |
 | ldc_f64                |   07   |   0000 0111   |        | **TODO** → **TODO** | **TODO** |
-| pop                    |   08   |   0000 1000   |        | value → | discard the top of stack |
+| sys                    |   08   |   0000 1000   |        | value → | discard the top of stack |
 | ld_i32                 |   09   |   0000 1001   | 1: index | → value | load an int32 from register ***#index***  |
 | ld_i64                 |   0a   |   0000 1010   | 1: index | → value | load an int64 from register ***#index***  |
 | ld_f32                 |   0b   |   0000 1011   | 1: index | → value | load a float from register ***#index***  |
@@ -105,9 +105,19 @@
 | jump_le_i64            |   63   |   0110 0011   | 2: offsetbyte1, offsetbyte2 | value1, value2 → | compare two int64s, if value1 <= value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
 | jump_eq_object         |   64   |   0110 0100   | 2: offsetbyte1, offsetbyte2 | value1, value2 → | compare two objects, if references are equal, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
 | jump_ne_object         |   65   |   0110 0101   | 2: offsetbyte1, offsetbyte2 | value1, value2 → | compare two objects, if references are not equal, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| cmp_i32                |   66   |   0110 0110   |        | value1, value2 → result | compare two int32s, push 0 if the two int32s are the same, 1 if value1 is greater than value2, -1 otherwise |
-| cmp_i64                |   67   |   0110 0111   |        | value1, value2 → result | compare two int64s, push 0 if the two int64s are the same, 1 if value1 is greater than value2, -1 otherwise |
-| cmp_lt_f32             |   68   |   0110 1000   |        | value1, value2 → result | compare two floats, push 0 if value1 < value2 |
-| cmp_lt_f64             |   69   |   0110 1001   |        | value1, value2 → result | compare two doubles, push 0 if value1 < value2 |
-| cmp_gt_f32             |   6a   |   0110 1010   |        | value1, value2 → result | compare two floats, push 0 if value1 > value2 |
-| cmp_gt_f64             |   6b   |   0110 1011   |        | value1, value2 → result | compare two doubles, push 0 if value1 > value2 |
+| cmp_i32                |   66   |   0110 0110   |        | value1, value2 → result | compare two int32s, push 0 if the two int32s are the same, 1 if value1 > value2, -1 otherwise |
+| cmp_i64                |   67   |   0110 0111   |        | value1, value2 → result | compare two int64s, push 0 if the two int64s are the same, 1 if value1 > value2, -1 otherwise |
+| cmp_lt_f32             |   68   |   0110 1000   |        | value1, value2 → result | compare two floats, push 0 if value1 < value2, 1 otherwise |
+| cmp_lt_f64             |   69   |   0110 1001   |        | value1, value2 → result | compare two doubles, push 0 if value1 < value2, 1 otherwise |
+| cmp_gt_f32             |   6a   |   0110 1010   |        | value1, value2 → result | compare two floats, push 0 if value1 > value2, 1 otherwise |
+| cmp_gt_f64             |   6b   |   0110 1011   |        | value1, value2 → result | compare two doubles, push 0 if value1 > value2, 1 otherwise |
+| stp_i32                |   6c   |   0110 1100   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store an int32 from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
+| stp_i64                |   6d   |   0110 1101   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store an int64 from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
+| stp_f32                |   6e   |   0110 1110   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store a float from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
+| stp_f64                |   6f   |   0110 1111   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store a double from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
+| stp_object             |   70   |   0111 0000   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store an object from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
+| pop_i32                |   71   |   0111 0001   |        | value → | discard the top of stack |
+| pop_i64                |   72   |   0111 0010   |        | value → | discard the top of stack |
+| pop_f32                |   73   |   0111 0011   |        | value → | discard the top of stack |
+| pop_f64                |   74   |   0111 0100   |        | value → | discard the top of stack |
+| pop_object             |   75   |   0111 0101   |        | value → | discard the top of stack |

@@ -31,6 +31,7 @@ namespace dvm {
 
             private:
                 Interpreter interpreter;
+                Byte *code_base;
                 VMOpcode *pc;
                 VMRegisterHolder regs;
                 Stack stack;
@@ -38,23 +39,23 @@ namespace dvm {
                 void run_with_context(VMContext *context);
 
                 /* Utility functions for pc */
-                inline UInt8 const_i8() {
+                inline UInt8 const_u8() {
                     return *pc++;
                 }
 
-                inline Int16 const_i16() {
-                    UInt8 &&h = const_i8();
+                inline UInt16 const_u16() {
+                    UInt8 &&h = const_u8();
                     dvm_memory_barrier();
 
-                    UInt8 &&l = const_i8();
+                    UInt8 &&l = const_u8();
                     return (h << 8) + l;
                 }
 
                 inline Int32 const_i32() {
-                    Int16 &&h = const_i16();
+                    UInt16 &&h = const_u16();
                     dvm_memory_barrier();
 
-                    Int16 &&l = const_i16();
+                    UInt16 &&l = const_u16();
 
                     return (h << 16) + l;
                 }
@@ -65,16 +66,16 @@ namespace dvm {
                         UInt8 bits[sizeof(Float)];
                     } c{ };
 
-                    c.bits[0] = const_i8();
+                    c.bits[0] = const_u8();
                     dvm_memory_barrier();
 
-                    c.bits[1] = const_i8();
+                    c.bits[1] = const_u8();
                     dvm_memory_barrier();
 
-                    c.bits[2] = const_i8();
+                    c.bits[2] = const_u8();
                     dvm_memory_barrier();
 
-                    c.bits[3] = const_i8();
+                    c.bits[3] = const_u8();
                     return c.f;
                 }
 

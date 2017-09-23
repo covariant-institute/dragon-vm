@@ -18,7 +18,7 @@ int main() {
     auto i32 = context.find_class("Int32")->new_instance();
     i32->slots[1].set(10086);
 
-    auto visitor = regs.get_register(0);
+    auto visitor = regs[0];
     visitor->set(10086);
 
     assert(visitor->data.i32 == 10086);
@@ -27,6 +27,7 @@ int main() {
     assert(visitor->data.i32 == 'Z');
 
     Stack s(config::STACK_DEFAULT_SIZE);
+    s.new_frame(256);
     s.push_object_ref(context.new_Double(3.14));
     visitor->set_unchecked(s.peek_pop<object::Object *>());
     auto obj = visitor->get<object::Object *>();
