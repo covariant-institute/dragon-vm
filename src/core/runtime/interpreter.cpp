@@ -347,71 +347,85 @@ namespace dvm {
 
                 OPCODE_IMPL(shl_i32)
                 {
+                    Utils::math<Int32, MathShiftLeft<Int32>, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(shl_i64)
                 {
+                    Utils::math<Int64, MathShiftLeft<Int64>, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(shr_i32)
                 {
+                    Utils::math<Int32, MathShiftRight<Int32>, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(shr_i64)
                 {
+                    Utils::math<Int64, MathShiftRight<Int64>, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ushl_i32)
                 {
+                    Utils::math<Int32, MathShiftLeftUnsigned<Int32>, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ushl_i64)
                 {
+                    Utils::math<Int64, MathShiftLeftUnsigned<Int64>, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ushr_i32)
                 {
+                    Utils::math<Int32, MathShiftRightUnsigned<Int32>, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ushr_i64)
                 {
+                    Utils::math<Int64, MathShiftRightUnsigned<Int64>, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(and_i32)
                 {
+                    Utils::math<Int32, MathAnd<Int32> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(and_i64)
                 {
+                    Utils::math<Int64, MathAnd<Int64> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(or_i32)
                 {
+                    Utils::math<Int32, MathOr<Int32> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(or_i64)
                 {
+                    Utils::math<Int64, MathOr<Int64> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(xor_i32)
                 {
+                    Utils::math<Int32, MathXor<Int32> >(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(xor_i64)
                 {
+                    Utils::math<Int64, MathXor<Int64> >(thread);
                     OPCODE_NEXT(context);
                 }
 

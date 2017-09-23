@@ -1,7 +1,7 @@
 ## Opcodes in Dragon VM
 
 ### Instructions
-| Mnemonic | Opcode (in hex) | Opcode (in binary) | Other bytes ([count]: [operand labels]) | Stack ([before] → [after]) | Description |
+| Mnemonic | Opcode (in hex) | Opcode (in binary) | Other bytes ([count]: [operand labels]) | Stack ([before] → [after]) ([top], ..., [bottom]) | Description |
 |:--------:|:---------------:|:------------------:|:---------------------------------------:|:---------------------------:|:-----------:|
 | nop                    |   00   |   0000 0000   |        | [No Change] | do nothing |
 | new_instance           |   01   |   0000 0001   | 2: indexbyte1, indexbyte2 | → object | create an instance of a class, which is identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) in constant pool. |

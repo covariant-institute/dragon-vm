@@ -12,30 +12,30 @@
 namespace dvm {
     namespace core {
         namespace runtime {
-            template <typename T>
+            template <typename LhsType, typename RhsType = LhsType>
             struct MathAdd {
-                static inline T get_result(T &&lhs, T &&rhs) {
+                static inline LhsType get_result(LhsType &&lhs, LhsType &&rhs) {
                     return lhs + rhs;
                 }
             };
 
-            template <typename T>
+            template <typename LhsType, typename RhsType = LhsType>
             struct MathSub {
-                static inline T get_result(T &&lhs, T &&rhs) {
+                static inline LhsType get_result(LhsType &&lhs, LhsType &&rhs) {
                     return lhs - rhs;
                 }
             };
 
-            template <typename T>
+            template <typename LhsType, typename RhsType = LhsType>
             struct MathMul {
-                static inline T get_result(T &&lhs, T &&rhs) {
+                static inline LhsType get_result(LhsType &&lhs, LhsType &&rhs) {
                     return lhs * rhs;
                 }
             };
 
-            template <typename T>
+            template <typename LhsType, typename RhsType = LhsType>
             struct MathDiv {
-                static inline T get_result(T &&lhs, T &&rhs) {
+                static inline LhsType get_result(LhsType &&lhs, LhsType &&rhs) {
                     if (rhs == 0) {
                         throw dvm::core::Exception(DVM_RUNTIME_DIVIDE_BY_ZERO);
                     }
@@ -43,9 +43,9 @@ namespace dvm {
                 }
             };
 
-            template <typename T>
+            template <typename LhsType, typename RhsType = LhsType>
             struct MathRemain {
-                static inline T get_result(T &&lhs, T &&rhs) {
+                static inline LhsType get_result(LhsType &&lhs, LhsType &&rhs) {
                     return lhs % rhs;
                 }
             };
@@ -64,10 +64,81 @@ namespace dvm {
                 }
             };
 
-            template <typename T>
+            template <typename LhsType>
             struct MathNegate {
-                static inline T get_result(T &&operand) {
+                static inline LhsType get_result(LhsType &&operand) {
                     return -operand;
+                }
+            };
+
+            template <typename LhsType, typename RhsType = Int32>
+            struct MathShiftLeft {
+                static inline LhsType get_result(LhsType &&lhs, RhsType &&rhs) {
+                    return lhs << rhs;
+                }
+            };
+
+            template <typename LhsType, typename RhsType = Int32>
+            struct MathShiftRight {
+                static inline LhsType get_result(LhsType &&lhs, RhsType &&rhs) {
+                    return lhs >> rhs;
+                }
+            };
+
+            template <typename LhsType, typename RhsType = Int32>
+            struct MathShiftLeftUnsigned;
+
+            template <typename LhsType, typename RhsType = Int32>
+            struct MathShiftRightUnsigned;
+
+            template <>
+            struct MathShiftLeftUnsigned<Int32, Int32> {
+                static inline Int32 get_result(Int32 &&lhs, Int32 &&rhs) {
+                    return static_cast<UInt32>(lhs) << rhs;
+                }
+            };
+
+
+            template <>
+            struct MathShiftLeftUnsigned<Int64, Int32> {
+                static inline Int64 get_result(Int64 &&lhs, Int32 &&rhs) {
+                    return static_cast<Int64>(lhs) << rhs;
+                }
+            };
+
+            template <>
+            struct MathShiftRightUnsigned<Int32, Int32> {
+                static inline Int32 get_result(Int32 &&lhs, Int32 &&rhs) {
+                    return static_cast<UInt32>(lhs) >> rhs;
+                }
+            };
+
+
+            template <>
+            struct MathShiftRightUnsigned<Int64, Int32> {
+                static inline Int64 get_result(Int64 &&lhs, Int32 &&rhs) {
+                    return static_cast<Int64>(lhs) >> rhs;
+                }
+            };
+
+            template <typename LhsType, typename RhsType = LhsType>
+            struct MathAnd {
+                static inline LhsType get_result(LhsType &&lhs, RhsType &&rhs) {
+                    return lhs & rhs;
+                }
+            };
+
+            template <typename LhsType, typename RhsType = LhsType>
+            struct MathOr {
+                static inline LhsType get_result(LhsType &&lhs, RhsType &&rhs) {
+                    return lhs | rhs;
+                }
+            };
+
+            template <typename LhsType, typename RhsType = LhsType>
+            struct MathXor {
+                static inline LhsType get_result(LhsType &&lhs, RhsType &&rhs) {
+                    return lhs ^ rhs;
                 }
             };
         }

@@ -7,6 +7,7 @@
 
 #define OPCODE(X) static_cast<dvm::core::runtime::VMOpcode>(dvm::core::runtime::VMOpcodes::X)
 
+/* see opcodes_def.hpp.inc */
 #define RET_CODE 0x49
 
 #define T(code_name, condition_area, ...) \
@@ -228,7 +229,7 @@ int main() {
       OPCODE(neg_i32));
 
     // - (5.0f % 3.0f)
-    T("neg_f32 @ 5.0f % 3.0f", {
+    T("neg_f32 @ - (5.0f % 3.0f)", {
         assert(thread.get_stack().peek<Float>() == -2.0f);
     },
       OPCODE(ldc_f32), 0, 0, 0, 3,
@@ -236,4 +237,94 @@ int main() {
       OPCODE(ldc_f32), byte5[0], byte5[1], byte5[2], byte5[3],
       OPCODE(remain_f32),
       OPCODE(neg_f32));
+
+    // 1 << 5
+    T("shl_i32", {
+        assert(thread.get_stack().peek<Int32>() == (1 << 5));
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 5,
+      OPCODE(ldc_i32), 0, 0, 0, 1,
+      OPCODE(shl_i32));
+
+    // 1LL << 8
+    T("shl_i64", {
+        assert(thread.get_stack().peek<Int64>() == (Int64(1) << 8));
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 8,
+      OPCODE(ldc_i32), 0, 0, 0, 1,
+      OPCODE(ldc_i32), 0, 0, 0, 0,
+      OPCODE(ldc_i64),
+      OPCODE(shl_i64));
+
+    // 4 >> 2
+    T("shr_i32", {
+        assert(thread.get_stack().peek<Int32>() == (4 >> 2));
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 2,
+      OPCODE(ldc_i32), 0, 0, 0, 4,
+      OPCODE(shr_i32));
+
+    // 4LL >> 2
+    T("shr_i64", {
+        assert(thread.get_stack().peek<Int64>() == (Int64(4) >> 2));
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 2,
+      OPCODE(ldc_i32), 0, 0, 0, 4, /* low */
+      OPCODE(ldc_i32), 0, 0, 0, 0, /* high */
+      OPCODE(ldc_i64),
+      OPCODE(shr_i64));
+
+    T("and_i32", {
+        assert(thread.get_stack().peek<Int32>() == 0);
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 1,
+      OPCODE(ldc_i32), 0, 0, 0, 0,
+      OPCODE(and_i32));
+
+    T("and_i64", {
+        assert(thread.get_stack().peek<Int64>() == Int64(0));
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 1, /* low */
+      OPCODE(ldc_i32), 0, 0, 0, 0, /* high */
+      OPCODE(ldc_i64),
+      OPCODE(ldc_i32), 0, 0, 0, 0, /* low */
+      OPCODE(ldc_i32), 0, 0, 0, 0, /* high */
+      OPCODE(ldc_i64),
+      OPCODE(and_i64));
+
+    T("or_i32", {
+        assert(thread.get_stack().peek<Int32>() == 1);
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 1,
+      OPCODE(ldc_i32), 0, 0, 0, 0,
+      OPCODE(or_i32));
+
+    T("or_i64", {
+        assert(thread.get_stack().peek<Int64>() == 1);
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 1, /* low */
+      OPCODE(ldc_i32), 0, 0, 0, 0, /* high */
+      OPCODE(ldc_i64),
+      OPCODE(ldc_i32), 0, 0, 0, 0, /* low */
+      OPCODE(ldc_i32), 0, 0, 0, 0, /* high */
+      OPCODE(ldc_i64),
+      OPCODE(or_i64));
+
+    T("xor_i32", {
+        assert(thread.get_stack().peek<Int32>() == (1 ^ 2));
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 2,
+      OPCODE(ldc_i32), 0, 0, 0, 1,
+      OPCODE(xor_i32));
+
+    T("xor_i64", {
+        assert(thread.get_stack().peek<Int64>() == (Int64(1) ^ Int64(2)));
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 2, /* low */
+      OPCODE(ldc_i32), 0, 0, 0, 0, /* high */
+      OPCODE(ldc_i64),
+      OPCODE(ldc_i32), 0, 0, 0, 1, /* low */
+      OPCODE(ldc_i32), 0, 0, 0, 0, /* high */
+      OPCODE(ldc_i64),
+      OPCODE(xor_i64));
 }
