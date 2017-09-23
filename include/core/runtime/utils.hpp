@@ -32,7 +32,7 @@ namespace dvm {
 
                 template <typename LhsType, typename Impl>
                 static inline void math1(Thread *thread) {
-                    LhsType &&operand = std::move(thread->stack.peek_pop<LhsType>());
+                    LhsType &&operand = thread->stack.peek_pop<LhsType>();
 
                     LhsType &&result = Impl::get_result(std::forward<LhsType>(operand));
                     thread->stack.push<LhsType>(std::forward<LhsType>(result));
