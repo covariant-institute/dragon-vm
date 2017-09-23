@@ -327,4 +327,22 @@ int main() {
       OPCODE(ldc_i32), 0, 0, 0, 0, /* high */
       OPCODE(ldc_i64),
       OPCODE(xor_i64));
+
+    T("i32_to_f32", {
+        assert(thread.get_stack().peek<Float>() == 3.0f);
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 3,
+      OPCODE(i32_to_f32));
+
+    T("i32_to_f64", {
+        assert(thread.get_stack().peek<Double>() == 99.0);
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 99,
+      OPCODE(i32_to_f64));
+
+    T("i32_to_i64", {
+        assert(thread.get_stack().peek<Int64>() == Int64(3));
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 3,
+      OPCODE(i32_to_i64));
 }

@@ -436,21 +436,25 @@ namespace dvm {
 
                 OPCODE_IMPL(i32_to_i64)
                 {
+                    Utils::cast<Int32, Int64>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(i32_to_f32)
                 {
+                    Utils::cast<Int32, Float>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(i32_to_f64)
                 {
+                    Utils::cast<Int32, Double>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(i64_to_i32)
                 {
+                    Utils::cast<Int64, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
@@ -461,21 +465,25 @@ namespace dvm {
 
                 OPCODE_IMPL(i64_to_f32)
                 {
+                    Utils::cast<Int64, Float>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(i64_to_f64)
                 {
+                    Utils::cast<Int64, Double>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(f32_to_i32)
                 {
+                    Utils::cast<Float, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(f32_to_i64)
                 {
+                    Utils::cast<Float, Int64>(thread);
                     OPCODE_NEXT(context);
                 }
 
@@ -486,21 +494,25 @@ namespace dvm {
 
                 OPCODE_IMPL(f32_to_f64)
                 {
+                    Utils::cast<Float, Double>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(f64_to_i32)
                 {
+                    Utils::cast<Double, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(f64_to_i64)
                 {
+                    Utils::cast<Double, Int64>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(f64_to_f32)
                 {
+                    Utils::cast<Double, Float>(thread);
                     OPCODE_NEXT(context);
                 }
 

@@ -13,20 +13,26 @@ namespace dvm {
 
             class Utils {
             public:
+                template <typename FromType, typename ToType>
+                static inline void cast(Thread *thread) {
+                    FromType &&from = std::move(thread->stack.peek_pop<FromType>());
+                    thread->stack.push<ToType>(std::forward<ToType>(from));
+                }
+
                 template <typename LhsType, typename Impl, typename RhsType = LhsType>
                 static inline void math(Thread *thread) {
-                    LhsType &&lhs = thread->stack.peek_pop<LhsType>();
+                    LhsType &&lhs = std::move(thread->stack.peek_pop<LhsType>());
                     dvm_memory_barrier();
-                    RhsType &&rhs = thread->stack.peek_pop<RhsType>();
+                    RhsType &&rhs = std::move(thread->stack.peek_pop<RhsType>());
 
                     LhsType &&result = Impl::get_result(std::forward<LhsType>(lhs),
-                                                  std::forward<RhsType>(rhs));
+                                                        std::forward<RhsType>(rhs));
                     thread->stack.push<LhsType>(std::forward<LhsType>(result));
                 }
 
                 template <typename LhsType, typename Impl>
                 static inline void math1(Thread *thread) {
-                    LhsType &&operand = thread->stack.peek_pop<LhsType>();
+                    LhsType &&operand = std::move(thread->stack.peek_pop<LhsType>());
 
                     LhsType &&result = Impl::get_result(std::forward<LhsType>(operand));
                     thread->stack.push<LhsType>(std::forward<LhsType>(result));
@@ -34,14 +40,14 @@ namespace dvm {
 
                 template <typename T>
                 static inline T load_reg(Thread *thread) {
-                    UInt8 reg = thread->const_i8();
+                    UInt8 &&reg = thread->const_i8();
 
                     return thread->regs.get_register(reg)->get_unchecked<T>();
                 }
 
                 template <typename T>
                 static inline void store(Thread *thread) {
-                    UInt8 reg = thread->const_i8();
+                    UInt8 &&reg = thread->const_i8();
 
                     // Do not use peek_pop()
                     // st_* instructions do not drop stack elements
@@ -49,7 +55,7 @@ namespace dvm {
                 }
 
                 static inline void store_object_ref(Thread *thread) {
-                    UInt8 reg = thread->const_i8();
+                    UInt8 &&reg = thread->const_i8();
 
                     // Do not use peek_object_pop()
                     // st_* instructions do not drop stack elements
