@@ -28,47 +28,20 @@
 using namespace dvm::core;
 using namespace dvm::core::runtime;
 
-//UInt8 *float_bytes1(Float f) {
-//    static UInt8 r[sizeof(f)];
-//    memcpy(r, &f, sizeof(r));
-//    return r;
-//}
-//
-//UInt8 *float_bytes2(Float f) {
-//    static UInt8 r[sizeof(f)];
-//    memcpy(r, &f, sizeof(r));
-//    return r;
-//}
-//
-//UInt8 *float_bytes3(Float f) {
-//    static UInt8 r[sizeof(f)];
-//    memcpy(r, &f, sizeof(r));
-//    return r;
-//}
-
 union FloatBytes {
     Float f;
     UInt8 b[sizeof(Float)];
 };
 
 int main() {
-    FloatBytes f1{ };
+    FloatBytes f1{};
     f1.f = 3.14f;
 
-    FloatBytes f2{ };
+    FloatBytes f2{};
     f2.f = 4.14f;
 
-    FloatBytes f3{ };
+    FloatBytes f3{};
     f3.f = 5.14f;
-
-//    Float float1 = 3.14f;
-//    UInt8 *float_bytes1 = float_bytes1(float1);
-//
-//    Float float2 = 4.14f;
-//    UInt8 *float_bytes2 = float_bytes2(float2);
-//
-//    Float float3 = 5.14f;
-//    UInt8 *float_bytes3 = float_bytes3(float3);
 
     VMContext context;
     Thread thread;
@@ -266,7 +239,6 @@ int main() {
     T("neg_f32 @ - (5.0f % 3.0f)", {
         assert(thread.get_stack().peek<Float>() == -2.0f);
     },
-      OPCODE(ldc_f32), 0, 0, 0, 3,
       OPCODE(ldc_f32), byte3[0], byte3[1], byte3[2], byte3[3],
       OPCODE(ldc_f32), byte5[0], byte5[1], byte5[2], byte5[3],
       OPCODE(remain_f32),
@@ -409,31 +381,41 @@ int main() {
       OPCODE(ldc_i32), 0, 0, 0, 70, /* value1 */
       OPCODE(cmp_i32));
 
+    Float f314 = 3.14f;
+    Float f414 = 4.14f;
+    Float f514 = 5.14f;
+    UInt8 f314b[sizeof(Float)];
+    UInt8 f414b[sizeof(Float)];
+    UInt8 f514b[sizeof(Float)];
+    memcpy(f314b, &f314, sizeof(Float));
+    memcpy(f414b, &f414, sizeof(Float));
+    memcpy(f514b, &f514, sizeof(Float));
+
     T("cmp_lt_f32 @ value1 < value2", {
         assert(thread.get_stack().peek<Int32>() == 0);
     },
-      OPCODE(ldc_f32), f3.b[1], f3.b[2], f3.b[3], f3.b[4], /* value2 */
-      OPCODE(ldc_f32), f2.b[1], f2.b[2], f2.b[3], f2.b[4], /* value1 */
+      OPCODE(ldc_f32), f414b[0], f414b[1], f414b[2], f414b[3], /* value2 */
+      OPCODE(ldc_f32), f314b[0], f314b[1], f314b[2], f314b[3], /* value1 */
       OPCODE(cmp_lt_f32));
 
     T("cmp_lt_f32 @ value1 < value2", {
         assert(thread.get_stack().peek<Int32>() == 1);
     },
-      OPCODE(ldc_f32), f1.b[1], f1.b[2], f1.b[3], f1.b[4], /* value2 */
-      OPCODE(ldc_f32), f2.b[1], f2.b[2], f2.b[3], f2.b[4], /* value1 */
+      OPCODE(ldc_f32), f414b[0], f414b[1], f414b[2], f414b[3], /* value2 */
+      OPCODE(ldc_f32), f514b[0], f514b[1], f514b[2], f514b[3], /* value1 */
       OPCODE(cmp_lt_f32));
 
     T("cmp_gt_f32 @ value1 > value2", {
         assert(thread.get_stack().peek<Int32>() == 1);
     },
-      OPCODE(ldc_f32), f3.b[1], f3.b[2], f3.b[3], f3.b[4], /* value2 */
-      OPCODE(ldc_f32), f2.b[1], f2.b[2], f2.b[3], f2.b[4], /* value1 */
+      OPCODE(ldc_f32), f414b[0], f414b[1], f414b[2], f414b[3], /* value2 */
+      OPCODE(ldc_f32), f2.b[0], f2.b[1], f2.b[2], f2.b[3], /* value1 */
       OPCODE(cmp_gt_f32));
 
     T("cmp_gt_f32 @ value1 > value2", {
         assert(thread.get_stack().peek<Int32>() == 0);
     },
-      OPCODE(ldc_f32), f1.b[1], f1.b[2], f1.b[3], f1.b[4], /* value2 */
-      OPCODE(ldc_f32), f2.b[1], f2.b[2], f2.b[3], f2.b[4], /* value1 */
+      OPCODE(ldc_f32), f1.b[0], f1.b[1], f1.b[2], f1.b[3], /* value2 */
+      OPCODE(ldc_f32), f2.b[0], f2.b[1], f2.b[2], f2.b[3], /* value1 */
       OPCODE(cmp_gt_f32));
 }
