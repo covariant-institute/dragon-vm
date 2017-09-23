@@ -19,8 +19,10 @@ namespace dvm {
         private:
             Byte *bp;
             Byte *sp;
+            Byte *sl;
+            SizeT frame_size;
 
-            explicit Frame(Byte *bp);
+            Frame(Byte *bp, SizeT size);
 
             ~Frame();
 
@@ -36,7 +38,20 @@ namespace dvm {
                 }
             }
 
+            template <typename T>
+            inline T *at(Byte *bytes) const {
+                return reinterpret_cast<T *>(bytes);
+            }
+
         public:
+            template <typename T>
+            inline T *at(UInt16 offset) {
+                if (bp - offset < sl) {
+                    throw dvm::core::Exception(DVM_MEMORY_STACK_INVALID_ACCESS);
+                }
+                return at<T>(bp - offset);
+            }
+
             template <typename T>
             inline void pop() {
                 ensure_not_empty();
@@ -46,13 +61,13 @@ namespace dvm {
             template <typename T>
             inline void push(T &&t) {
                 Byte *byte = allocate(sizeof(T));
-                *reinterpret_cast<T *>(byte) = std::forward<T>(t);
+                *at<T>(byte) = std::forward<T>(t);
             }
 
             template <typename T>
             inline T peek() const {
                 ensure_not_empty();
-                return *reinterpret_cast<T *>(sp);
+                return *at<T>(sp);
             }
 
             template <typename T>
@@ -68,7 +83,7 @@ namespace dvm {
 
             inline object::Object *peek_object() const {
                 ensure_not_empty();
-                auto **ref = reinterpret_cast<object::Object **>(sp);
+                auto **ref = at<object::Object *>(sp);
                 return ref != nullptr ? *ref : nullptr;
             }
 
@@ -81,7 +96,7 @@ namespace dvm {
             inline void push_object_ref(object::Object *obj) {
                 // push the address of the object as a reference
                 Byte *ref = allocate(sizeof(object::Object *));
-                *reinterpret_cast<object::Object **>(ref) = obj;
+                *at<object::Object *>(ref) = obj;
             }
         };
 
@@ -111,7 +126,7 @@ namespace dvm {
 
             ~Stack();
 
-            void new_frame();
+            void new_frame(SizeT size);
 
             void remove_top_frame();
 

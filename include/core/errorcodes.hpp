@@ -14,6 +14,7 @@
 #define DVM_DCX_LINKING_INVALID_METHOD "Invalid method."
 
 #define DVM_MEMORY_STACK_OVERFLOW "Stack overflow."
+#define DVM_MEMORY_STACK_INVALID_ACCESS "Invalid access."
 #define DVM_MEMORY_STACK_EMPTY "Empty stack."
 
 #define DVM_RUNTIME_CLASS_NOT_FOUND "Class not found."

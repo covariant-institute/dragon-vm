@@ -16,8 +16,10 @@
         using namespace dvm::core::runtime; \
         printf(":: Testing on %s\n", code_name); \
         Byte _c[] = { __VA_ARGS__, RET_CODE }; \
+        thread.get_stack().new_frame(64); \
         thread.set_runnable(_c); \
         context.run_thread(&thread); \
+        thread.get_stack().remove_top_frame(); \
         condition_area; \
         printf(":: Passed\n"); \
     }

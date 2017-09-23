@@ -14,7 +14,7 @@ int main() {
     VMContext context{ };
 
     Stack s(dvm::core::config::STACK_DEFAULT_SIZE);
-    s.new_frame();
+    s.new_frame(256);
 
     auto *prototype_int32 = context.find_class("Int32");
 
