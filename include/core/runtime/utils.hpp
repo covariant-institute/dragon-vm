@@ -12,9 +12,28 @@ namespace dvm {
         namespace runtime {
 
             class Utils {
+            private:
+                static inline void jump_to_offset(Thread *thread, Int32 offset, bool place_return_address) {
+                    if (place_return_address) {
+                        thread->stack.push<Int32>(std::forward<Int32>(-offset));
+                    }
+                    thread->pc += offset;
+                }
+
             public:
                 template <typename Condition>
                 static inline void jump(Thread *thread, bool place_return_address) {
+                    Int32 &&check = thread->stack.peek_pop<Int32>();
+                    Int16 offset = thread->const_i16();
+
+                    if (Condition::get_result(check)) {
+                        jump_to_offset(thread, offset, place_return_address);
+                    }
+                }
+
+                static inline void jump0(Thread *thread, bool place_return_address) {
+                    Int16 offset = thread->const_i16();
+                    jump_to_offset(thread, offset, place_return_address);
                 }
 
                 template <typename FromType, typename ToType>

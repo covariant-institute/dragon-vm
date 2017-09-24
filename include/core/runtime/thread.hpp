@@ -54,6 +54,14 @@ namespace dvm {
                     return (h << 8) + l;
                 }
 
+                inline Int16 const_i16() {
+                    UInt8 &&h = const_u8();
+                    dvm_memory_barrier();
+
+                    UInt8 &&l = const_u8();
+                    return (h << 8) + l;
+                }
+
                 inline Int32 const_i32() {
                     UInt16 &&h = const_u16();
                     dvm_memory_barrier();

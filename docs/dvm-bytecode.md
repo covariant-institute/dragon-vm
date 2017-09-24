@@ -82,14 +82,14 @@
 | ret_i64                |   4c   |   0100 1100   |        | value → [Empty] | return an int64 |
 | ret_f32                |   4d   |   0100 1101   |        | value → [Empty] | return a float |
 | ret_f64                |   4e   |   0100 1110   |        | value → [Empty] | return a double |
-| jump                   |   4f   |   0100 1111   | 2: offsetbyte1, offsetbyte2 | [No Change] | goes to another instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_ret               |   50   |   0101 0000   | 2: offsetbyte1, offsetbyte2 | → offset | goes to another instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) and place the return address on the stack |
-| jump_eq                |   51   |   0101 0001   | 2: offsetbyte1, offsetbyte2 | value → | if value == 0, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_ne                |   52   |   0101 0010   | 2: offsetbyte1, offsetbyte2 | value → | if value != 0, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_gt                |   53   |   0101 0011   | 2: offsetbyte1, offsetbyte2 | value → | if value > 0, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_ge                |   54   |   0101 0100   | 2: offsetbyte1, offsetbyte2 | value → | if value >= 0, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_lt                |   55   |   0101 0101   | 2: offsetbyte1, offsetbyte2 | value → | if value < 0, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_le                |   56   |   0101 0110   | 2: offsetbyte1, offsetbyte2 | value → | if value <= 0, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump                   |   4f   |   0100 1111   | 2: offsetbyte1, offsetbyte2 | [No Change] | goes to another instruction at `pc + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_ret               |   50   |   0101 0000   | 2: offsetbyte1, offsetbyte2 | → offset | goes to another instruction at `pc + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) and place the return address on the stack |
+| jump_eq                |   51   |   0101 0001   | 2: offsetbyte1, offsetbyte2 | value → | if value == 0, jump to instruction at `pc + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_ne                |   52   |   0101 0010   | 2: offsetbyte1, offsetbyte2 | value → | if value != 0, jump to instruction at `pc + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_gt                |   53   |   0101 0011   | 2: offsetbyte1, offsetbyte2 | value → | if value > 0, jump to instruction at `pc + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_ge                |   54   |   0101 0100   | 2: offsetbyte1, offsetbyte2 | value → | if value >= 0, jump to instruction at `pc + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_lt                |   55   |   0101 0101   | 2: offsetbyte1, offsetbyte2 | value → | if value < 0, jump to instruction at `pc + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
+| jump_le                |   56   |   0101 0110   | 2: offsetbyte1, offsetbyte2 | value → | if value <= 0, jump to instruction at `pc + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
 | cmp_i32                |   57   |   0101 0111   |        | value1, value2 → result | compare two int32s, push 0 if the two int32s are the same, 1 if value1 > value2, -1 otherwise |
 | cmp_i64                |   58   |   0101 1000   |        | value1, value2 → result | compare two int64s, push 0 if the two int64s are the same, 1 if value1 > value2, -1 otherwise |
 | cmp_lt_f32             |   59   |   0101 1001   |        | value1, value2 → result | compare two floats, push 0 if value1 < value2, 1 otherwise |

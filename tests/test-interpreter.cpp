@@ -432,4 +432,53 @@ int main() {
     },
       OPCODE(ldc_null),
       OPCODE(cmp_nn_object));
+
+    T("jump", {
+        assert(thread->get_stack().peek<Int32>() == 2);
+    },
+      OPCODE(jump), 0, 5,           /* pc + 5 */
+      OPCODE(ldc_i32), 0, 0, 0, 1,
+      OPCODE(ldc_i32), 0, 0, 0, 2); /* <- pc + 5 */
+
+    T("jump_ret", {
+        assert(thread->get_stack().peek_pop<Int32>() == 2);
+        assert(thread->get_stack().peek<Int32>() == -5);
+    },
+      OPCODE(jump_ret), 0, 5,           /* pc + 5 */
+      OPCODE(ldc_i32), 0, 0, 0, 1,
+      OPCODE(ldc_i32), 0, 0, 0, 2);     /* <- pc + 5 */
+
+    T("jump_eq", {
+        assert(thread->get_stack().peek<Int32>() == 2);
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 0,
+      OPCODE(jump_eq), 0, 5,        /* pc + 5 */
+      OPCODE(ldc_i32), 0, 0, 0, 1,
+      OPCODE(ldc_i32), 0, 0, 0, 2); /* <- pc + 5 */
+
+    T("jump_ne", {
+        thread->get_stack().pop<Int32>();
+        assert(thread->get_stack().peek<Int32>() == 1);
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 0,
+      OPCODE(jump_ne), 0, 5,        /* pc + 5 */
+      OPCODE(ldc_i32), 0, 0, 0, 1,
+      OPCODE(ldc_i32), 0, 0, 0, 2); /* <- pc + 5 */
+
+    union {
+        Int16 v;
+        UInt8 bits[sizeof(Int16)];
+    } X{ };
+
+    X.v = -11;
+
+    T("jump @ back", {
+        assert(thread->get_stack().peek<Int32>() == 1);
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 0,
+      OPCODE(jump_eq), 0, 6,
+      OPCODE(ldc_i32), 0, 0, 0, 1,            /* <- pc - 11 */
+      OPCODE(ret),
+      OPCODE(ldc_i32), 0, 0, 0, 2,
+      OPCODE(jump_gt), X.bits[0], X.bits[1]); /* <- pc */
 }

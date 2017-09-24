@@ -2,11 +2,12 @@
 // Created by kiva on 2017/8/28.
 //
 
-#include <core/runtime/vm_context.hpp>
 #include <core/runtime/interpreter.hpp>
 #include <core/runtime/thread.hpp>
+#include <core/runtime/vm_context.hpp>
 #include <core/runtime/utils.hpp>
 #include <core/runtime/math.hpp>
+#include <core/runtime/jump.hpp>
 
 #ifdef DVM_INTERPRETATION_THREADED
 
@@ -559,41 +560,49 @@ namespace dvm {
 
                 OPCODE_IMPL(jump)
                 {
+                    Utils::jump0(thread, false);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_ret)
                 {
+                    Utils::jump0(thread, true);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_eq)
                 {
+                    Utils::jump<JumpConditionEq>(thread, false);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_ne)
                 {
+                    Utils::jump<JumpConditionNe>(thread, false);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_gt)
                 {
+                    Utils::jump<JumpConditionGt>(thread, false);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_ge)
                 {
+                    Utils::jump<JumpConditionGe>(thread, false);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_lt)
                 {
+                    Utils::jump<JumpConditionLt>(thread, false);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_le)
                 {
+                    Utils::jump<JumpConditionLe>(thread, false);
                     OPCODE_NEXT(context);
                 }
 
