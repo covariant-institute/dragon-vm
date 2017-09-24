@@ -470,15 +470,15 @@ int main() {
         UInt8 bits[sizeof(Int16)];
     } X{ };
 
-    X.v = -11;
+    X.v = -14;
 
     T("jump @ back", {
         assert(thread->get_stack().peek<Int32>() == 1);
     },
       OPCODE(ldc_i32), 0, 0, 0, 0,
       OPCODE(jump_eq), 0, 6,
-      OPCODE(ldc_i32), 0, 0, 0, 1,            /* <- pc - 11 */
+      OPCODE(ldc_i32), 0, 0, 0, 1,            /* <- pc - 14 */
       OPCODE(ret),
       OPCODE(ldc_i32), 0, 0, 0, 2,
-      OPCODE(jump_gt), X.bits[0], X.bits[1]); /* <- pc */
+      OPCODE(jump_gt), X.bits[1], X.bits[0]); /* <- pc */
 }
