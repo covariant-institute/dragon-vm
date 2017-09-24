@@ -4,8 +4,10 @@
 
 #include <core/runtime/interpreter.hpp>
 #include <core/runtime/thread.hpp>
+#include <core/runtime/vm_context.hpp>
 #include <core/runtime/utils.hpp>
 #include <core/runtime/math.hpp>
+#include <core/runtime/jump.hpp>
 
 #ifdef DVM_INTERPRETATION_THREADED
 
@@ -43,9 +45,14 @@ namespace dvm {
                 setup_opcode_handler();
             }
 
-            void Interpreter::exec(Thread *thread, VMContext *context) {
+            void Interpreter::exec(Thread *thread) {
                 if (thread == nullptr || thread->pc == nullptr) {
                     throw dvm::core::Exception(DVM_RUNTIME_INVALID_CODE);
+                }
+
+                VMContext *context = thread->get_context();
+                if (context == nullptr) {
+                    throw dvm::core::Exception(DVM_RUNTIME_INVALID_ENV);
                 }
 
 #ifdef DVM_INTERPRETATION_THREADED
@@ -553,116 +560,49 @@ namespace dvm {
 
                 OPCODE_IMPL(jump)
                 {
+                    Utils::jump0(thread, false);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_ret)
                 {
+                    Utils::jump0(thread, true);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_eq)
                 {
+                    Utils::jump<JumpConditionEq>(thread, false);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_ne)
                 {
+                    Utils::jump<JumpConditionNe>(thread, false);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_gt)
                 {
+                    Utils::jump<JumpConditionGt>(thread, false);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_ge)
                 {
+                    Utils::jump<JumpConditionGe>(thread, false);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_lt)
                 {
+                    Utils::jump<JumpConditionLt>(thread, false);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_le)
                 {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_not_null)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_eq_i32)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_eq_i64)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_ne_i32)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_ne_i64)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_gt_i32)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_gt_i64)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_ge_i32)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_ge_i64)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_lt_i32)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_lt_i64)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_le_i32)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_le_i64)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_eq_object)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_ne_object)
-                {
+                    Utils::jump<JumpConditionLe>(thread, false);
                     OPCODE_NEXT(context);
                 }
 
@@ -699,6 +639,21 @@ namespace dvm {
                 OPCODE_IMPL(cmp_gt_f64)
                 {
                     Utils::math<Double, MathCompareGreaterThan<Double>, Double, Int32>(thread);
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(cmp_object)
+                {
+                    Utils::math<object::Object *,
+                            MathCompare<object::Object *, object::Object *>,
+                            object::Object *, Int32>(thread);
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(cmp_nn_object)
+                {
+                    Utils::math1<object::Object *,
+                            MathCompareNotNull, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 

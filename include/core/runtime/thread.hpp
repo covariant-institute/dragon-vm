@@ -14,9 +14,8 @@ namespace dvm {
         namespace runtime {
             class VMContext;
 
-            class Runnable {
-            public:
-                virtual void run() = 0;
+            class ThreadLocalStorage {
+
             };
 
             /**
@@ -29,14 +28,18 @@ namespace dvm {
 
                 friend class VMContext;
 
+                friend class DragonVM;
+
             private:
                 Interpreter interpreter;
+                Stack stack;
+                VMRegisterHolder regs;
+
+                VMContext *context;
                 Byte *code_base;
                 VMOpcode *pc;
-                VMRegisterHolder regs;
-                Stack stack;
 
-                void run_with_context(VMContext *context);
+                explicit Thread(VMContext *context);
 
                 /* Utility functions for pc */
                 inline UInt8 const_u8() {
@@ -44,6 +47,14 @@ namespace dvm {
                 }
 
                 inline UInt16 const_u16() {
+                    UInt8 &&h = const_u8();
+                    dvm_memory_barrier();
+
+                    UInt8 &&l = const_u8();
+                    return (h << 8) + l;
+                }
+
+                inline Int16 const_i16() {
                     UInt8 &&h = const_u8();
                     dvm_memory_barrier();
 
@@ -80,13 +91,17 @@ namespace dvm {
                 }
 
             public:
-                Thread();
-
                 Thread(const Thread &) = delete;
 
-                ~Thread();
+                ~Thread() = default;
 
                 void set_runnable(Byte *code);
+
+                void run();
+
+                inline VMContext *get_context() const {
+                    return context;
+                }
 
                 inline Stack &get_stack() {
                     return stack;

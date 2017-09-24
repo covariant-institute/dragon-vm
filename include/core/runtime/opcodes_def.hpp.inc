@@ -49,20 +49,12 @@ OPCODE(jump_gt)
 OPCODE(jump_ge)
 OPCODE(jump_lt)
 OPCODE(jump_le)
-OPCODE(jump_not_null)
-
-INTS_OPCODES_PREFIX(jump_eq)
-INTS_OPCODES_PREFIX(jump_ne)
-INTS_OPCODES_PREFIX(jump_gt)
-INTS_OPCODES_PREFIX(jump_ge)
-INTS_OPCODES_PREFIX(jump_lt)
-INTS_OPCODES_PREFIX(jump_le)
-OPCODE(jump_eq_object)
-OPCODE(jump_ne_object)
 
 INTS_OPCODES_PREFIX(cmp)
 FLOATS_OPCODES_PREFIX(cmp_lt)
 FLOATS_OPCODES_PREFIX(cmp_gt)
+OPCODE(cmp_object)
+OPCODE(cmp_nn_object)
 
 /* stp: any stack to register */
 TYPED_OPCODES_PREFIX(stp)

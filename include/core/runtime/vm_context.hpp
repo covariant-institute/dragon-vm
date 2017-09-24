@@ -1,13 +1,8 @@
 #pragma once
 
-#include <core/memory.hpp>
-#include <core/stack.hpp>
-#include <core/heap.hpp>
 #include <core/object/class.hpp>
-#include <core/dcx/dcx_file.hpp>
-#include <core/runtime/opcodes.hpp>
-#include <core/runtime/vm_register.hpp>
-
+#include <core/runtime/dvm.hpp>
+#include <core/runtime/thread.hpp>
 #include <unordered_map>
 
 namespace dvm {
@@ -19,40 +14,51 @@ namespace dvm {
         namespace runtime {
             class Thread;
 
+            class DragonVM;
+
             // TODO VM Executing Context
             class VMContext {
+                friend class DragonVM;
+
             private:
-                std::unordered_map<std::string, object::Class *> class_map;
-                std::unordered_map<std::string, std::unordered_map<std::string, object::Method *>> method_map;
-                std::unordered_map<UInt16, std::string> constant_string_map;
-                std::unordered_map<UInt16, object::Class *> constant_class_map;
+                DragonVM *dvm;
+
+                VMContext() = default;
 
             public:
-                VMContext();
-
-                explicit VMContext(std::shared_ptr<dcx::DcxFile> dcx_file);
-
                 VMContext(const VMContext &) = delete;
 
-                ~VMContext();
+                ~VMContext() = default;
 
-                void register_class(const std::string &class_name, object::Class *prototype);
+                inline void register_class(const std::string &class_name, object::Class *prototype) {
+                    dvm->register_class(class_name, prototype);
+                }
 
-                object::Class *find_class(const std::string &class_name) const;
+                inline object::Class *find_class(const std::string &class_name) const {
+                    return dvm->find_class(class_name);
+                }
 
-                void register_method(const std::string &method_name, const std::string &signature,
-                                     object::Method *method);
+                inline void register_method(const std::string &method_name, const std::string &signature,
+                                            object::Method *method) {
+                    dvm->register_method(method_name, signature, method);
+                }
 
-                object::Method *resolve_method(const std::string &method_name,
-                                               const std::string &signature) const;
+                inline object::Method *resolve_method(const std::string &method_name,
+                                                      const std::string &signature) const {
+                    return dvm->resolve_method(method_name, signature);
+                }
 
-                void register_constant(UInt16 constant_id, const std::string &data);
+                inline void register_constant(UInt16 constant_id, const std::string &data) {
+                    dvm->register_constant(constant_id, data);
+                }
 
-                void register_constant(UInt16 constant_id, object::Class *constant);
+                inline void register_constant(UInt16 constant_id, object::Class *constant) {
+                    dvm->register_constant(constant_id, constant);
+                };
 
-                const std::string &find_constant(UInt16 constant_id) const;
-
-                void run_thread(Thread *thread);
+                inline const std::string &find_constant(UInt16 constant_id) const {
+                    return dvm->find_constant(constant_id);
+                }
 
 #define CREATOR_SIGNATURE(TYPE) \
             object::Object* new_##TYPE(TYPE value)

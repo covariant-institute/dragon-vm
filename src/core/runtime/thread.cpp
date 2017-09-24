@@ -8,18 +8,17 @@
 namespace dvm {
     namespace core {
         namespace runtime {
-            Thread::Thread() :stack(config::STACK_DEFAULT_SIZE), pc(nullptr) {
+            Thread::Thread(VMContext *context)
+                    : stack(config::STACK_DEFAULT_SIZE), pc(nullptr), context(context) {
             }
-
-            Thread::~Thread() = default;
 
             void Thread::set_runnable(Byte *code) {
                 this->pc = code;
                 this->code_base = code;
             }
 
-            void Thread::run_with_context(VMContext *context) {
-                interpreter.exec(this, context);
+            void Thread::run() {
+                interpreter.exec(this);
             }
         }
     }

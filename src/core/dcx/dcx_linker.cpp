@@ -4,6 +4,7 @@
 
 #include <core/dcx/dcx_linker.hpp>
 #include <core/object/method.hpp>
+#include <algorithm>
 
 namespace dvm {
     namespace core {
@@ -28,7 +29,7 @@ namespace dvm {
                 }
             }
 
-            void DcxLinker::link(runtime::VMContext &context, std::shared_ptr<DcxFile> dcx_file) {
+            void DcxLinker::link(runtime::VMContext *context, std::shared_ptr<DcxFile> dcx_file) {
                 std::vector<UInt16> link_after_class{ };
 
                 link_constant(context, dcx_file, link_after_class);
@@ -37,41 +38,41 @@ namespace dvm {
 
                 std::for_each(link_after_class.begin(), link_after_class.end(),
                               [&](UInt16 class_name_id) {
-                                  auto constant = context.find_class(context.find_constant(class_name_id));
-                                  context.register_constant(class_name_id, constant);
+                                  auto constant = context->find_class(context->find_constant(class_name_id));
+                                  context->register_constant(class_name_id, constant);
                               });
             }
 
-            void DcxLinker::link_class(runtime::VMContext &context, std::shared_ptr<DcxFile> dcx_file) {
+            void DcxLinker::link_class(runtime::VMContext *context, std::shared_ptr<DcxFile> dcx_file) {
                 std::for_each(dcx_file->class_pool.begin(), dcx_file->class_pool.end(),
                               [&](DcxFileClassEntry &entry) {
                                   using namespace dvm::core::object;
 
                                   validate_class(entry);
 
-                                  std::string parent_class_name = context.find_constant(
+                                  std::string parent_class_name = context->find_constant(
                                           entry.header.parent_class_name_id);
-                                  std::string class_name = context.find_constant(entry.header.class_name_id);
+                                  std::string class_name = context->find_constant(entry.header.class_name_id);
 
-                                  auto *parent = context.find_class(parent_class_name);
+                                  auto *parent = context->find_class(parent_class_name);
                                   Class::define_class(context, parent,
                                                       class_name,
                                                       entry.header.class_slot_count, entry.header.member_slot_count);
                               });
             }
 
-            void DcxLinker::link_method(runtime::VMContext &context, std::shared_ptr<DcxFile> dcx_file) {
+            void DcxLinker::link_method(runtime::VMContext *context, std::shared_ptr<DcxFile> dcx_file) {
                 std::for_each(dcx_file->method_pool.begin(), dcx_file->method_pool.end(),
                               [&](DcxFileMethodEntry &entry) {
                                   using namespace dvm::core::object;
 
                                   validate_method(entry);
-                                  std::string name = context.find_constant(entry.header.method_name_id);
-                                  std::string signature = context.find_constant(entry.header.method_signature_id);
-                                  std::string return_type = context.find_constant(
+                                  std::string name = context->find_constant(entry.header.method_name_id);
+                                  std::string signature = context->find_constant(entry.header.method_signature_id);
+                                  std::string return_type = context->find_constant(
                                           entry.header.method_return_type_name_id);
 
-                                  auto *return_type_class = context.find_class(return_type);
+                                  auto *return_type_class = context->find_class(return_type);
                                   if (entry.header.method_is_native) {
                                       Method::register_native_method(context, return_type_class,
                                                                      name, signature, entry.header.method_is_static);
@@ -84,11 +85,11 @@ namespace dvm {
                               });
             }
 
-            void DcxLinker::link_constant(runtime::VMContext &context, std::shared_ptr<DcxFile> dcx_file,
+            void DcxLinker::link_constant(runtime::VMContext *context, std::shared_ptr<DcxFile> dcx_file,
                                           std::vector<UInt16> &class_constants) {
                 std::for_each(dcx_file->constant_pool.begin(), dcx_file->constant_pool.end(),
                               [&](DcxFileConstantEntry &entry) {
-                                  context.register_constant(entry.header.constant_id,
+                                  context->register_constant(entry.header.constant_id,
                                                             constant_to_string(entry));
                                   if (entry.header.constant_type == CONSTANT_CLASS) {
                                       class_constants.push_back(entry.header.constant_id);

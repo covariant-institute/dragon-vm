@@ -7,9 +7,8 @@
 #include <core/object/class.hpp>
 #include <core/object/object.hpp>
 #include <core/runtime/vm_context.hpp>
-#include <unordered_map>
-#include <cstdlib>
 #include <core/memory.hpp>
+#include <cstring>
 
 namespace dvm {
     namespace core {
@@ -18,11 +17,11 @@ namespace dvm {
                 return (Class *) dvm_malloc(sizeof(Class) + sizeof(Slot) * class_slot_count);
             }
 
-            const Class *Class::find_class(runtime::VMContext &context, const std::string &name) {
-                return context.find_class(name);
+            const Class *Class::find_class(runtime::VMContext *context, const std::string &name) {
+                return context->find_class(name);
             }
 
-            Class *Class::define_bootstrap_class(runtime::VMContext &context, const std::string &name,
+            Class *Class::define_bootstrap_class(runtime::VMContext *context, const std::string &name,
                                                  UInt32 class_slot_count, UInt32 member_slot_count) {
                 Class *clazz = create_class(class_slot_count);
                 clazz->type = type_identifier::TYPE_ID_OBJECT;
@@ -30,15 +29,15 @@ namespace dvm {
                 clazz->name = new std::string(name);
                 clazz->class_slot_count = class_slot_count;
                 clazz->member_slot_count = member_slot_count;
-                context.register_class(name, clazz);
+                context->register_class(name, clazz);
                 return clazz;
             }
 
-            const Class *Class::define_class(runtime::VMContext &context, const Class *parent, const std::string &name,
+            const Class *Class::define_class(runtime::VMContext *context, const Class *parent, const std::string &name,
                                              UInt32 class_slot_count, UInt32 member_slot_count) {
                 const Class *parent_class = parent;
                 if (parent_class == nullptr) {
-                    parent_class = context.find_class("Object");
+                    parent_class = context->find_class("Object");
                 }
 
                 if (parent_class->type != type_identifier::TYPE_ID_OBJECT

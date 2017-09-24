@@ -5,17 +5,20 @@
 #include <core/runtime/vm_register.hpp>
 #include <core/runtime/vm_context.hpp>
 #include <cassert>
+#include <core/stack.hpp>
+#include <core/config.hpp>
 
 int main() {
     using namespace dvm::core;
     using namespace dvm::core::runtime;
     using namespace dvm::core::object;
 
-    VMContext context{ };
+    DragonVM vm;
+    VMContext *context = vm.current_thread()->get_context();
 
     VMRegisterHolder regs;
 
-    auto i32 = context.find_class("Int32")->new_instance();
+    auto i32 = context->find_class("Int32")->new_instance();
     i32->slots[1].set(10086);
 
     auto visitor = regs[0];
@@ -28,7 +31,7 @@ int main() {
 
     Stack s(config::STACK_DEFAULT_SIZE);
     s.new_frame(256);
-    s.push_object_ref(context.new_Double(3.14));
+    s.push_object_ref(context->new_Double(3.14));
     visitor->set_unchecked(s.peek_pop<object::Object *>());
     auto obj = visitor->get<object::Object *>();
     assert(obj->slots[1].get<Double>() == 3.14);

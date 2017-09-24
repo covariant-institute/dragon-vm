@@ -62,6 +62,8 @@ add_library(dragon_vm_core SHARED
         include/core/runtime/thread.hpp
         include/core/runtime/utils.hpp
         include/core/runtime/math.hpp
+        include/core/runtime/jump.hpp
+        include/core/runtime/dvm.hpp
 
         include/core/object/method.hpp
         include/core/object/class.hpp
@@ -89,6 +91,7 @@ add_library(dragon_vm_core SHARED
         src/core/runtime/vm_register_visitor.cpp
         src/core/runtime/vm_context.cpp
         src/core/runtime/thread.cpp
+        src/core/runtime/dvm.cpp
 
         src/core/object/class.cpp
         src/core/object/object.cpp
@@ -117,11 +120,8 @@ target_link_libraries(test-stack dragon_vm_core)
 add_executable(test-gc tests/test-gc.cpp)
 target_link_libraries(test-gc dragon_vm_gc)
 
-add_executable(test-vm tests/test-vm.cpp)
-target_link_libraries(test-vm dragon_vm_core)
-
-add_executable(test-vm_register tests/test-vm_register.cpp)
-target_link_libraries(test-vm_register dragon_vm_core)
+add_executable(test-register tests/test-register.cpp)
+target_link_libraries(test-register dragon_vm_core)
 
 add_executable(test-type tests/test-type.cpp)
 target_link_libraries(test-type dragon_vm_core)
