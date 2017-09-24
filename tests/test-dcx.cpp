@@ -6,6 +6,7 @@
 #include <core/dcx/dcx_file.hpp>
 #include <core/dcx/dcx_linker.hpp>
 #include <core/object/method.hpp>
+#include <core/runtime/thread.hpp>
 #include <cassert>
 
 using namespace dvm::core::dcx;
@@ -21,7 +22,7 @@ int main(int argc, const char **argv) {
 
     auto dcx = DcxFile::open(argv[1] ? argv[1] : "../cmake-build-debug/empty-dcx.dcx");
     DragonVM vm;
-    VMContext *context = vm.attachCurrentThread();
+    VMContext *context = vm.current_thread()->get_context();
     DcxLinker linker;
     linker.link(context, dcx);
 

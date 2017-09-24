@@ -2,6 +2,7 @@
 
 #include <core/object/class.hpp>
 #include <core/runtime/dvm.hpp>
+#include <core/runtime/thread.hpp>
 #include <unordered_map>
 
 namespace dvm {
@@ -21,7 +22,6 @@ namespace dvm {
 
             private:
                 DragonVM *dvm;
-                Thread *thread;
 
                 VMContext() = default;
 
@@ -29,8 +29,6 @@ namespace dvm {
 
             public:
                 VMContext(const VMContext &) = delete;
-
-                void run_thread(Thread *thread);
 
                 inline void register_class(const std::string &class_name, object::Class *prototype) {
                     dvm->register_class(class_name, prototype);

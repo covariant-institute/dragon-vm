@@ -12,7 +12,7 @@ int main() {
     using namespace dvm::core::object;
     using namespace dvm::core::runtime;
     DragonVM vm;
-    VMContext *context = vm.attachCurrentThread();
+    VMContext *context = vm.current_thread()->get_context();
 
     Stack s(dvm::core::config::STACK_DEFAULT_SIZE);
     s.new_frame(256);

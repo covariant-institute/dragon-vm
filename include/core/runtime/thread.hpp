@@ -18,7 +18,6 @@ namespace dvm {
 
             };
 
-
             /**
              * TODO: Thread and Thread Pool
              */
@@ -29,15 +28,20 @@ namespace dvm {
 
                 friend class VMContext;
 
+                friend class DragonVM;
+
             private:
                 Interpreter interpreter;
                 Stack stack;
                 VMRegisterHolder regs;
 
+                VMContext *context;
                 Byte *code_base;
                 VMOpcode *pc;
 
-                void run_with_context(VMContext *context);
+                explicit Thread(VMContext *context);
+
+                ~Thread();
 
                 /* Utility functions for pc */
                 inline UInt8 const_u8() {
@@ -81,13 +85,15 @@ namespace dvm {
                 }
 
             public:
-                Thread();
-
                 Thread(const Thread &) = delete;
 
-                ~Thread();
-
                 void set_runnable(Byte *code);
+
+                void run();
+
+                inline VMContext *get_context() const {
+                    return context;
+                }
 
                 inline Stack &get_stack() {
                     return stack;

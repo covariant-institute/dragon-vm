@@ -1,7 +1,6 @@
 #pragma once
 
 #include <core/runtime/opcodes.hpp>
-#include <core/runtime/vm_context.hpp>
 
 #define OPCODE_HANDLER_NAME(X) opcode_handler_##X
 #ifdef DVM_INTERPRETATION_THREADED
@@ -35,6 +34,8 @@ namespace dvm {
     namespace core {
         namespace runtime {
             class Thread;
+
+            class VMContext;
 
             class Interpreter {
                 friend class Thread;

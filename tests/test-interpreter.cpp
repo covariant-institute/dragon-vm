@@ -2,7 +2,7 @@
 // Created by kiva on 2017/9/17.
 //
 
-#include <core/runtime/thread.hpp>
+#include <core/runtime/vm_context.hpp>
 #include <cassert>
 
 #define OPCODE(X) static_cast<dvm::core::runtime::VMOpcode>(dvm::core::runtime::VMOpcodes::X)
@@ -18,7 +18,7 @@
         Byte _c[] = { __VA_ARGS__, RET_CODE }; \
         thread->get_stack().new_frame(64); \
         thread->set_runnable(_c); \
-        context->run_thread(thread); \
+        thread->run(); \
         thread->get_stack().remove_top_frame(); \
         condition_area; \
         printf(":: Passed\n"); \
@@ -44,8 +44,8 @@ int main() {
     f3.f = 5.14f;
 
     DragonVM vm;
-    Thread *thread = vm.create_thread();
-    VMContext *context = vm.attachCurrentThread();
+    Thread *thread = vm.current_thread();
+    VMContext *context = thread->get_context();
 
     Int32 h = (1 << 24) + (2 << 16) + (3 << 8) + 4;
     Int32 l = (5 << 24) + (6 << 16) + (7 << 8) + 8;

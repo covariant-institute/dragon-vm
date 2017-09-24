@@ -27,6 +27,7 @@ namespace dvm {
 
             private:
                 VMContext *bootstrapContext;
+                Thread *bootstrapThread;
 
                 std::unordered_map<std::string, object::Class *> class_map;
                 std::unordered_map<std::string, std::unordered_map<std::string, object::Method *>> method_map;
@@ -54,9 +55,9 @@ namespace dvm {
 
                 ~DragonVM();
 
-                Thread *create_thread();
+                Thread *current_thread();
 
-                VMContext *attachCurrentThread();
+                void attachCurrentThread();
 
                 void detachCurrentThread();
             };

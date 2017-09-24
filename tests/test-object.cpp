@@ -12,7 +12,7 @@ int main() {
     using namespace dvm::core::runtime;
 
     DragonVM vm;
-    VMContext *context = vm.attachCurrentThread();
+    VMContext *context = vm.current_thread()->get_context();
 
     Object *object = context->find_class("Object")->new_instance();
     assert(object->slots[0].get<Object *>() == object);

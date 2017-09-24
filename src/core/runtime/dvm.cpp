@@ -29,12 +29,14 @@ namespace dvm {
             DragonVM::DragonVM() {
                 bootstrapContext = new VMContext;
                 bootstrapContext->dvm = this;
+                bootstrapThread = new Thread(bootstrapContext);
                 vm_boot(bootstrapContext);
             }
 
             DragonVM::~DragonVM() {
                 // TODO release resources
                 delete bootstrapContext;
+                delete bootstrapThread;
             }
 
             void DragonVM::register_class(const std::string &class_name, object::Class *prototype) {
@@ -82,14 +84,11 @@ namespace dvm {
                 }
             }
 
-            Thread *DragonVM::create_thread() {
-                // TODO create thread
-                return new Thread;
+            Thread *DragonVM::current_thread() {
+                return bootstrapThread;
             }
 
-            VMContext *DragonVM::attachCurrentThread() {
-                // TODO find current thread and attach
-                return bootstrapContext;
+            void DragonVM::attachCurrentThread() {
             }
 
             void DragonVM::detachCurrentThread() {

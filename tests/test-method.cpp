@@ -3,7 +3,6 @@
 //
 #include <core/config.hpp>
 #include <core/object/method.hpp>
-#include <cassert>
 
 using namespace dvm::core::object;
 using namespace dvm::core::runtime;
@@ -14,7 +13,7 @@ extern "C" void dvm_native_hello(VMContext &context) {
 
 int main() {
     DragonVM vm;
-    VMContext *context = vm.attachCurrentThread();
+    VMContext *context = vm.current_thread()->get_context();
 
     Method::register_native_method(context, context->find_class("Int32"),
                                    "dvm_native_hello", "()", dvm::core::False);

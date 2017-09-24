@@ -14,7 +14,7 @@ int main() {
     using namespace dvm::core::object;
 
     DragonVM vm;
-    VMContext *context = vm.attachCurrentThread();
+    VMContext *context = vm.current_thread()->get_context();
 
     VMRegisterHolder regs;
 

@@ -2,6 +2,7 @@
 // Created by kiva on 2017/8/28.
 //
 
+#include <core/runtime/vm_context.hpp>
 #include <core/runtime/interpreter.hpp>
 #include <core/runtime/thread.hpp>
 #include <core/runtime/utils.hpp>

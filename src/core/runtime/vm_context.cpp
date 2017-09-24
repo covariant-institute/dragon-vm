@@ -9,12 +9,6 @@ namespace dvm {
     namespace core {
         namespace runtime {
 
-            void VMContext::run_thread(Thread *thread) {
-                if (thread != nullptr) {
-                    thread->run_with_context(this);
-                }
-            }
-
 #define CREATOR_SIGNATURE(TYPE) \
             object::Object* VMContext::new_##TYPE(TYPE value)
 
