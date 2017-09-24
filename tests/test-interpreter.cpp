@@ -34,13 +34,13 @@ union FloatBytes {
 };
 
 int main() {
-    FloatBytes f1{};
+    FloatBytes f1{ };
     f1.f = 3.14f;
 
-    FloatBytes f2{};
+    FloatBytes f2{ };
     f2.f = 4.14f;
 
-    FloatBytes f3{};
+    FloatBytes f3{ };
     f3.f = 5.14f;
 
     VMContext context;
@@ -418,4 +418,17 @@ int main() {
       OPCODE(ldc_f32), f1.b[0], f1.b[1], f1.b[2], f1.b[3], /* value2 */
       OPCODE(ldc_f32), f2.b[0], f2.b[1], f2.b[2], f2.b[3], /* value1 */
       OPCODE(cmp_gt_f32));
+
+    T("cmp_obj", {
+        assert(thread.get_stack().peek<Int32>() == 0);
+    },
+      OPCODE(ldc_null),
+      OPCODE(ldc_null),
+      OPCODE(cmp_object));
+
+    T("cmp_nn_obj", {
+        assert(thread.get_stack().peek<Int32>() == 1);
+    },
+      OPCODE(ldc_null),
+      OPCODE(cmp_nn_object));
 }

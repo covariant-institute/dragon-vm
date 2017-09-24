@@ -629,11 +629,16 @@ namespace dvm {
 
                 OPCODE_IMPL(cmp_object)
                 {
+                    Utils::math<object::Object *,
+                            MathCompare<object::Object *, object::Object *>,
+                            object::Object *, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(cmp_nn_object)
                 {
+                    Utils::math1<object::Object *,
+                            MathCompareNotNull, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 

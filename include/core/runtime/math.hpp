@@ -176,6 +176,22 @@ namespace dvm {
                     return lhs > rhs ? CompareResult::RESULT_OK : CompareResult::RESULT_NOT;
                 }
             };
+
+            template <>
+            struct MathCompare<object::Object *, object::Object *> {
+                static inline Int32 get_result(object::Object *lhs, object::Object *rhs) {
+                    object::ensure_object_valid(lhs);
+                    object::ensure_object_valid(rhs);
+                    return lhs == rhs ? CompareResult::RESULT_OK : CompareResult::RESULT_NOT;
+                };
+            };
+
+            struct MathCompareNotNull {
+                static inline Int32 get_result(object::Object *lhs) {
+                    object::ensure_object_valid(lhs);
+                    return lhs->is_null() ? CompareResult::RESULT_NOT : CompareResult::RESULT_OK;
+                }
+            };
         }
     }
 }
