@@ -43,7 +43,7 @@ namespace dvm {
             private:
                 void setup_opcode_handler();
 
-                void exec(Thread *thread, VMContext *context);
+                void exec(Thread *thread);
 
 #ifdef DVM_INTERPRETATION_THREADED
                 void *opcode_jump_table[VM_OPCODES_NUMBER];

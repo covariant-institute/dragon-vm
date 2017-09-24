@@ -25,10 +25,10 @@ namespace dvm {
 
                 VMContext() = default;
 
-                ~VMContext() = default;
-
             public:
                 VMContext(const VMContext &) = delete;
+
+                ~VMContext() = default;
 
                 inline void register_class(const std::string &class_name, object::Class *prototype) {
                     dvm->register_class(class_name, prototype);

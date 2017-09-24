@@ -41,8 +41,6 @@ namespace dvm {
 
                 explicit Thread(VMContext *context);
 
-                ~Thread();
-
                 /* Utility functions for pc */
                 inline UInt8 const_u8() {
                     return *pc++;
@@ -86,6 +84,8 @@ namespace dvm {
 
             public:
                 Thread(const Thread &) = delete;
+
+                ~Thread() = default;
 
                 void set_runnable(Byte *code);
 

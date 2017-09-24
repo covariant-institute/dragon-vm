@@ -13,13 +13,14 @@ extern "C" void dvm_native_hello(VMContext &context) {
 
 int main() {
     DragonVM vm;
-    VMContext *context = vm.current_thread()->get_context();
+    Thread *thread = vm.current_thread();
+    VMContext *context = thread->get_context();
 
     Method::register_native_method(context, context->find_class("Int32"),
                                    "dvm_native_hello", "()", dvm::core::False);
 
     auto method = context->resolve_method("dvm_native_hello", "()");
-    method->invoke(context);
+    method->invoke(thread);
     return 0;
 }
 

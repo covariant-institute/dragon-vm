@@ -44,9 +44,14 @@ namespace dvm {
                 setup_opcode_handler();
             }
 
-            void Interpreter::exec(Thread *thread, VMContext *context) {
+            void Interpreter::exec(Thread *thread) {
                 if (thread == nullptr || thread->pc == nullptr) {
                     throw dvm::core::Exception(DVM_RUNTIME_INVALID_CODE);
+                }
+
+                VMContext *context = thread->get_context();
+                if (context == nullptr) {
+                    throw dvm::core::Exception(DVM_RUNTIME_INVALID_ENV);
                 }
 
 #ifdef DVM_INTERPRETATION_THREADED
