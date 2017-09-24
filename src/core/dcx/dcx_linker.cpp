@@ -4,6 +4,7 @@
 
 #include <core/dcx/dcx_linker.hpp>
 #include <core/object/method.hpp>
+#include <algorithm>
 
 namespace dvm {
     namespace core {
