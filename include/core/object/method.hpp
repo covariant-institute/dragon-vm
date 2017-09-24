@@ -12,7 +12,7 @@ namespace dvm {
 
             class Method {
             public:
-                virtual void invoke(runtime::VMContext &context) = 0;
+                virtual void invoke(runtime::VMContext *context) = 0;
 
                 virtual Bool is_native() = 0;
 
@@ -24,14 +24,14 @@ namespace dvm {
 
                 virtual const std::string &get_name() = 0;
 
-                static Method *resolve(runtime::VMContext &context,
+                static Method *resolve(runtime::VMContext *context,
                                        const std::string &name, const std::string &signature);
 
-                static void register_method(runtime::VMContext &context, Class *return_type,
+                static void register_method(runtime::VMContext *context, Class *return_type,
                                             const std::string &name, const std::string &signature,
                                             Bool is_static_method, Byte *body, SizeT length);
 
-                static void register_native_method(runtime::VMContext &context, Class *return_type,
+                static void register_native_method(runtime::VMContext *context, Class *return_type,
                                                    const std::string &name, const std::string &signature,
                                                    Bool is_static_method);
             };

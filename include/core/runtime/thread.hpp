@@ -14,10 +14,10 @@ namespace dvm {
         namespace runtime {
             class VMContext;
 
-            class Runnable {
-            public:
-                virtual void run() = 0;
+            class ThreadLocalStorage {
+
             };
+
 
             /**
              * TODO: Thread and Thread Pool
@@ -31,10 +31,11 @@ namespace dvm {
 
             private:
                 Interpreter interpreter;
+                Stack stack;
+                VMRegisterHolder regs;
+
                 Byte *code_base;
                 VMOpcode *pc;
-                VMRegisterHolder regs;
-                Stack stack;
 
                 void run_with_context(VMContext *context);
 

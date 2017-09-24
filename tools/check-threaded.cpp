@@ -11,6 +11,7 @@ int main() {
     goto *p;
 
     return 0;
+
     label:
     return 1;
 }

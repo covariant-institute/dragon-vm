@@ -17,16 +17,16 @@ namespace dvm {
 
                 static void validate_method(DcxFileMethodEntry &entry);
 
-                static void link_constant(runtime::VMContext &context, std::shared_ptr<DcxFile> dcx_file,
+                static void link_constant(runtime::VMContext *context, std::shared_ptr<DcxFile> dcx_file,
                                           std::vector<UInt16> &class_constants);
 
-                static void link_class(runtime::VMContext &context, std::shared_ptr<DcxFile> dcx_file);
+                static void link_class(runtime::VMContext *context, std::shared_ptr<DcxFile> dcx_file);
 
-                static void link_method(runtime::VMContext &context, std::shared_ptr<DcxFile> dcx_file);
+                static void link_method(runtime::VMContext *context, std::shared_ptr<DcxFile> dcx_file);
 
             public:
 
-                static void link(runtime::VMContext &context, std::shared_ptr<DcxFile> dcx_file);
+                static void link(runtime::VMContext *context, std::shared_ptr<DcxFile> dcx_file);
             };
         }
     }

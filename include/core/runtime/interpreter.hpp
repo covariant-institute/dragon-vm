@@ -55,8 +55,9 @@ namespace dvm {
 
 #include "opcodes_def.hpp.inc"
 
-            public:
                 Interpreter();
+
+                ~Interpreter() = default;
             };
         }
     }

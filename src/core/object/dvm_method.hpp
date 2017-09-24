@@ -20,7 +20,7 @@ namespace dvm {
 
                 ~DvmMethod() override = default;
 
-                void invoke(runtime::VMContext &context) override;
+                void invoke(runtime::VMContext *context) override;
             };
         }
     }
