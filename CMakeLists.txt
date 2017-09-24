@@ -12,6 +12,16 @@ else()
     message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
 set(CMAKE_CXX_STANDARD 11)
+
+include(CheckCCompilerFlag)
+CHECK_C_COMPILER_FLAG("-std=c11" COMPILER_SUPPORTS_C11)
+if (COMPILER_SUPPORTS_CXX11)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
+else()
+    message(STATUS "The compiler ${CMAKE_C_COMPILER} has no C11 support. Please use a different C compiler.")
+endif()
+set(CMAKE_C_STANDARD 11)
+
 include_directories(include)
 
 try_run(IS_LITTLE_ENDIAN COMPILE_RESULT ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/tools/check-le-or-be.c)
@@ -143,6 +153,9 @@ add_executable(generate-empty-dcx tools/generate-empty-dcx.cpp)
 add_executable(generate-opcode-table tools/generate-opcode-table.cpp)
 add_executable(generate-opcode-impl tools/generate-opcode-impl.cpp)
 
+add_executable(dvm-exec tools/dvm-exec.cpp)
+target_link_libraries(dvm-exec dragon_vm_core)
+
 # Experimental test cases
 add_executable(exp-threaded-interpreter
         experimental-tests/threaded-interpretation/opcodes.h
@@ -154,6 +167,12 @@ add_executable(exp-threaded-interpreter
 
 add_executable(exp-universal-memory
         experimental-tests/universal-memory/test.cpp)
+
+add_executable(exp-calc-compiler
+        experimental-tests/calc-compiler/y.tab.c
+        experimental-tests/calc-compiler/y.tab.h
+        experimental-tests/calc-compiler/lex.yy.c
+        experimental-tests/calc-compiler/main.c)
 
 if (WIN32)
 elseif (UNIX)

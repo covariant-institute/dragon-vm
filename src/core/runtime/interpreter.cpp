@@ -145,6 +145,8 @@ namespace dvm {
                 OPCODE_IMPL(sys)
                 {
                     // TODO: System Call
+                    // Current is to print stack top element as Float
+                    printf("%lf\n", thread->stack.peek_pop<Float>());
                     OPCODE_NEXT(context);
                 }
 

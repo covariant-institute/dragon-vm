@@ -1,0 +1,131 @@
+#include <stdio.h>
+#include <stdint.h>
+
+#define OPCODE(X) ((VMOpcode) X)
+
+typedef int8_t Int8;
+typedef int16_t Int16;
+typedef int32_t Int32;
+typedef int64_t Int64;
+
+typedef uint8_t UInt8;
+typedef uint16_t UInt16;
+typedef uint32_t UInt32;
+typedef uint64_t UInt64;
+
+typedef UInt8 Byte;
+typedef Byte Bool;
+typedef float Float;
+typedef double Double;
+
+typedef UInt8 VMOpcode;
+
+enum VMOpcodes {
+    nop,
+    new_instance,
+    invoke_method,
+    ldc_null,
+    ldc_i32,
+    ldc_i64,
+    ldc_f32,
+    ldc_f64,
+    sys,
+    ld_i32,
+    ld_i64,
+    ld_f32,
+    ld_f64,
+    ld_object,
+    st_i32,
+    st_i64,
+    st_f32,
+    st_f64,
+    st_object,
+    add_i32,
+    add_i64,
+    add_f32,
+    add_f64,
+    sub_i32,
+    sub_i64,
+    sub_f32,
+    sub_f64,
+    mul_i32,
+    mul_i64,
+    mul_f32,
+    mul_f64,
+    div_i32,
+    div_i64,
+    div_f32,
+    div_f64,
+    remain_i32,
+    remain_i64,
+    remain_f32,
+    remain_f64,
+    neg_i32,
+    neg_i64,
+    neg_f32,
+    neg_f64,
+    shl_i32,
+    shl_i64,
+    shr_i32,
+    shr_i64,
+    ushl_i32,
+    ushl_i64,
+    ushr_i32,
+    ushr_i64,
+    and_i32,
+    and_i64,
+    or_i32,
+    or_i64,
+    xor_i32,
+    xor_i64,
+    i32_to_i32,
+    i32_to_i64,
+    i32_to_f32,
+    i32_to_f64,
+    i64_to_i32,
+    i64_to_i64,
+    i64_to_f32,
+    i64_to_f64,
+    f32_to_i32,
+    f32_to_i64,
+    f32_to_f32,
+    f32_to_f64,
+    f64_to_i32,
+    f64_to_i64,
+    f64_to_f32,
+    f64_to_f64,
+    ret,
+    ret_object,
+    ret_i32,
+    ret_i64,
+    ret_f32,
+    ret_f64,
+    jump,
+    jump_ret,
+    jump_eq,
+    jump_ne,
+    jump_gt,
+    jump_ge,
+    jump_lt,
+    jump_le,
+    cmp_i32,
+    cmp_i64,
+    cmp_lt_f32,
+    cmp_lt_f64,
+    cmp_gt_f32,
+    cmp_gt_f64,
+    cmp_object,
+    cmp_nn_object,
+    stp_i32,
+    stp_i64,
+    stp_f32,
+    stp_f64,
+    stp_object,
+    pop_i32,
+    pop_i64,
+    pop_f32,
+    pop_f64,
+    pop_object,
+
+    VM_OPCODES_NUMBER,
+};
