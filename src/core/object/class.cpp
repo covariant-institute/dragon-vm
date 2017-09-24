@@ -7,9 +7,8 @@
 #include <core/object/class.hpp>
 #include <core/object/object.hpp>
 #include <core/runtime/vm_context.hpp>
-#include <unordered_map>
-#include <cstdlib>
 #include <core/memory.hpp>
+#include <cstring>
 
 namespace dvm {
     namespace core {
