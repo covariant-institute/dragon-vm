@@ -591,81 +591,6 @@ namespace dvm {
                     OPCODE_NEXT(context);
                 }
 
-                OPCODE_IMPL(jump_not_null)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_eq_i32)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_eq_i64)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_ne_i32)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_ne_i64)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_gt_i32)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_gt_i64)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_ge_i32)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_ge_i64)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_lt_i32)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_lt_i64)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_le_i32)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_le_i64)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_eq_object)
-                {
-                    OPCODE_NEXT(context);
-                }
-
-                OPCODE_IMPL(jump_ne_object)
-                {
-                    OPCODE_NEXT(context);
-                }
-
                 OPCODE_IMPL(cmp_i32)
                 {
                     Utils::math<Int32, MathCompare<Int32>, Int32, Int32>(thread);
@@ -699,6 +624,16 @@ namespace dvm {
                 OPCODE_IMPL(cmp_gt_f64)
                 {
                     Utils::math<Double, MathCompareGreaterThan<Double>, Double, Int32>(thread);
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(cmp_object)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(cmp_nn_object)
+                {
                     OPCODE_NEXT(context);
                 }
 

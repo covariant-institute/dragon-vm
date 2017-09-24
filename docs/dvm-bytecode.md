@@ -11,7 +11,7 @@
 | ldc_i64                |   05   |   0000 0101   |        | int32h, int32l → value | push a ***#int64***(`int32h << 32 + int32l`) |
 | ldc_f32                |   06   |   0000 0110   | 4: byte1, byte2, byte3, byte4 | → value | push a ***#float***(`byte1 << 24 + byte2 << 16 + byte3 << 8 + byte4`) onto the stack |
 | ldc_f64                |   07   |   0000 0111   |        | **TODO** → **TODO** | **TODO** |
-| sys                    |   08   |   0000 1000   |        | value → | discard the top of stack |
+| sys                    |   08   |   0000 1000   |        | **TODO** → **TODO** | **TODO** |
 | ld_i32                 |   09   |   0000 1001   | 1: index | → value | load an int32 from register ***#index***  |
 | ld_i64                 |   0a   |   0000 1010   | 1: index | → value | load an int64 from register ***#index***  |
 | ld_f32                 |   0b   |   0000 1011   | 1: index | → value | load a float from register ***#index***  |
@@ -90,34 +90,21 @@
 | jump_ge                |   54   |   0101 0100   | 2: offsetbyte1, offsetbyte2 | value → | if value >= 0, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
 | jump_lt                |   55   |   0101 0101   | 2: offsetbyte1, offsetbyte2 | value → | if value < 0, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
 | jump_le                |   56   |   0101 0110   | 2: offsetbyte1, offsetbyte2 | value → | if value <= 0, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_not_null          |   57   |   0101 0111   | 2: offsetbyte1, offsetbyte2 | value → | if value != null, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_eq_i32            |   58   |   0101 1000   | 2: offsetbyte1, offsetbyte2 | value1, value2 → | compare two int32s, if value1 == value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_eq_i64            |   59   |   0101 1001   | 2: offsetbyte1, offsetbyte2 | value1, value2 → | compare two int64s, if value1 == value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_ne_i32            |   5a   |   0101 1010   | 2: offsetbyte1, offsetbyte2 | value1, value2 → | compare two int32s, if value1 != value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_ne_i64            |   5b   |   0101 1011   | 2: offsetbyte1, offsetbyte2 | value1, value2 → | compare two int64s, if value1 != value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_gt_i32            |   5c   |   0101 1100   | 2: offsetbyte1, offsetbyte2 | value1, value2 → | compare two int32s, if value1 > value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_gt_i64            |   5d   |   0101 1101   | 2: offsetbyte1, offsetbyte2 | value1, value2 → | compare two int64s, if value1 > value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_ge_i32            |   5e   |   0101 1110   | 2: offsetbyte1, offsetbyte2 | value1, value2 → | compare two int32s, if value1 >= value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_ge_i64            |   5f   |   0101 1111   | 2: offsetbyte1, offsetbyte2 | value1, value2 → | compare two int64s, if value1 >= value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_lt_i32            |   60   |   0110 0000   | 2: offsetbyte1, offsetbyte2 | value1, value2 → | compare two int32s, if value1 < value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_lt_i64            |   61   |   0110 0001   | 2: offsetbyte1, offsetbyte2 | value1, value2 → | compare two int64s, if value1 < value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_le_i32            |   62   |   0110 0010   | 2: offsetbyte1, offsetbyte2 | value1, value2 → | compare two int32s, if value1 <= value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_le_i64            |   63   |   0110 0011   | 2: offsetbyte1, offsetbyte2 | value1, value2 → | compare two int64s, if value1 <= value2, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_eq_object         |   64   |   0110 0100   | 2: offsetbyte1, offsetbyte2 | value1, value2 → | compare two objects, if references are equal, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_ne_object         |   65   |   0110 0101   | 2: offsetbyte1, offsetbyte2 | value1, value2 → | compare two objects, if references are not equal, jump to instruction at `code_base + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| cmp_i32                |   66   |   0110 0110   |        | value1, value2 → result | compare two int32s, push 0 if the two int32s are the same, 1 if value1 > value2, -1 otherwise |
-| cmp_i64                |   67   |   0110 0111   |        | value1, value2 → result | compare two int64s, push 0 if the two int64s are the same, 1 if value1 > value2, -1 otherwise |
-| cmp_lt_f32             |   68   |   0110 1000   |        | value1, value2 → result | compare two floats, push 0 if value1 < value2, 1 otherwise |
-| cmp_lt_f64             |   69   |   0110 1001   |        | value1, value2 → result | compare two doubles, push 0 if value1 < value2, 1 otherwise |
-| cmp_gt_f32             |   6a   |   0110 1010   |        | value1, value2 → result | compare two floats, push 0 if value1 > value2, 1 otherwise |
-| cmp_gt_f64             |   6b   |   0110 1011   |        | value1, value2 → result | compare two doubles, push 0 if value1 > value2, 1 otherwise |
-| stp_i32                |   6c   |   0110 1100   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store an int32 from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
-| stp_i64                |   6d   |   0110 1101   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store an int64 from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
-| stp_f32                |   6e   |   0110 1110   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store a float from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
-| stp_f64                |   6f   |   0110 1111   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store a double from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
-| stp_object             |   70   |   0111 0000   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store an object from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
-| pop_i32                |   71   |   0111 0001   |        | value → | discard the top of stack |
-| pop_i64                |   72   |   0111 0010   |        | value → | discard the top of stack |
-| pop_f32                |   73   |   0111 0011   |        | value → | discard the top of stack |
-| pop_f64                |   74   |   0111 0100   |        | value → | discard the top of stack |
-| pop_object             |   75   |   0111 0101   |        | value → | discard the top of stack |
+| cmp_i32                |   57   |   0101 0111   |        | value1, value2 → result | compare two int32s, push 0 if the two int32s are the same, 1 if value1 > value2, -1 otherwise |
+| cmp_i64                |   58   |   0101 1000   |        | value1, value2 → result | compare two int64s, push 0 if the two int64s are the same, 1 if value1 > value2, -1 otherwise |
+| cmp_lt_f32             |   59   |   0101 1001   |        | value1, value2 → result | compare two floats, push 0 if value1 < value2, 1 otherwise |
+| cmp_lt_f64             |   5a   |   0101 1010   |        | value1, value2 → result | compare two doubles, push 0 if value1 < value2, 1 otherwise |
+| cmp_gt_f32             |   5b   |   0101 1011   |        | value1, value2 → result | compare two floats, push 0 if value1 > value2, 1 otherwise |
+| cmp_gt_f64             |   5c   |   0101 1100   |        | value1, value2 → result | compare two doubles, push 0 if value1 > value2, 1 otherwise |
+| cmp_object             |   5d   |   0101 1101   |        | object1, object2 → result | compare two objects, push 0 if object1 and object2 point to the same object, 1 otherwise |
+| cmp_nn_object          |   5e   |   0101 1110   |        | object1 → result | push 0 if object1 is not null, 1 otherwise |
+| stp_i32                |   5f   |   0101 1111   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store an int32 from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
+| stp_i64                |   60   |   0110 0000   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store an int64 from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
+| stp_f32                |   61   |   0110 0001   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store a float from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
+| stp_f64                |   62   |   0110 0010   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store a double from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
+| stp_object             |   63   |   0110 0011   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store an object from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
+| pop_i32                |   64   |   0110 0100   |        | value → | discard the top of stack |
+| pop_i64                |   65   |   0110 0101   |        | value → | discard the top of stack |
+| pop_f32                |   66   |   0110 0110   |        | value → | discard the top of stack |
+| pop_f64                |   67   |   0110 0111   |        | value → | discard the top of stack |
+| pop_object             |   68   |   0110 1000   |        | object → | discard the top of stack |

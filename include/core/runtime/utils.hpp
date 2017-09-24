@@ -13,6 +13,10 @@ namespace dvm {
 
             class Utils {
             public:
+                template <typename Condition>
+                static inline void jump(Thread *thread, bool place_return_address) {
+                }
+
                 template <typename FromType, typename ToType>
                 static inline void cast(Thread *thread) {
                     FromType &&from = std::move(thread->stack.peek_pop<FromType>());
