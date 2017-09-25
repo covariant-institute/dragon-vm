@@ -11,6 +11,10 @@ namespace dvm {
                 using namespace object;
 
             public:
+                static inline VMReturnAddr pc_to_return_address(VMOpcode *pc) {
+                    return reinterpret_cast<VMReturnAddr &&>(pc);
+                }
+
                 /**
                  * Prepare to call a method.
                  */
@@ -23,6 +27,9 @@ namespace dvm {
                     // to store return address
                     UInt16 frame_size = method->get_frame_size() + sizeof(VMReturnAddr);
                     thread->get_stack().new_frame(frame_size);
+
+                    // store return address
+                    thread->get_stack().push<VMReturnAddr>(pc_to_return_address(thread->pc));
                 }
 
                 static inline void after_invoke(Thread *thread, Method *method) {

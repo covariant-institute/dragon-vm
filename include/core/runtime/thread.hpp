@@ -26,6 +26,8 @@ namespace dvm {
 
                 friend class Dispatcher;
 
+                friend class InvokeHelper;
+
                 friend class VMContext;
 
                 friend class DragonVM;

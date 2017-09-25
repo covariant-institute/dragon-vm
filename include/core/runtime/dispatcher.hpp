@@ -22,7 +22,7 @@ namespace dvm {
 
                 static inline void jump_to_exact(Thread *thread, Byte *new_pc, bool place_return_address) {
                     if (place_return_address) {
-                        thread->stack.push<VMReturnAddr>(reinterpret_cast<VMReturnAddr &&>(thread->pc));
+                        thread->stack.push<VMReturnAddr>(InvokeHelper::pc_to_return_address(thread->pc));
                     }
                     thread->pc = new_pc;
                 }
