@@ -182,4 +182,5 @@ add_executable(exp-calc-compiler
 if (WIN32)
 elseif (UNIX)
     target_link_libraries(dvm-core -ldl)
+    target_link_libraries(dvm-core-static -ldl)
 endif()
