@@ -15,7 +15,7 @@ namespace dvm {
                 }
             }
 
-            NativeMethod::NativeMethod(Class *return_type, const std::string &name, const std::string &signature,
+            NativeMethod::NativeMethod(const Class *return_type, const std::string &name, const std::string &signature,
                                        Bool is_static_method)
                     : AbsMethod(return_type, name, signature, True, is_static_method) {
             }

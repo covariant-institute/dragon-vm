@@ -84,6 +84,15 @@ namespace dvm {
                 }
             }
 
+            const object::Class *DragonVM::find_class_constant(UInt16 constant_id) {
+                try {
+                    return constant_class_map.at(constant_id);
+
+                } catch (const std::out_of_range &e) {
+                    throw dvm::core::Exception(DVM_RUNTIME_CONSTANT_NOT_FOUND);
+                }
+            }
+
             Thread *DragonVM::current_thread() {
                 return bootstrapThread;
             }

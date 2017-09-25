@@ -108,7 +108,22 @@ namespace dvm {
                     throw dvm::core::Exception(DVM_DCX_NOT_OPEN);
                 }
 
+                entry.method_body = nullptr;
+                entry.handlers = nullptr;
+
                 if (ByteOrderedReader::read<DcxFileMethodEntryHeader>(dcx_file, &entry.header)) {
+                    // Read method handlers
+                    if (entry.header.method_handlers_count > 0) {
+                        entry.handlers = (DcxFileMethodEntryHandler *) dvm_malloc(
+                                sizeof(DcxFileMethodEntryHandler) * entry.header.method_handlers_count);
+                        for (int i = 0; i < entry.header.method_handlers_count; ++i) {
+                            ByteOrderedReader::read_bytes(dcx_file,
+                                                          reinterpret_cast<Byte *>(entry.handlers + i),
+                                                          sizeof(DcxFileMethodEntryHandler));
+                        }
+                    }
+
+                    // Read method body
                     entry.method_body = (Byte *) dvm_malloc(sizeof(Byte) * entry.header.method_body_size);
 
                     return ByteOrderedReader::read_bytes(dcx_file, entry.method_body,

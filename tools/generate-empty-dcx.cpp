@@ -41,18 +41,31 @@ void write_class_entry(FILE *fp, UInt16 parent_class_name_id, UInt16 class_name_
 }
 
 void
-write_method_entry(FILE *fp, UInt16 return_type_id, UInt16 method_name_id, UInt16 method_signature_id, Bool is_native,
-                   Bool is_static, Byte *body, SizeT length) {
+write_method_entry(FILE *fp, UInt16 return_type_id, UInt16 method_name_id, UInt16 method_signature_id,
+                   Bool is_native, Bool is_static,
+                   Byte *body, SizeT length,
+                   DcxFileMethodEntryHandler *handlers, UInt16 handlers_count) {
+
     DcxFileMethodEntry methodEntry = { };
     methodEntry.header.method_is_native = is_native;
     methodEntry.header.method_is_static = is_static;
     methodEntry.header.method_return_type_name_id = return_type_id;
     methodEntry.header.method_name_id = method_name_id;
     methodEntry.header.method_signature_id = method_signature_id;
-    methodEntry.header.method_body_size = !is_native ? static_cast<UInt32>(length) : 0;
+    methodEntry.header.method_handlers_count = static_cast<UInt16>(is_native ? 0 : handlers_count);
+    methodEntry.header.method_body_size = is_native ? 0 : static_cast<UInt32>(length);
 
     fwrite(reinterpret_cast<void *>(&methodEntry.header), sizeof(methodEntry.header), 1, fp);
 
+    // Write handler
+    if (!is_native && handlers_count > 0) {
+        for (int i = 0; i < handlers_count; ++i) {
+            fwrite(reinterpret_cast<void *>(handlers + i),
+                   sizeof(DcxFileMethodEntryHandler), 1, fp);
+        }
+    }
+
+    // Write body
     if (!is_native) {
         methodEntry.method_body = body;
         fwrite(reinterpret_cast<void *>(methodEntry.method_body), sizeof(Byte),
@@ -103,10 +116,18 @@ int main(int argc, const char **argv) {
     SizeT length = 128;
     auto *body = (Byte *) malloc(sizeof(Byte) * length);
     bzero(reinterpret_cast<void *>(body), length);
+
     // dvm method
-    write_method_entry(fp, return_type_id, method_name_id, method_signature_id, False, True, body, length);
+    DcxFileMethodEntryHandler handlers[1];
+    handlers[0].handler_offset = 110;
+    handlers[0].exception_class_name_id = class_name_id;
+    write_method_entry(fp, return_type_id, method_name_id, method_signature_id,
+                       False, True, body, length,
+                       handlers, sizeof(handlers) / sizeof(handlers[0]));
+
     // native method
-    write_method_entry(fp, return_type_id, method_name_id, method_signature_2_id, True, True, nullptr, 0);
+    write_method_entry(fp, return_type_id, method_name_id, method_signature_2_id,
+                       True, True, nullptr, 0, nullptr, 0);
 
     fclose(fp);
     printf("OK\n");

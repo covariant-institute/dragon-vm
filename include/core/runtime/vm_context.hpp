@@ -60,6 +60,10 @@ namespace dvm {
                     return dvm->find_constant(constant_id);
                 }
 
+                inline const object::Class *find_class_constant(UInt16 constant_id) const {
+                    return dvm->find_class_constant(constant_id);
+                }
+
 #define CREATOR_SIGNATURE(TYPE) \
             object::Object* new_##TYPE(TYPE value)
 

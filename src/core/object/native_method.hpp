@@ -25,7 +25,7 @@ namespace dvm {
                 NativeMethodCallable callable;
 
             public:
-                NativeMethod(Class *return_type, const std::string &name, const std::string &signature,
+                NativeMethod(const Class *return_type, const std::string &name, const std::string &signature,
                              Bool is_static_method);
 
                 ~NativeMethod() override;

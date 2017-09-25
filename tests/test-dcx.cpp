@@ -36,5 +36,6 @@ int main(int argc, const char **argv) {
 
     method = context->resolve_method("dvm_main", "(X)");
     assert(method->is_native() == dvm::core::False);
+    Method::dump_method_info(method);
     return 0;
 }
