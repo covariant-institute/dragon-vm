@@ -126,6 +126,7 @@ enum VMOpcodes {
     pop_f32,
     pop_f64,
     pop_object,
+    thr,
 
     VM_OPCODES_NUMBER,
 };
