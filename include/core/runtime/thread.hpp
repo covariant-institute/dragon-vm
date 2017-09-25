@@ -24,7 +24,7 @@ namespace dvm {
             class Thread {
                 friend class Interpreter;
 
-                friend class Utils;
+                friend class Dispatcher;
 
                 friend class VMContext;
 

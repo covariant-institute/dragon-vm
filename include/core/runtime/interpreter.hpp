@@ -37,6 +37,8 @@ namespace dvm {
 
             class VMContext;
 
+            using VMReturnAddr = UInt64;
+
             class Interpreter {
                 friend class Thread;
 

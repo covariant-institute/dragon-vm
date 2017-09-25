@@ -6,21 +6,35 @@
 #include <core/runtime/interpreter.hpp>
 #include <core/runtime/thread.hpp>
 #include <core/runtime/vm_register.hpp>
+#include <core/runtime/invoke.hpp>
 
 namespace dvm {
     namespace core {
         namespace runtime {
 
-            class Utils {
-            private:
-                static inline void jump_to_offset(Thread *thread, Int32 offset, bool place_return_address) {
-                    if (place_return_address) {
-                        thread->stack.push<Int32>(std::forward<Int32>(-offset));
-                    }
-                    thread->pc += offset;
+            class Dispatcher {
+            public:
+                /* Utility functions */
+                static inline void invoke_method(Thread *thread) {
+                    InvokeHelper::before_invoke(thread, nullptr);
+                    InvokeHelper::after_invoke(thread, nullptr);
                 }
 
-            public:
+                static inline void jump_to_exact(Thread *thread, Byte *new_pc, bool place_return_address) {
+                    if (place_return_address) {
+                        thread->stack.push<VMReturnAddr>(reinterpret_cast<VMReturnAddr &&>(thread->pc));
+                    }
+                    thread->pc = new_pc;
+                }
+
+                static inline void jump_to_offset(Thread *thread, Int32 offset, bool place_return_address) {
+                    jump_to_exact(thread, thread->pc + offset, place_return_address);
+                }
+
+
+
+                /* Outer interfaces to Interpreter */
+
                 static inline void new_instance(Thread *thread) {
                     UInt16 class_id = thread->const_u16();
                     auto prototype = thread->get_context()->find_class_constant(class_id);

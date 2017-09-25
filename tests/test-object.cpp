@@ -28,7 +28,7 @@ int main() {
 
     Object *u64 = context->new_UInt64(0);
     u64->slots[1].set(UINT64_MAX);
-    assert(u64->slots[1].get_type() == type_identifier::TYPE_ID_UINT64);
+    assert(u64->slots[1].get_type() == TypeIdentifier::TYPE_ID_UINT64);
     assert(u64->slots[1].data.i64 == UINT64_MAX);
     assert(u64->slots[1].get<Int64>() == -1);
 

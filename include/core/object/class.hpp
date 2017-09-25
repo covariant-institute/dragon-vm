@@ -17,7 +17,7 @@ namespace dvm {
             struct Object;
 
             struct Class final {
-                type_identifier type;
+                TypeIdentifier type;
                 UInt32 class_slot_count;
                 UInt32 member_slot_count;
 

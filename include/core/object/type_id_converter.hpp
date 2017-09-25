@@ -12,16 +12,16 @@ namespace dvm {
         }
 
         template <>
-        struct type_id_converter<object::Object> {
-            constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_OBJECT;
+        struct TypeIdConverter<object::Object> {
+            constexpr static TypeIdentifier get_type_id() {
+                return TypeIdentifier::TYPE_ID_OBJECT;
             }
         };
 
         template <>
-        struct type_id_converter<object::Object *> {
-            constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_OBJECT;
+        struct TypeIdConverter<object::Object *> {
+            constexpr static TypeIdentifier get_type_id() {
+                return TypeIdentifier::TYPE_ID_OBJECT;
             }
         };
     }
