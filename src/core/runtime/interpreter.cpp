@@ -719,6 +719,11 @@ namespace dvm {
                     OPCODE_NEXT(context);
                 }
 
+                OPCODE_IMPL(thr)
+                {
+                    OPCODE_NEXT(context);
+                }
+
 
 #ifdef DVM_INTERPRETATION_THREADED
             } // Interpreter::threaded()

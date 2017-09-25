@@ -131,36 +131,37 @@ target_link_libraries(dragon_vm_cmdline dvm-core)
 
 # Test cases
 add_executable(test-stack tests/test-stack.cpp)
-target_link_libraries(test-stack dvm-core)
+target_link_libraries(test-stack dvm-core-static)
 
 add_executable(test-gc tests/test-gc.cpp)
 target_link_libraries(test-gc dvm-gc)
 
 add_executable(test-register tests/test-register.cpp)
-target_link_libraries(test-register dvm-core)
+target_link_libraries(test-register dvm-core-static)
 
 add_executable(test-type tests/test-type.cpp)
-target_link_libraries(test-type dvm-core)
+target_link_libraries(test-type dvm-core-static)
 
 add_executable(test-object tests/test-object.cpp)
-target_link_libraries(test-object dvm-core)
+target_link_libraries(test-object dvm-core-static)
 
 add_executable(test-method tests/test-method.cpp)
-target_link_libraries(test-method dvm-core)
+target_link_libraries(test-method dvm-core-static)
 
 add_executable(test-dcx tests/test-dcx.cpp)
-target_link_libraries(test-dcx dvm-core)
+target_link_libraries(test-dcx dvm-core-static)
 
 add_executable(test-interpreter tests/test-interpreter.cpp)
-target_link_libraries(test-interpreter dvm-core)
+target_link_libraries(test-interpreter dvm-core-static)
 
 # Build tools
 add_executable(generate-empty-dcx tools/generate-empty-dcx.cpp)
 add_executable(generate-opcode-table tools/generate-opcode-table.cpp)
 add_executable(generate-opcode-impl tools/generate-opcode-impl.cpp)
+add_executable(generate-libdvm-hpp tools/generate-libdvm-h.cpp)
 
 add_executable(dvm-exec tools/dvm-exec.cpp)
-target_link_libraries(dvm-exec dvm-core)
+target_link_libraries(dvm-exec dvm-core-static)
 
 # Experimental test cases
 add_executable(exp-threaded-interpreter
