@@ -105,8 +105,6 @@ set(DVM_CORE_SOURCE
         src/core/object/class.cpp
         src/core/object/object.cpp
         src/core/object/method.cpp
-        src/core/object/abs_method.hpp
-        src/core/object/abs_method.cpp
         src/core/object/dvm_method.cpp
         src/core/object/dvm_method.hpp
         src/core/object/native_method.hpp

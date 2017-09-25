@@ -89,7 +89,7 @@ namespace dvm {
                     return constant_class_map.at(constant_id);
 
                 } catch (const std::out_of_range &e) {
-                    throw dvm::core::Exception(DVM_RUNTIME_CONSTANT_NOT_FOUND);
+                    throw dvm::core::Exception(DVM_RUNTIME_CLASS_NOT_FOUND);
                 }
             }
 

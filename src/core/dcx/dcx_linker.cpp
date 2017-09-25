@@ -62,9 +62,9 @@ namespace dvm {
 
                                   validate_class(entry);
 
-                                  std::string parent_class_name = context->find_constant(
+                                  const std::string &parent_class_name = context->find_constant(
                                           entry.header.parent_class_name_id);
-                                  std::string class_name = context->find_constant(entry.header.class_name_id);
+                                  const std::string &class_name = context->find_constant(entry.header.class_name_id);
 
                                   auto *parent = context->find_class(parent_class_name);
                                   Class::define_class(context, parent,
@@ -79,21 +79,27 @@ namespace dvm {
                                   using namespace dvm::core::object;
 
                                   validate_method(entry);
-                                  std::string name = context->find_constant(entry.header.method_name_id);
-                                  std::string signature = context->find_constant(entry.header.method_signature_id);
+                                  const std::string &name = context->find_constant(entry.header.method_name_id);
+                                  const std::string &signature = context->find_constant(
+                                          entry.header.method_signature_id);
 
                                   auto *return_type_class = context->find_class_constant(
                                           entry.header.method_return_type_name_id);
 
                                   if (entry.header.method_is_native) {
                                       Method::register_native_method(context, return_type_class,
-                                                                     name, signature, entry.header.method_is_static);
+                                                                     name, signature,
+                                                                     entry.header.method_is_static,
+                                                                     entry.header.method_frame_size);
                                       return;
                                   }
 
                                   Method::register_method(context, return_type_class, name, signature,
-                                                          entry.header.method_is_static, entry.method_body,
-                                                          entry.header.method_body_size, entry.handlers,
+                                                          entry.header.method_is_static,
+                                                          entry.header.method_frame_size,
+                                                          entry.method_body,
+                                                          entry.header.method_body_size,
+                                                          entry.handlers,
                                                           entry.header.method_handlers_count);
                               });
             }

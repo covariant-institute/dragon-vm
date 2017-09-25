@@ -103,6 +103,7 @@ namespace dvm {
 
                 OPCODE_IMPL(new_instance)
                 {
+                    Utils::new_instance(thread);
                     OPCODE_NEXT(context);
                 }
 

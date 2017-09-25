@@ -16,11 +16,10 @@ namespace dvm {
             }
 
             NativeMethod::NativeMethod(const Class *return_type, const std::string &name, const std::string &signature,
-                                       Bool is_static_method)
-                    : AbsMethod(return_type, name, signature, True, is_static_method) {
-            }
+                                       Bool is_static_method, Bool is_native_method, UInt16 frame_size)
+                    : Method(return_type, name, signature, is_static_method, is_native_method, frame_size) {
 
-            NativeMethod::~NativeMethod() = default;
+            }
 
             void NativeMethod::invoke(runtime::Thread *thread) {
                 if (callable.callable == nullptr) {

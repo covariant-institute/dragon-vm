@@ -21,6 +21,13 @@ namespace dvm {
                 }
 
             public:
+                static inline void new_instance(Thread *thread) {
+                    UInt16 class_id = thread->const_u16();
+                    auto prototype = thread->get_context()->find_class_constant(class_id);
+                    auto object = prototype->new_instance();
+                    thread->stack.push_object_ref(object);
+                }
+
                 template <typename Condition>
                 static inline void jump(Thread *thread, bool place_return_address) {
                     Int32 &&check = thread->stack.peek_pop<Int32>();

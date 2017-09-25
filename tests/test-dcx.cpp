@@ -31,6 +31,7 @@ int main(int argc, const char **argv) {
 
     auto method = context->resolve_method("dvm_main", "(N)");
     assert(method->is_native() == dvm::core::True);
+    Method::dump_method_info(method);
     // Try invoke our native method
     method->invoke(thread);
 
