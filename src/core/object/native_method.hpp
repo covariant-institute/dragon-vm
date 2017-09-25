@@ -3,13 +3,13 @@
 //
 #pragma once
 
-#include "abs_method.hpp"
+#include <core/object/method.hpp>
 
 namespace dvm {
     namespace core {
         namespace object {
             struct NativeMethodCallable {
-                using Type = void(*)(runtime::Thread *thread);
+                using Type = void (*)(runtime::Thread *thread);
 
                 Type callable;
 
@@ -20,15 +20,19 @@ namespace dvm {
                 }
             };
 
-            class NativeMethod : public AbsMethod {
+            class NativeMethod : public Method {
             private:
                 NativeMethodCallable callable;
 
             public:
-                NativeMethod(Class *return_type, const std::string &name, const std::string &signature,
-                             Bool is_static_method);
+                NativeMethod(const Class *return_type,
+                             const std::string &name,
+                             const std::string &signature,
+                             Bool is_static_method,
+                             Bool is_native_method,
+                             UInt16 frame_size);
 
-                ~NativeMethod() override;
+                ~NativeMethod() override = default;
 
                 void invoke(runtime::Thread *thread) override;
             };

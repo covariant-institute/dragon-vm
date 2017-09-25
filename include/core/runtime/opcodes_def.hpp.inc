@@ -63,3 +63,5 @@ OPCODE(stp_object)
 /* pop: drop the top of stack */
 TYPED_OPCODES_PREFIX(pop)
 OPCODE(pop_object)
+
+OPCODE(thr)

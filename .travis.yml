@@ -14,4 +14,4 @@ addons:
       - g++-6
 
 
-script: export CC=gcc-6 && export CXX=g++-6 && cmake . && make all && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:. && ./test-interpreter
+script: export CC=gcc-6 && export CXX=g++-6 && cmake . && make all -j8 && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:. && ./test-interpreter

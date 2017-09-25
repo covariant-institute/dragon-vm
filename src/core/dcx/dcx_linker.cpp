@@ -27,20 +27,32 @@ namespace dvm {
                     (entry.header.method_body_size == 0 || entry.method_body == nullptr)) {
                     throw dvm::core::Exception(DVM_DCX_LINKING_INVALID_METHOD);
                 }
+
+                if (!entry.header.method_is_native
+                    && entry.header.method_handlers_count > 0
+                    && entry.handlers == nullptr) {
+                    throw dvm::core::Exception(DVM_DCX_LINKING_INVALID_METHOD);
+                }
+
+                if (entry.header.method_is_native
+                    && entry.header.method_handlers_count > 0) {
+                    throw dvm::core::Exception(DVM_DCX_LINKING_INVALID_METHOD);
+                }
             }
 
             void DcxLinker::link(runtime::VMContext *context, std::shared_ptr<DcxFile> dcx_file) {
                 std::vector<UInt16> link_after_class{ };
 
                 link_constant(context, dcx_file, link_after_class);
-                link_class(context, dcx_file);
-                link_method(context, dcx_file);
 
+                link_class(context, dcx_file);
                 std::for_each(link_after_class.begin(), link_after_class.end(),
                               [&](UInt16 class_name_id) {
                                   auto constant = context->find_class(context->find_constant(class_name_id));
                                   context->register_constant(class_name_id, constant);
                               });
+
+                link_method(context, dcx_file);
             }
 
             void DcxLinker::link_class(runtime::VMContext *context, std::shared_ptr<DcxFile> dcx_file) {
@@ -50,9 +62,9 @@ namespace dvm {
 
                                   validate_class(entry);
 
-                                  std::string parent_class_name = context->find_constant(
+                                  const std::string &parent_class_name = context->find_constant(
                                           entry.header.parent_class_name_id);
-                                  std::string class_name = context->find_constant(entry.header.class_name_id);
+                                  const std::string &class_name = context->find_constant(entry.header.class_name_id);
 
                                   auto *parent = context->find_class(parent_class_name);
                                   Class::define_class(context, parent,
@@ -67,21 +79,28 @@ namespace dvm {
                                   using namespace dvm::core::object;
 
                                   validate_method(entry);
-                                  std::string name = context->find_constant(entry.header.method_name_id);
-                                  std::string signature = context->find_constant(entry.header.method_signature_id);
-                                  std::string return_type = context->find_constant(
+                                  const std::string &name = context->find_constant(entry.header.method_name_id);
+                                  const std::string &signature = context->find_constant(
+                                          entry.header.method_signature_id);
+
+                                  auto *return_type_class = context->find_class_constant(
                                           entry.header.method_return_type_name_id);
 
-                                  auto *return_type_class = context->find_class(return_type);
                                   if (entry.header.method_is_native) {
                                       Method::register_native_method(context, return_type_class,
-                                                                     name, signature, entry.header.method_is_static);
+                                                                     name, signature,
+                                                                     entry.header.method_is_static,
+                                                                     entry.header.method_frame_size);
                                       return;
                                   }
 
                                   Method::register_method(context, return_type_class, name, signature,
-                                                          entry.header.method_is_static, entry.method_body,
-                                                          entry.header.method_body_size);
+                                                          entry.header.method_is_static,
+                                                          entry.header.method_frame_size,
+                                                          entry.method_body,
+                                                          entry.header.method_body_size,
+                                                          entry.handlers,
+                                                          entry.header.method_handlers_count);
                               });
             }
 
@@ -90,7 +109,7 @@ namespace dvm {
                 std::for_each(dcx_file->constant_pool.begin(), dcx_file->constant_pool.end(),
                               [&](DcxFileConstantEntry &entry) {
                                   context->register_constant(entry.header.constant_id,
-                                                            constant_to_string(entry));
+                                                             constant_to_string(entry));
                                   if (entry.header.constant_type == CONSTANT_CLASS) {
                                       class_constants.push_back(entry.header.constant_id);
                                   }

@@ -61,10 +61,17 @@ namespace dvm {
                 UInt8 unused[2];
             };
 
+            struct DcxFileMethodEntryHandler {
+                UInt16 exception_class_name_id;
+                UInt16 handler_offset;
+            };
+
             struct DcxFileMethodEntryHeader {
                 UInt16 method_name_id;
                 UInt16 method_signature_id;
                 UInt16 method_return_type_name_id;
+                UInt16 method_handlers_count;
+                UInt16 method_frame_size;
                 UInt32 method_body_size;
                 Bool method_is_native;
                 Bool method_is_static;
@@ -72,6 +79,7 @@ namespace dvm {
 
             struct DcxFileMethodEntry {
                 DcxFileMethodEntryHeader header;
+                DcxFileMethodEntryHandler *handlers;
                 Byte *method_body;
             };
 

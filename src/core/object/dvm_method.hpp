@@ -4,19 +4,25 @@
 
 #pragma once
 
-#include "abs_method.hpp"
+#include <core/object/method.hpp>
 
 namespace dvm {
     namespace core {
         namespace object {
-            class DvmMethod : public AbsMethod {
+            class DvmMethod : public Method {
+                friend class Method;
+
             private:
                 Byte *method_body;
                 SizeT method_length;
 
             public:
-                DvmMethod(Class *return_type, const std::string &name, const std::string &signature, Bool is_static_method,
-                          Byte *body, SizeT length);
+                DvmMethod(const Class *return_type,
+                          const std::string &name,
+                          const std::string &signature,
+                          Bool is_static_method,
+                          Bool is_native_method,
+                          UInt16 frame_size);
 
                 ~DvmMethod() override = default;
 

@@ -103,6 +103,7 @@ namespace dvm {
 
                 OPCODE_IMPL(new_instance)
                 {
+                    Utils::new_instance(thread);
                     OPCODE_NEXT(context);
                 }
 
@@ -145,6 +146,8 @@ namespace dvm {
                 OPCODE_IMPL(sys)
                 {
                     // TODO: System Call
+                    // Current is to print stack top element as Float
+                    printf("%lf\n", thread->stack.peek_pop<Float>());
                     OPCODE_NEXT(context);
                 }
 
@@ -714,6 +717,11 @@ namespace dvm {
                 OPCODE_IMPL(pop_object)
                 {
                     Utils::pop_object(thread);
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(thr)
+                {
                     OPCODE_NEXT(context);
                 }
 

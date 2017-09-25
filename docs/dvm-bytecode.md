@@ -108,3 +108,4 @@
 | pop_f32                |   66   |   0110 0110   |        | value → | discard the top of stack |
 | pop_f64                |   67   |   0110 0111   |        | value → | discard the top of stack |
 | pop_object             |   68   |   0110 1000   |        | object → | discard the top of stack |
+| thr                    |   69   |   0110 1001   |        | object → | throw an exception object |

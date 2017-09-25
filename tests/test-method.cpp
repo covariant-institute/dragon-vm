@@ -17,7 +17,7 @@ int main() {
     VMContext *context = thread->get_context();
 
     Method::register_native_method(context, context->find_class("Int32"),
-                                   "dvm_native_hello", "()", dvm::core::False);
+                                   "dvm_native_hello", "()", dvm::core::False, 128);
 
     auto method = context->resolve_method("dvm_native_hello", "()");
     method->invoke(thread);
