@@ -15,10 +15,6 @@ namespace dvm {
             class Dispatcher {
             public:
                 /* Utility functions */
-                static inline void invoke_method(Thread *thread) {
-                    InvokeHelper::before_invoke(thread, nullptr);
-                    InvokeHelper::after_invoke(thread, nullptr);
-                }
 
                 static inline void jump_to_exact(Thread *thread, Byte *new_pc, bool place_return_address) {
                     if (place_return_address) {
@@ -27,11 +23,28 @@ namespace dvm {
                     thread->pc = new_pc;
                 }
 
+                static inline void invoke_method(Thread *thread, object::Method *method) {
+                    InvokeHelper::before_invoke(thread, method);
+                    method->invoke(thread);
+                    InvokeHelper::after_invoke(thread, method);
+                }
+
                 static inline void jump_to_offset(Thread *thread, Int32 offset, bool place_return_address) {
                     jump_to_exact(thread, thread->pc + offset, place_return_address);
                 }
 
+
                 /* Outer interfaces to Interpreter */
+
+                static inline void invoke_method(Thread *thread) {
+                    UInt16 name_id = thread->const_u16();
+                    dvm_memory_barrier();
+                    UInt16 signature_id = thread->const_u16();
+
+                    object::Method *method =
+                            InvokeHelper::resolve_by_id(thread, name_id, signature_id);
+                    Dispatcher::invoke_method(thread, method);
+                }
 
                 static inline void new_instance(Thread *thread) {
                     UInt16 class_id = thread->const_u16();

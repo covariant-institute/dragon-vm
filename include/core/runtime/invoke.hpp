@@ -13,6 +13,14 @@ namespace dvm {
                     return reinterpret_cast<VMReturnAddr &&>(pc);
                 }
 
+                static inline object::Method *resolve_by_id(Thread *thread, UInt16 name_id, UInt16 signature_id) {
+                    VMContext *context = thread->get_context();
+                    const std::string &name = context->find_constant(name_id);
+                    const std::string &signature = context->find_constant(signature_id);
+
+                    return thread->get_context()->resolve_method(name, signature);
+                }
+
                 /**
                  * Prepare to call a method.
                  */
