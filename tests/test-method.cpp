@@ -3,6 +3,7 @@
 //
 #include <core/config.hpp>
 #include <core/object/method.hpp>
+#include <core/runtime/dispatcher.hpp>
 
 using namespace dvm::core::object;
 using namespace dvm::core::runtime;
@@ -20,7 +21,7 @@ int main() {
                                    "dvm_native_hello", "()", dvm::core::False, 128);
 
     auto method = context->resolve_method("dvm_native_hello", "()");
-    method->invoke(thread);
+    Dispatcher::invoke_method(thread, method);
     return 0;
 }
 
