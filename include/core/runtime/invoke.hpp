@@ -8,8 +8,6 @@ namespace dvm {
     namespace core {
         namespace runtime {
             class InvokeHelper {
-                using namespace object;
-
             public:
                 static inline VMReturnAddr pc_to_return_address(VMOpcode *pc) {
                     return reinterpret_cast<VMReturnAddr &&>(pc);
@@ -18,7 +16,7 @@ namespace dvm {
                 /**
                  * Prepare to call a method.
                  */
-                static inline void before_invoke(Thread *thread, Method *method) {
+                static inline void before_invoke(Thread *thread, object::Method *method) {
                     if (method == nullptr || thread == nullptr) {
                         return;
                     }
@@ -30,14 +28,21 @@ namespace dvm {
 
                     // store return address
                     thread->get_stack().push<VMReturnAddr>(pc_to_return_address(thread->pc));
+
+                    // finally, store caller
+                    thread->calling_stack.push(CallStackEntry(method));
                 }
 
-                static inline void after_invoke(Thread *thread, Method *method) {
+                static inline void after_invoke(Thread *thread, object::Method *method) {
                     if (method == nullptr || thread == nullptr) {
                         return;
                     }
 
+                    // clean stack memory
                     thread->get_stack().remove_top_frame();
+
+                    // remove caller
+                    thread->calling_stack.pop();
                 }
             };
         }

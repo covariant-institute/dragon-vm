@@ -31,8 +31,6 @@ namespace dvm {
                     jump_to_exact(thread, thread->pc + offset, place_return_address);
                 }
 
-
-
                 /* Outer interfaces to Interpreter */
 
                 static inline void new_instance(Thread *thread) {
