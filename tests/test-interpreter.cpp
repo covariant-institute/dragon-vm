@@ -19,8 +19,8 @@
         thread->get_stack().new_frame(64); \
         thread->set_runnable(_c); \
         thread->run(); \
-        thread->get_stack().remove_top_frame(); \
         condition_area; \
+        thread->get_stack().remove_top_frame(); \
         printf(":: Passed\n"); \
     }
 
