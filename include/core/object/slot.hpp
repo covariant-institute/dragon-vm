@@ -16,7 +16,7 @@ namespace dvm {
 
             struct Slot {
             private:
-                type_identifier slot_type;
+                TypeIdentifier slot_type;
 
             public:
                 union {
@@ -29,13 +29,13 @@ namespace dvm {
                     Object *object;
                 } data;
 
-                inline type_identifier get_type() const {
+                inline TypeIdentifier get_type() const {
                     return slot_type;
                 }
 
-                inline void set_type(type_identifier new_type) {
-                    if (new_type == type_identifier::TYPE_ID_UNSPECIFIC ||
-                        (slot_type != type_identifier::TYPE_ID_UNSPECIFIC
+                inline void set_type(TypeIdentifier new_type) {
+                    if (new_type == TypeIdentifier::TYPE_ID_UNSPECIFIC ||
+                        (slot_type != TypeIdentifier::TYPE_ID_UNSPECIFIC
                          && slot_type != new_type)) {
                         throw dvm::core::Exception(DVM_UNSATISFIED_SLOT_TYPE);
                     }
@@ -44,7 +44,7 @@ namespace dvm {
 
                 template <typename T>
                 inline T get() const {
-                    if (slot_type == type_identifier::TYPE_ID_UNSPECIFIC) {
+                    if (slot_type == TypeIdentifier::TYPE_ID_UNSPECIFIC) {
                         throw dvm::core::Exception(DVM_UNSATISFIED_SLOT_TYPE);
                     }
 
@@ -53,13 +53,13 @@ namespace dvm {
 
                 template <typename T>
                 inline void set(const T &t) {
-                    set_type(type_id_converter<T>::get_type_id());
+                    set_type(TypeIdConverter<T>::get_type_id());
                     *reinterpret_cast<T *>(&data) = t;
                 }
 
                 template <typename T>
                 inline void set_unchecked(const T &t) {
-                    slot_type = type_identifier::TYPE_ID_UNSPECIFIC;
+                    slot_type = TypeIdentifier::TYPE_ID_UNSPECIFIC;
                     set<T>(t);
                 }
 

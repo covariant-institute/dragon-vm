@@ -6,21 +6,46 @@
 #include <core/runtime/interpreter.hpp>
 #include <core/runtime/thread.hpp>
 #include <core/runtime/vm_register.hpp>
+#include <core/runtime/invoke.hpp>
 
 namespace dvm {
     namespace core {
         namespace runtime {
 
-            class Utils {
-            private:
-                static inline void jump_to_offset(Thread *thread, Int32 offset, bool place_return_address) {
+            class Dispatcher {
+            public:
+                /* Utility functions */
+
+                static inline void jump_to_exact(Thread *thread, Byte *new_pc, bool place_return_address) {
                     if (place_return_address) {
-                        thread->stack.push<Int32>(std::forward<Int32>(-offset));
+                        thread->stack.push<VMReturnAddr>(InvokeHelper::pc_to_return_address(thread->pc));
                     }
-                    thread->pc += offset;
+                    thread->pc = new_pc;
                 }
 
-            public:
+                static inline void invoke_method(Thread *thread, object::Method *method) {
+                    InvokeHelper::before_invoke(thread, method);
+                    method->invoke(thread);
+                    InvokeHelper::after_invoke(thread, method);
+                }
+
+                static inline void jump_to_offset(Thread *thread, Int32 offset, bool place_return_address) {
+                    jump_to_exact(thread, thread->pc + offset, place_return_address);
+                }
+
+
+                /* Outer interfaces to Interpreter */
+
+                static inline void invoke_method(Thread *thread) {
+                    UInt16 name_id = thread->const_u16();
+                    dvm_memory_barrier();
+                    UInt16 signature_id = thread->const_u16();
+
+                    object::Method *method =
+                            InvokeHelper::resolve_by_id(thread, name_id, signature_id);
+                    Dispatcher::invoke_method(thread, method);
+                }
+
                 static inline void new_instance(Thread *thread) {
                     UInt16 class_id = thread->const_u16();
                     auto prototype = thread->get_context()->find_class_constant(class_id);

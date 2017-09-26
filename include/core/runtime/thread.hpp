@@ -5,6 +5,7 @@
 #pragma once
 
 #include <core/stack.hpp>
+#include <core/runtime/callstack.hpp>
 #include <core/runtime/opcodes.hpp>
 #include <core/runtime/interpreter.hpp>
 #include <core/runtime/vm_register.hpp>
@@ -14,17 +15,15 @@ namespace dvm {
         namespace runtime {
             class VMContext;
 
-            class ThreadLocalStorage {
-
-            };
-
             /**
              * TODO: Thread and Thread Pool
              */
             class Thread {
                 friend class Interpreter;
 
-                friend class Utils;
+                friend class Dispatcher;
+
+                friend class InvokeHelper;
 
                 friend class VMContext;
 
@@ -36,7 +35,7 @@ namespace dvm {
                 VMRegisterHolder regs;
 
                 VMContext *context;
-                Byte *code_base;
+                CallStack calling_stack;
                 VMOpcode *pc;
 
                 explicit Thread(VMContext *context);

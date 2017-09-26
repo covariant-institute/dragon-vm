@@ -24,7 +24,7 @@ namespace dvm {
             Class *Class::define_bootstrap_class(runtime::VMContext *context, const std::string &name,
                                                  UInt32 class_slot_count, UInt32 member_slot_count) {
                 Class *clazz = create_class(class_slot_count);
-                clazz->type = type_identifier::TYPE_ID_OBJECT;
+                clazz->type = TypeIdentifier::TYPE_ID_OBJECT;
                 clazz->parent = nullptr;
                 clazz->name = new std::string(name);
                 clazz->class_slot_count = class_slot_count;
@@ -40,7 +40,7 @@ namespace dvm {
                     parent_class = context->find_class("Object");
                 }
 
-                if (parent_class->type != type_identifier::TYPE_ID_OBJECT
+                if (parent_class->type != TypeIdentifier::TYPE_ID_OBJECT
                     || member_slot_count < 1) {
                     throw dvm::core::Exception(DVM_INVALID_OBJECT_MEMORY);
                 }

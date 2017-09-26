@@ -26,7 +26,7 @@ namespace dvm {
         constexpr Bool True = static_cast<Bool>(true);
         constexpr Bool False = static_cast<Bool>(false);
 
-        enum class type_identifier : UInt32 {
+        enum class TypeIdentifier : UInt32 {
             TYPE_ID_UNSPECIFIC = 0,
             TYPE_ID_INT8 = 1,
             TYPE_ID_INT16 = 2,
@@ -45,79 +45,79 @@ namespace dvm {
         };
 
         template <typename T>
-        struct type_id_converter {
-            constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_UNSPECIFIC;
+        struct TypeIdConverter {
+            constexpr static TypeIdentifier get_type_id() {
+                return TypeIdentifier::TYPE_ID_UNSPECIFIC;
             }
         };
 
         template <>
-        struct type_id_converter<Int8> {
-            constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_INT8;
+        struct TypeIdConverter<Int8> {
+            constexpr static TypeIdentifier get_type_id() {
+                return TypeIdentifier::TYPE_ID_INT8;
             }
         };
 
         template <>
-        struct type_id_converter<Int16> {
-            constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_INT16;
+        struct TypeIdConverter<Int16> {
+            constexpr static TypeIdentifier get_type_id() {
+                return TypeIdentifier::TYPE_ID_INT16;
             }
         };
 
         template <>
-        struct type_id_converter<Int32> {
-            constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_INT32;
+        struct TypeIdConverter<Int32> {
+            constexpr static TypeIdentifier get_type_id() {
+                return TypeIdentifier::TYPE_ID_INT32;
             }
         };
 
         template <>
-        struct type_id_converter<Int64> {
-            constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_INT64;
+        struct TypeIdConverter<Int64> {
+            constexpr static TypeIdentifier get_type_id() {
+                return TypeIdentifier::TYPE_ID_INT64;
             }
         };
 
         template <>
-        struct type_id_converter<UInt8> {
-            constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_UINT8;
+        struct TypeIdConverter<UInt8> {
+            constexpr static TypeIdentifier get_type_id() {
+                return TypeIdentifier::TYPE_ID_UINT8;
             }
         };
 
         template <>
-        struct type_id_converter<UInt16> {
-            constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_UINT16;
+        struct TypeIdConverter<UInt16> {
+            constexpr static TypeIdentifier get_type_id() {
+                return TypeIdentifier::TYPE_ID_UINT16;
             }
         };
 
         template <>
-        struct type_id_converter<UInt32> {
-            constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_UINT32;
+        struct TypeIdConverter<UInt32> {
+            constexpr static TypeIdentifier get_type_id() {
+                return TypeIdentifier::TYPE_ID_UINT32;
             }
         };
 
         template <>
-        struct type_id_converter<UInt64> {
-            constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_UINT64;
+        struct TypeIdConverter<UInt64> {
+            constexpr static TypeIdentifier get_type_id() {
+                return TypeIdentifier::TYPE_ID_UINT64;
             }
         };
 
         template <>
-        struct type_id_converter<Float> {
-            constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_FLOAT;
+        struct TypeIdConverter<Float> {
+            constexpr static TypeIdentifier get_type_id() {
+                return TypeIdentifier::TYPE_ID_FLOAT;
             }
         };
 
         template <>
-        struct type_id_converter<Double> {
-            constexpr static type_identifier get_type_id() {
-                return type_identifier::TYPE_ID_DOUBLE;
+        struct TypeIdConverter<Double> {
+            constexpr static TypeIdentifier get_type_id() {
+                return TypeIdentifier::TYPE_ID_DOUBLE;
             }
         };
     }

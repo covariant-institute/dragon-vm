@@ -69,7 +69,7 @@ set(DVM_CORE_SOURCE
         include/core/runtime/vm_register_common.hpp
         include/core/runtime/vm_register_visitor.hpp
         include/core/runtime/thread.hpp
-        include/core/runtime/utils.hpp
+        include/core/runtime/dispatcher.hpp
         include/core/runtime/math.hpp
         include/core/runtime/jump.hpp
         include/core/runtime/dvm.hpp
@@ -114,7 +114,7 @@ set(DVM_CORE_SOURCE
         src/core/dcx/dcx_file.cpp
         src/core/dcx/dcx_linker.cpp
 
-        ${DVM_PLATFORM_SRC})
+        ${DVM_PLATFORM_SRC} include/core/runtime/invoke.hpp include/core/runtime/callstack.hpp)
 
 # Dragon VM Core
 add_library(dvm-core SHARED ${DVM_CORE_SOURCE})

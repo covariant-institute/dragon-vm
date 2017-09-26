@@ -19,8 +19,8 @@
         thread->get_stack().new_frame(64); \
         thread->set_runnable(_c); \
         thread->run(); \
-        thread->get_stack().remove_top_frame(); \
         condition_area; \
+        thread->get_stack().remove_top_frame(); \
         printf(":: Passed\n"); \
     }
 
@@ -442,7 +442,13 @@ int main() {
 
     T("jump_ret", {
         assert(thread->get_stack().peek_pop<Int32>() == 2);
-        assert(thread->get_stack().peek<Int32>() == -5);
+        auto return_addr = thread->get_stack().peek_pop<UInt64>();
+        auto *return_opcode = reinterpret_cast<VMOpcode *>(return_addr);
+        assert(return_opcode[0] == OPCODE(ldc_i32));
+        assert(return_opcode[1] == 0);
+        assert(return_opcode[2] == 0);
+        assert(return_opcode[3] == 0);
+        assert(return_opcode[4] == 1);
     },
       OPCODE(jump_ret), 0, 5,           /* pc + 5 */
       OPCODE(ldc_i32), 0, 0, 0, 1,

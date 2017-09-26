@@ -30,6 +30,7 @@ namespace dvm {
             // Move sp backward
             sp += frame->frame_size;
             dvm_free(frame);
+            frames.erase(frames.end() - 1);
         }
 
         Byte *Frame::allocate(SizeT size) {
