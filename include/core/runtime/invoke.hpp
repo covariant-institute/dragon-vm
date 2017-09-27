@@ -36,17 +36,6 @@ namespace dvm {
                     frame->set_last_pc(thread->pc);
                     frame->set_method(method);
                 }
-
-                static inline void after_invoke(Thread *thread, object::Method *method) {
-                    if (method == nullptr || thread == nullptr) {
-                        return;
-                    }
-
-                    thread->pc = thread->get_stack().current_frame()->get_last_pc();
-
-                    // clean stack memory
-                    thread->get_stack().remove_top_frame();
-                }
             };
         }
     }

@@ -26,7 +26,6 @@ namespace dvm {
                 static inline void invoke_method(Thread *thread, object::Method *method) {
                     InvokeHelper::before_invoke(thread, method);
                     method->invoke(thread);
-                    InvokeHelper::after_invoke(thread, method);
                 }
 
                 static inline void jump_to_offset(Thread *thread, Int32 offset, bool place_return_address) {
@@ -35,6 +34,11 @@ namespace dvm {
 
 
                 /* Outer interfaces to Interpreter */
+
+                template <typename T>
+                static inline void method_return(Thread *thread) {
+
+                }
 
                 static inline void invoke_method(Thread *thread) {
                     UInt16 name_id = thread->const_u16();
