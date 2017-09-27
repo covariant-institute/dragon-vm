@@ -35,7 +35,6 @@ namespace dvm {
                 VMRegisterHolder regs;
 
                 VMContext *context;
-                CallStack calling_stack;
                 VMOpcode *pc;
 
                 explicit Thread(VMContext *context);

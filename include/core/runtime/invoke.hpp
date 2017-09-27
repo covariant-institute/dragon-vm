@@ -29,16 +29,12 @@ namespace dvm {
                         return;
                     }
 
-                    // allocate stack, we need one more sizeof(VMReturnAddr) bytes
-                    // to store return address
-                    UInt16 frame_size = method->get_frame_size() + sizeof(VMReturnAddr);
-                    thread->get_stack().new_frame(frame_size);
+                    UInt16 frame_size = method->get_frame_size();
+                    Frame *frame = thread->get_stack().new_frame(frame_size);
 
-                    // store return address
-                    thread->get_stack().push<VMReturnAddr>(pc_to_return_address(thread->pc));
-
-                    // finally, store caller
-                    thread->calling_stack.push(CallStackEntry(method));
+                    // return address
+                    frame->set_last_pc(thread->pc);
+                    frame->set_method(method);
                 }
 
                 static inline void after_invoke(Thread *thread, object::Method *method) {
@@ -46,11 +42,10 @@ namespace dvm {
                         return;
                     }
 
+                    thread->pc = thread->get_stack().current_frame()->get_last_pc();
+
                     // clean stack memory
                     thread->get_stack().remove_top_frame();
-
-                    // remove caller
-                    thread->calling_stack.pop();
                 }
             };
         }

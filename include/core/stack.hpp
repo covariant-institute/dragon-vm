@@ -4,13 +4,17 @@
 #include <core/memory.hpp>
 #include <core/exceptions.hpp>
 #include <core/errorcodes.hpp>
-#include <core/object/object.hpp>
 #include <cstring>
 #include <cstdlib>
 #include <vector>
 
 namespace dvm {
     namespace core {
+        namespace object {
+            class Object;
+            class Method;
+        }
+
         class Stack;
 
         class Frame final {
@@ -21,6 +25,12 @@ namespace dvm {
             Byte *sp;
             Byte *sl;
             SizeT frame_size;
+
+            // Store return address
+            Byte *last_pc;
+
+            // Method called in this frame
+            object::Method *method;
 
             Frame(Byte *bp, SizeT size);
 
@@ -44,6 +54,22 @@ namespace dvm {
             }
 
         public:
+            inline Byte *get_last_pc() const {
+                return last_pc;
+            }
+
+            inline void set_last_pc(Byte *last_pc) {
+                this->last_pc = last_pc;
+            }
+
+            inline object::Method* get_method() const {
+                return method;
+            }
+
+            inline void set_method(object::Method *method) {
+                this->method = method;
+            }
+
             template <typename T>
             inline T *at(UInt16 offset) {
                 if (bp - offset < sl) {
@@ -126,7 +152,7 @@ namespace dvm {
 
             ~Stack();
 
-            void new_frame(SizeT size);
+            Frame *new_frame(SizeT size);
 
             void remove_top_frame();
 

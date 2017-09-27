@@ -3,6 +3,8 @@
 //
 
 #include <core/stack.hpp>
+#include <core/object/object.hpp>
+#include <core/object/method.hpp>
 
 namespace dvm {
     namespace core {
@@ -16,13 +18,14 @@ namespace dvm {
             sp = memory + size;
         }
 
-        void Stack::new_frame(SizeT size) {
+        Frame *Stack::new_frame(SizeT size) {
             auto *bytes = static_cast<Byte *>(dvm_malloc(sizeof(Frame)));
             auto *frame = new(bytes) Frame(sp, size);
             frames.push_back(frame);
 
             // Move sp forward
             sp -= size;
+            return frame;
         }
 
         void Stack::remove_top_frame() {
