@@ -29,8 +29,8 @@ namespace dvm {
                         return;
                     }
 
-                    UInt16 frame_size = method->get_frame_size();
-                    Frame *frame = thread->get_stack().new_frame(frame_size);
+                    UInt16 locals_size = method->get_locals_size();
+                    Frame *frame = thread->get_stack().new_frame(locals_size);
 
                     // return address
                     frame->set_last_pc(thread->pc);

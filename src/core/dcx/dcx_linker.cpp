@@ -90,13 +90,13 @@ namespace dvm {
                                       Method::register_native_method(context, return_type_class,
                                                                      name, signature,
                                                                      entry.header.method_is_static,
-                                                                     entry.header.method_frame_size);
+                                                                     entry.header.method_locals_size);
                                       return;
                                   }
 
                                   Method::register_method(context, return_type_class, name, signature,
                                                           entry.header.method_is_static,
-                                                          entry.header.method_frame_size,
+                                                          entry.header.method_locals_size,
                                                           entry.method_body,
                                                           entry.header.method_body_size,
                                                           entry.handlers,

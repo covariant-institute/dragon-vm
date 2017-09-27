@@ -29,7 +29,7 @@ namespace dvm {
                 const Class *return_type;
                 Bool is_native_method;
                 Bool is_static_method;
-                UInt16 frame_size;
+                UInt16 locals_size;
 
             public:
                 Method(const Class *return_type,
@@ -37,7 +37,7 @@ namespace dvm {
                        const std::string &signature,
                        Bool is_static_method,
                        Bool is_native_method,
-                       UInt16 frame_size);
+                       UInt16 locals_size);
 
                 virtual ~Method() = default;
 
@@ -65,8 +65,8 @@ namespace dvm {
                     return method_name;
                 }
 
-                inline UInt16 get_frame_size() const {
-                    return frame_size;
+                inline UInt16 get_locals_size() const {
+                    return locals_size;
                 }
 
                 virtual void invoke(runtime::Thread *thread) = 0;

@@ -11,10 +11,10 @@ namespace dvm {
     namespace core {
         namespace object {
             Method::Method(const Class *return_type, const std::string &name, const std::string &signature,
-                           Bool is_static_method, Bool is_native_method, UInt16 frame_size)
+                           Bool is_static_method, Bool is_native_method, UInt16 max_locals)
                     : return_type(return_type), method_name(name), method_signature(signature),
                       is_static_method(is_static_method), is_native_method(is_native_method),
-                      frame_size(frame_size) {
+                      locals_size(locals_size) {
             }
 
             Method *Method::resolve(runtime::VMContext *context, const std::string &name,
@@ -63,7 +63,7 @@ namespace dvm {
                 printf("  Return type: %s\n", method->get_return_type()->name->c_str());
                 printf("  Native:      %s\n", method->is_native() ? "true" : "false");
                 printf("  Static:      %s\n", method->is_static() ? "true" : "false");
-                printf("  Frame size:  %u\n", method->get_frame_size());
+                printf("  Max locals:  %u\n", method->get_locals_size());
 
                 auto &handlers = method->get_handlers();
                 if (handlers.get_handler_count() > 0) {
