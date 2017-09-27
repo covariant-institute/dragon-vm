@@ -5,7 +5,6 @@
 #pragma once
 
 #include <core/stack.hpp>
-#include <core/runtime/callstack.hpp>
 #include <core/runtime/opcodes.hpp>
 #include <core/runtime/interpreter.hpp>
 #include <core/runtime/vm_register.hpp>

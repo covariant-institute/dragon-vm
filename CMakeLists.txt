@@ -114,7 +114,7 @@ set(DVM_CORE_SOURCE
         src/core/dcx/dcx_file.cpp
         src/core/dcx/dcx_linker.cpp
 
-        ${DVM_PLATFORM_SRC} include/core/runtime/invoke.hpp include/core/runtime/callstack.hpp)
+        ${DVM_PLATFORM_SRC} include/core/runtime/invoke.hpp)
 
 # Dragon VM Core
 add_library(dvm-core SHARED ${DVM_CORE_SOURCE})
