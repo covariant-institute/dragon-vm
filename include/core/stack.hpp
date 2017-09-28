@@ -39,10 +39,10 @@ namespace dvm {
             // 在这个帧上的方法
             object::Method *method;
 
-            // 帧的大小: base_pointer - frame_limit
+            // 帧的大小: base_pointer_no_shared - frame_limit
             SizeT frame_size;
 
-            // 从上一个帧里分享的大小
+            // 从上一个帧里分享的大小: base_pointer - base_pointer_no_shared
             SizeT shared_size;
 
             Frame(Byte *bp, SizeT size, SizeT shared);
