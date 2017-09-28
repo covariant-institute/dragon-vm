@@ -55,7 +55,7 @@ int main() {
     auto i = s.peek<Int32>();
     assert(i == 52019);
 
-    // simulate invoking a method with argument Int32(52019)
+    // simulate invoking a method with argument Int32(52019) and a local Double variable
     // create a frame, with sizeof(Int32) bytes shared, which is the argument
     s.new_frame(sizeof(Double), sizeof(Int32));
     // get the argument
