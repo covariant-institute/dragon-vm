@@ -55,11 +55,27 @@ int main() {
     auto i = s.peek<Int32>();
     assert(i == 52019);
 
-    // create a shared frame, with sizeof(Int32) bytes shared with the current one.
-    s.new_frame(0, sizeof(Int32));
-    i = s.peek_pop<Int32>();
+    // simulate invoking a method with argument Int32(52019)
+    // create a frame, with sizeof(Int32) bytes shared, which is the argument
+    s.new_frame(sizeof(Double), sizeof(Int32));
+    // get the argument
+    i = s.peek<Int32>();
     assert(i == 52019);
+    // method local variables
+    s.push<Double>(111.111);
+    // can we access these variables properly?
+    assert(*s.at<Int32>(sizeof(Int32)) == 52019);
+    assert(*s.at<Double>(sizeof(Int32) + sizeof(Double)) == 111.111);
+    // prepare for return
+    s.pop<Double>();
+    // Replace the shared int32 with our "return value"
+    s.pop<Int32>();
+    s.push<Int32>(52020);
+    // simulate returning from a method
     s.remove_top_frame();
+
+    // get the "return value"
+    assert(s.peek<Int32>() == 52020);
 
     s.remove_top_frame();
     return 0;
