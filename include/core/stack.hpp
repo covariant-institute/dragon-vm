@@ -21,25 +21,38 @@ namespace dvm {
             friend class Stack;
 
         private:
-            Byte *bp;
-            Byte *sp;
-            Byte *sl;
-            SizeT frame_size;
+            // 帧顶
+            Byte *frame_limit;
 
-            // Store return address
+            // 帧底
+            Byte *base_pointer;
+
+            // 原始的帧底，没有计算 shared 空间
+            Byte *base_pointer_no_shared;
+
+            // 当前位置
+            Byte *sp;
+
+            // 返回地址
             Byte *last_pc;
 
-            // Method called in this frame
+            // 在这个帧上的方法
             object::Method *method;
 
-            Frame(Byte *bp, SizeT size);
+            // 帧的大小: base_pointer - frame_limit
+            SizeT frame_size;
+
+            // 从上一个帧里分享的大小
+            SizeT shared_size;
+
+            Frame(Byte *bp, SizeT size, SizeT shared);
 
             ~Frame();
 
             Byte *allocate(SizeT size);
 
             inline bool empty() const {
-                return sp == bp;
+                return sp == base_pointer;
             }
 
             inline void ensure_not_empty() const {
@@ -72,10 +85,10 @@ namespace dvm {
 
             template <typename T>
             inline T *at(UInt16 offset) {
-                if (bp - offset < sl) {
+                if (base_pointer - offset < frame_limit) {
                     throw dvm::core::Exception(DVM_MEMORY_STACK_INVALID_ACCESS);
                 }
-                return at<T>(bp - offset);
+                return at<T>(base_pointer - offset);
             }
 
             template <typename T>
@@ -152,7 +165,7 @@ namespace dvm {
 
             ~Stack();
 
-            Frame *new_frame(SizeT size);
+            Frame *new_frame(SizeT size, SizeT shared = 0);
 
             void remove_top_frame();
 

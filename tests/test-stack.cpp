@@ -48,5 +48,19 @@ int main() {
     s.pop<Int32>(); // int32
 
     s.remove_top_frame();
+
+    // test shared frame
+    s.new_frame(sizeof(Int32));
+    s.push<Int32>(52019);
+    auto i = s.peek<Int32>();
+    assert(i == 52019);
+
+    // create a shared frame, with sizeof(Int32) bytes shared with the current one.
+    s.new_frame(0, sizeof(Int32));
+    i = s.peek_pop<Int32>();
+    assert(i == 52019);
+    s.remove_top_frame();
+
+    s.remove_top_frame();
     return 0;
 }
