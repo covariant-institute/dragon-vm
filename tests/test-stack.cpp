@@ -50,27 +50,38 @@ int main() {
     s.remove_top_frame();
 
     // test shared frame
+    // simulate invoking a method with argument Int32(52019) and a local Double variable
+
+    // this is the caller's frame
     s.new_frame(sizeof(Int32));
+    // the argument
     s.push<Int32>(52019);
+    // let's check if the argument is properly stored
     auto i = s.peek<Int32>();
     assert(i == 52019);
 
-    // simulate invoking a method with argument Int32(52019) and a local Double variable
-    // create a frame, with sizeof(Int32) bytes shared, which is the argument
+    // create a frame for the callee,
+    // with sizeof(Int32) bytes shared, which is the argument.
     s.new_frame(sizeof(Double), sizeof(Int32));
+
     // get the argument
     i = s.peek<Int32>();
     assert(i == 52019);
+
     // method local variables
     s.push<Double>(111.111);
+
     // can we access these variables properly?
     assert(*s.at<Int32>(sizeof(Int32)) == 52019);
     assert(*s.at<Double>(sizeof(Int32) + sizeof(Double)) == 111.111);
+
     // prepare for return
     s.pop<Double>();
-    // Replace the shared int32 with our "return value"
+
+    // drop the argument and push our "return value"
     s.pop<Int32>();
     s.push<Int32>(52020);
+
     // simulate returning from a method
     s.remove_top_frame();
 
