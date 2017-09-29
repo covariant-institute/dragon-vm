@@ -16,10 +16,7 @@ namespace dvm {
             public:
                 /* Utility functions */
 
-                static inline void jump_to_exact(Thread *thread, Byte *new_pc, bool place_return_address) {
-                    if (place_return_address) {
-                        thread->stack.push<VMReturnAddr>(InvokeHelper::pc_to_return_address(thread->pc));
-                    }
+                static inline void jump_to_exact(Thread *thread, Byte *new_pc) {
                     thread->pc = new_pc;
                 }
 
@@ -28,8 +25,8 @@ namespace dvm {
                     method->invoke(thread);
                 }
 
-                static inline void jump_to_offset(Thread *thread, Int32 offset, bool place_return_address) {
-                    jump_to_exact(thread, thread->pc + offset, place_return_address);
+                static inline void jump_to_offset(Thread *thread, Int32 offset) {
+                    jump_to_exact(thread, thread->pc + offset);
                 }
 
 
@@ -58,18 +55,23 @@ namespace dvm {
                 }
 
                 template <typename Condition>
-                static inline void jump(Thread *thread, bool place_return_address) {
+                static inline void jump(Thread *thread) {
                     Int32 &&check = thread->stack.peek_pop<Int32>();
                     Int16 offset = thread->const_i16();
 
                     if (Condition::get_result(check)) {
-                        jump_to_offset(thread, offset, place_return_address);
+                        jump_to_offset(thread, offset);
                     }
                 }
 
-                static inline void jump0(Thread *thread, bool place_return_address) {
+                static inline void jump0(Thread *thread) {
                     Int16 offset = thread->const_i16();
-                    jump_to_offset(thread, offset, place_return_address);
+                    jump_to_offset(thread, offset);
+                }
+
+                static inline void jump0_w(Thread *thread) {
+                    Int32 offset = thread->const_i32();
+                    jump_to_offset(thread, offset);
                 }
 
                 template <typename FromType, typename ToType>

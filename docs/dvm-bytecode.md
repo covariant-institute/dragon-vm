@@ -83,7 +83,7 @@
 | ret_f32                |   4d   |   0100 1101   |        | value → [Empty] | return a float |
 | ret_f64                |   4e   |   0100 1110   |        | value → [Empty] | return a double |
 | jump                   |   4f   |   0100 1111   | 2: offsetbyte1, offsetbyte2 | [No Change] | goes to another instruction at `pc + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
-| jump_ret               |   50   |   0101 0000   | 2: offsetbyte1, offsetbyte2 | → offset | goes to another instruction at `pc + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) and place the return address on the stack |
+| jump_w                 |   50   |   0101 0000   | 4: offsetbyte1, offsetbyte2, offsetbyte3, offsetbyte4 | [No Change] | goes to another instruction at `pc + offset` (signed int constructed from unsigned bytes `offsetbyte1 << 24 + offsetbyte2 << 16 + offsetbyte3 << 8 + offsetbyte4`) |
 | jump_eq                |   51   |   0101 0001   | 2: offsetbyte1, offsetbyte2 | value → | if value == 0, jump to instruction at `pc + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
 | jump_ne                |   52   |   0101 0010   | 2: offsetbyte1, offsetbyte2 | value → | if value != 0, jump to instruction at `pc + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |
 | jump_gt                |   53   |   0101 0011   | 2: offsetbyte1, offsetbyte2 | value → | if value > 0, jump to instruction at `pc + offset` (signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`) |

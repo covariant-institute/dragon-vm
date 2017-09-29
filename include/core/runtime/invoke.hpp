@@ -9,9 +9,6 @@ namespace dvm {
         namespace runtime {
             class InvokeHelper {
             public:
-                static inline VMReturnAddr pc_to_return_address(VMOpcode *pc) {
-                    return reinterpret_cast<VMReturnAddr &&>(pc);
-                }
 
                 static inline object::Method *resolve_by_id(Thread *thread, UInt16 name_id, UInt16 signature_id) {
                     VMContext *context = thread->get_context();
@@ -30,7 +27,10 @@ namespace dvm {
                     }
 
                     UInt16 locals_size = method->get_locals_size();
-                    Frame *frame = thread->get_stack().new_frame(locals_size);
+                    UInt16 args_size = method->get_args_size();
+
+                    // share args_size bytes with current frame for argument passing
+                    Frame *frame = thread->get_stack().new_frame(locals_size, args_size);
 
                     // return address
                     frame->set_last_pc(thread->pc);

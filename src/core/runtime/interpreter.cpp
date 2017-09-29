@@ -563,49 +563,49 @@ namespace dvm {
 
                 OPCODE_IMPL(jump)
                 {
-                    Dispatcher::jump0(thread, false);
+                    Dispatcher::jump0(thread);
                     OPCODE_NEXT(context);
                 }
 
-                OPCODE_IMPL(jump_ret)
+                OPCODE_IMPL(jump_w)
                 {
-                    Dispatcher::jump0(thread, true);
+                    Dispatcher::jump0_w(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_eq)
                 {
-                    Dispatcher::jump<JumpConditionEq>(thread, false);
+                    Dispatcher::jump<JumpConditionEq>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_ne)
                 {
-                    Dispatcher::jump<JumpConditionNe>(thread, false);
+                    Dispatcher::jump<JumpConditionNe>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_gt)
                 {
-                    Dispatcher::jump<JumpConditionGt>(thread, false);
+                    Dispatcher::jump<JumpConditionGt>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_ge)
                 {
-                    Dispatcher::jump<JumpConditionGe>(thread, false);
+                    Dispatcher::jump<JumpConditionGe>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_lt)
                 {
-                    Dispatcher::jump<JumpConditionLt>(thread, false);
+                    Dispatcher::jump<JumpConditionLt>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_le)
                 {
-                    Dispatcher::jump<JumpConditionLe>(thread, false);
+                    Dispatcher::jump<JumpConditionLe>(thread);
                     OPCODE_NEXT(context);
                 }
 
