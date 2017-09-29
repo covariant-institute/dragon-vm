@@ -34,7 +34,7 @@ namespace dvm {
 
                 template <typename T>
                 static inline void method_return(Thread *thread) {
-
+                    InvokeHelper::return_dispose(thread);
                 }
 
                 static inline void invoke_method(Thread *thread) {

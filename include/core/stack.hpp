@@ -93,8 +93,12 @@ namespace dvm {
 
             template <typename T>
             inline void pop() {
+                pop(sizeof(T));
+            }
+
+            inline void pop(SizeT size) {
                 ensure_not_empty();
-                sp += sizeof(T);
+                sp += size;
             }
 
             template <typename T>
@@ -186,6 +190,10 @@ namespace dvm {
             template <typename T>
             inline void pop() {
                 current_frame()->pop<T>();
+            }
+
+            inline void pop(SizeT size) {
+                current_frame()->pop(size);
             }
 
             template <typename T>

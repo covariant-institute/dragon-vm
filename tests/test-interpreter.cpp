@@ -440,20 +440,6 @@ int main() {
       OPCODE(ldc_i32), 0, 0, 0, 1,
       OPCODE(ldc_i32), 0, 0, 0, 2); /* <- pc + 5 */
 
-    T("jump_ret", {
-        assert(thread->get_stack().peek_pop<Int32>() == 2);
-        auto return_addr = thread->get_stack().peek_pop<UInt64>();
-        auto *return_opcode = reinterpret_cast<VMOpcode *>(return_addr);
-        assert(return_opcode[0] == OPCODE(ldc_i32));
-        assert(return_opcode[1] == 0);
-        assert(return_opcode[2] == 0);
-        assert(return_opcode[3] == 0);
-        assert(return_opcode[4] == 1);
-    },
-      OPCODE(jump_ret), 0, 5,           /* pc + 5 */
-      OPCODE(ldc_i32), 0, 0, 0, 1,
-      OPCODE(ldc_i32), 0, 0, 0, 2);     /* <- pc + 5 */
-
     T("jump_eq", {
         assert(thread->get_stack().peek<Int32>() == 2);
     },

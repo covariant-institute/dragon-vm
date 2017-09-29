@@ -9,7 +9,6 @@ namespace dvm {
         namespace runtime {
             class InvokeHelper {
             public:
-
                 static inline object::Method *resolve_by_id(Thread *thread, UInt16 name_id, UInt16 signature_id) {
                     VMContext *context = thread->get_context();
                     const std::string &name = context->find_constant(name_id);
@@ -35,6 +34,17 @@ namespace dvm {
                     // return address
                     frame->set_last_pc(thread->pc);
                     frame->set_method(method);
+                }
+
+                static inline void return_dispose(Thread *thread) {
+                    auto method = thread->get_stack().current_frame()->get_method();
+                    thread->get_stack().remove_top_frame();
+
+                    if (method == nullptr) {
+                        return;
+                    }
+
+                    thread->get_stack().pop(method->get_args_size());
                 }
             };
         }
