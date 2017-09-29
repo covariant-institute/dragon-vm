@@ -5,7 +5,7 @@
 #include <core/object/class.hpp>
 #include <core/runtime/dvm.hpp>
 #include <core/runtime/thread.hpp>
-#include <core/runtime/vm_context.hpp>
+#include <core/runtime/context.hpp>
 
 namespace dvm {
     namespace core {

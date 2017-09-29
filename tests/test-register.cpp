@@ -2,8 +2,8 @@
 // Created by kiva on 2017/8/30.
 //
 
-#include <core/runtime/vm_register.hpp>
-#include <core/runtime/vm_context.hpp>
+#include <core/runtime/register.hpp>
+#include <core/runtime/context.hpp>
 #include <cassert>
 #include <core/stack.hpp>
 #include <core/config.hpp>

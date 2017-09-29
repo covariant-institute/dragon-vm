@@ -85,22 +85,7 @@ namespace dvm {
 
                                   auto *return_type_class = context->find_class_constant(
                                           entry.header.method_return_type_name_id);
-
-                                  if (entry.header.method_is_native) {
-                                      Method::register_native_method(context, return_type_class,
-                                                                     name, signature,
-                                                                     entry.header.method_is_static,
-                                                                     entry.header.method_locals_size);
-                                      return;
-                                  }
-
-                                  Method::register_method(context, return_type_class, name, signature,
-                                                          entry.header.method_is_static,
-                                                          entry.header.method_locals_size,
-                                                          entry.method_body,
-                                                          entry.header.method_body_size,
-                                                          entry.handlers,
-                                                          entry.header.method_handlers_count);
+                                  Method::register_method(context, return_type_class, name, signature, entry);
                               });
             }
 

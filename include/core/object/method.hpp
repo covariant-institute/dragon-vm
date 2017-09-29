@@ -4,7 +4,7 @@
 #pragma once
 
 #include <core/object/object.hpp>
-#include <core/runtime/vm_context.hpp>
+#include <core/runtime/context.hpp>
 #include <core/dcx/dcx_file_info.hpp>
 
 namespace dvm {
@@ -30,14 +30,14 @@ namespace dvm {
                 Bool is_native_method;
                 Bool is_static_method;
                 UInt16 locals_size;
+                UInt16 args_size;
 
             public:
                 Method(const Class *return_type,
                        const std::string &name,
                        const std::string &signature,
                        Bool is_static_method,
-                       Bool is_native_method,
-                       UInt16 locals_size);
+                       Bool is_native_method);
 
                 virtual ~Method() = default;
 
@@ -76,12 +76,7 @@ namespace dvm {
 
                 static void register_method(runtime::VMContext *context, const Class *return_type,
                                             const std::string &name, const std::string &signature,
-                                            Bool is_static_method, UInt16 frame_size, Byte *body, SizeT length,
-                                            dcx::DcxFileMethodEntryHandler *handlers, SizeT handler_count);
-
-                static void register_native_method(runtime::VMContext *context, const Class *return_type,
-                                                   const std::string &name, const std::string &signature,
-                                                   Bool is_static_method, UInt16 frame_size);
+                                            const dcx::DcxFileMethodEntry &entry);
 
                 static void dump_method_info(const Method *method);
             };

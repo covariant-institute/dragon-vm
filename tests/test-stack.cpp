@@ -5,7 +5,7 @@
 #include <core/stack.hpp>
 #include <core/config.hpp>
 #include <cassert>
-#include <core/runtime/vm_context.hpp>
+#include <core/runtime/context.hpp>
 
 int main() {
     using namespace dvm::core;

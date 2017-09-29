@@ -4,7 +4,7 @@
 
 #include <core/runtime/interpreter.hpp>
 #include <core/runtime/thread.hpp>
-#include <core/runtime/vm_context.hpp>
+#include <core/runtime/context.hpp>
 #include <core/runtime/dispatcher.hpp>
 #include <core/runtime/math.hpp>
 #include <core/runtime/jump.hpp>

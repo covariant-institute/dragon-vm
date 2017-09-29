@@ -1,7 +1,7 @@
 //
 // Created by kiva on 2017/8/30.
 //
-#include <core/runtime/vm_register.hpp>
+#include <core/runtime/register.hpp>
 #include <core/memory.hpp>
 
 namespace dvm {

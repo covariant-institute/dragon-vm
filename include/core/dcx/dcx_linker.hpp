@@ -4,7 +4,7 @@
 #pragma once
 
 #include <core/dcx/dcx_file.hpp>
-#include <core/runtime/vm_context.hpp>
+#include <core/runtime/context.hpp>
 
 namespace dvm {
     namespace core {

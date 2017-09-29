@@ -7,7 +7,7 @@
 #include <core/stack.hpp>
 #include <core/runtime/opcodes.hpp>
 #include <core/runtime/interpreter.hpp>
-#include <core/runtime/vm_register.hpp>
+#include <core/runtime/register.hpp>
 
 namespace dvm {
     namespace core {

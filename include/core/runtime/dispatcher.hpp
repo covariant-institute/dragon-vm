@@ -5,7 +5,7 @@
 
 #include <core/runtime/interpreter.hpp>
 #include <core/runtime/thread.hpp>
-#include <core/runtime/vm_register.hpp>
+#include <core/runtime/register.hpp>
 #include <core/runtime/invoke.hpp>
 
 namespace dvm {

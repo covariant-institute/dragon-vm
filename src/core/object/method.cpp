@@ -11,10 +11,9 @@ namespace dvm {
     namespace core {
         namespace object {
             Method::Method(const Class *return_type, const std::string &name, const std::string &signature,
-                           Bool is_static_method, Bool is_native_method, UInt16 max_locals)
+                           Bool is_static_method, Bool is_native_method)
                     : return_type(return_type), method_name(name), method_signature(signature),
-                      is_static_method(is_static_method), is_native_method(is_native_method),
-                      locals_size(locals_size) {
+                      is_static_method(is_static_method), is_native_method(is_native_method) {
             }
 
             Method *Method::resolve(runtime::VMContext *context, const std::string &name,
@@ -24,33 +23,30 @@ namespace dvm {
 
             void Method::register_method(runtime::VMContext *context, const Class *return_type,
                                          const std::string &name, const std::string &signature,
-                                         Bool is_static_method, UInt16 frame_size,
-                                         Byte *body, SizeT length,
-                                         dcx::DcxFileMethodEntryHandler *handlers,
-                                         SizeT handler_count) {
+                                         const dcx::DcxFileMethodEntry &entry) {
+                object::Method *method = nullptr;
+                if (entry.header.method_is_native) {
+                    auto native_method = new NativeMethod(return_type, name, signature,
+                                                          entry.header.method_is_static, True);
+                    method = native_method;
+                } else {
+                    auto dvm_method = new DvmMethod(return_type, name, signature,
+                                                entry.header.method_is_static, False);
+                    dvm_method->method_body = entry.method_body;
+                    dvm_method->method_length = entry.header.method_body_size;
 
-                auto method = new DvmMethod(return_type, name, signature,
-                                            is_static_method, False, frame_size);
-                method->method_body = body;
-                method->method_length = length;
+                    method = dvm_method;
+                }
 
-                for (int i = 0; i < handler_count; ++i) {
-                    auto *handler = handlers + i;
+                for (int i = 0; i < entry.header.method_handlers_count; ++i) {
+                    auto *handler = entry.handlers + i;
                     auto *exception_class = context->find_class_constant(handler->exception_class_name_id);
                     method->handler.handlers[exception_class] = handler->handler_offset;
                 }
 
-                context->register_method(name, signature, method);
-            }
+                method->args_size = entry.header.method_args_size;
+                method->locals_size = entry.header.method_locals_size;
 
-            void
-            Method::register_native_method(runtime::VMContext *context, const Class *return_type,
-                                           const std::string &name,
-                                           const std::string &signature, Bool is_static_method,
-                                           UInt16 frame_size) {
-
-                auto method = new NativeMethod(return_type, name, signature,
-                                               is_static_method, True, frame_size);
                 context->register_method(name, signature, method);
             }
 

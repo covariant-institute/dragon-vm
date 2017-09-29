@@ -21,8 +21,7 @@ namespace dvm {
                           const std::string &name,
                           const std::string &signature,
                           Bool is_static_method,
-                          Bool is_native_method,
-                          UInt16 frame_size);
+                          Bool is_native_method);
 
                 ~DvmMethod() override = default;
 

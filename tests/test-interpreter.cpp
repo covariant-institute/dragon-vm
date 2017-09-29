@@ -2,7 +2,7 @@
 // Created by kiva on 2017/9/17.
 //
 
-#include <core/runtime/vm_context.hpp>
+#include <core/runtime/context.hpp>
 #include <cassert>
 
 #define OPCODE(X) static_cast<dvm::core::runtime::VMOpcode>(dvm::core::runtime::VMOpcodes::X)

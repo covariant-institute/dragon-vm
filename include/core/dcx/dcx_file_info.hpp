@@ -72,6 +72,7 @@ namespace dvm {
                 UInt16 method_return_type_name_id;
                 UInt16 method_handlers_count;
                 UInt16 method_locals_size;
+                UInt16 method_args_size;
                 UInt32 method_body_size;
                 Bool method_is_native;
                 Bool method_is_static;

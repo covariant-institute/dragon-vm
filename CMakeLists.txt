@@ -64,10 +64,10 @@ set(DVM_CORE_SOURCE
 
         include/core/runtime/interpreter.hpp
         include/core/runtime/opcodes.hpp
-        include/core/runtime/vm_context.hpp
-        include/core/runtime/vm_register.hpp
-        include/core/runtime/vm_register_common.hpp
-        include/core/runtime/vm_register_visitor.hpp
+        include/core/runtime/context.hpp
+        include/core/runtime/register.hpp
+        include/core/runtime/register_common.hpp
+        include/core/runtime/register_visitor.hpp
         include/core/runtime/thread.hpp
         include/core/runtime/dispatcher.hpp
         include/core/runtime/math.hpp
@@ -96,9 +96,9 @@ set(DVM_CORE_SOURCE
         src/core/heap.cpp
 
         src/core/runtime/interpreter.cpp
-        src/core/runtime/vm_register.cpp
-        src/core/runtime/vm_register_visitor.cpp
-        src/core/runtime/vm_context.cpp
+        src/core/runtime/register.cpp
+        src/core/runtime/register_visitor.cpp
+        src/core/runtime/context.cpp
         src/core/runtime/thread.cpp
         src/core/runtime/dvm.cpp
 
