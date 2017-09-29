@@ -59,7 +59,8 @@ namespace dvm {
                 printf("  Return type: %s\n", method->get_return_type()->name->c_str());
                 printf("  Native:      %s\n", method->is_native() ? "true" : "false");
                 printf("  Static:      %s\n", method->is_static() ? "true" : "false");
-                printf("  Max locals:  %u\n", method->get_locals_size());
+                printf("  Locals size: %u\n", method->get_locals_size());
+                printf("  Args size:   %u\n", method->get_args_size());
 
                 auto &handlers = method->get_handlers();
                 if (handlers.get_handler_count() > 0) {

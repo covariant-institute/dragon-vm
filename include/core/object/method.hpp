@@ -69,6 +69,10 @@ namespace dvm {
                     return locals_size;
                 }
 
+                inline UInt16 get_args_size() const {
+                    return args_size;
+                }
+
                 virtual void invoke(runtime::Thread *thread) = 0;
 
                 static Method *resolve(runtime::VMContext *context,

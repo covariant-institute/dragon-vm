@@ -52,7 +52,8 @@ write_method_entry(FILE *fp, UInt16 return_type_id, UInt16 method_name_id, UInt1
     methodEntry.header.method_return_type_name_id = return_type_id;
     methodEntry.header.method_name_id = method_name_id;
     methodEntry.header.method_signature_id = method_signature_id;
-    methodEntry.header.method_locals_size = 128;
+    methodEntry.header.method_locals_size = 12;
+    methodEntry.header.method_args_size = 8;
     methodEntry.header.method_handlers_count = static_cast<UInt16>(is_native ? 0 : handlers_count);
     methodEntry.header.method_body_size = is_native ? 0 : static_cast<UInt32>(length);
 
