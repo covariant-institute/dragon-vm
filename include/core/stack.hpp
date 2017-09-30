@@ -4,32 +4,56 @@
 #include <core/memory.hpp>
 #include <core/exceptions.hpp>
 #include <core/errorcodes.hpp>
-#include <core/object/object.hpp>
 #include <cstring>
 #include <cstdlib>
 #include <vector>
 
 namespace dvm {
     namespace core {
+        namespace object {
+            class Object;
+
+            class Method;
+        }
+
         class Stack;
 
         class Frame final {
             friend class Stack;
 
         private:
-            Byte *bp;
+            // 帧顶
+            Byte *frame_limit;
+
+            // 帧底
+            Byte *base_pointer;
+
+            // 原始的帧底，没有计算 shared 空间
+            Byte *base_pointer_no_shared;
+
+            // 当前位置
             Byte *sp;
-            Byte *sl;
+
+            // 返回地址
+            Byte *last_pc;
+
+            // 在这个帧上的方法
+            object::Method *method;
+
+            // 帧的大小: base_pointer_no_shared - frame_limit
             SizeT frame_size;
 
-            Frame(Byte *bp, SizeT size);
+            // 从上一个帧里分享的大小: base_pointer - base_pointer_no_shared
+            SizeT shared_size;
+
+            Frame(Byte *bp, SizeT size, SizeT shared);
 
             ~Frame();
 
             Byte *allocate(SizeT size);
 
             inline bool empty() const {
-                return sp == bp;
+                return sp == base_pointer;
             }
 
             inline void ensure_not_empty() const {
@@ -44,18 +68,38 @@ namespace dvm {
             }
 
         public:
+            inline Byte *get_last_pc() const {
+                return last_pc;
+            }
+
+            inline void set_last_pc(Byte *last_pc) {
+                this->last_pc = last_pc;
+            }
+
+            inline object::Method *get_method() const {
+                return method;
+            }
+
+            inline void set_method(object::Method *method) {
+                this->method = method;
+            }
+
             template <typename T>
             inline T *at(UInt16 offset) {
-                if (bp - offset < sl) {
+                if (base_pointer - offset < frame_limit) {
                     throw dvm::core::Exception(DVM_MEMORY_STACK_INVALID_ACCESS);
                 }
-                return at<T>(bp - offset);
+                return at<T>(base_pointer - offset);
             }
 
             template <typename T>
             inline void pop() {
+                pop(sizeof(T));
+            }
+
+            inline void pop(SizeT size) {
                 ensure_not_empty();
-                sp += sizeof(T);
+                sp += size;
             }
 
             template <typename T>
@@ -126,7 +170,7 @@ namespace dvm {
 
             ~Stack();
 
-            void new_frame(SizeT size);
+            Frame *new_frame(SizeT size, SizeT shared = 0);
 
             void remove_top_frame();
 
@@ -147,6 +191,10 @@ namespace dvm {
             template <typename T>
             inline void pop() {
                 current_frame()->pop<T>();
+            }
+
+            inline void pop(SizeT size) {
+                current_frame()->pop(size);
             }
 
             template <typename T>

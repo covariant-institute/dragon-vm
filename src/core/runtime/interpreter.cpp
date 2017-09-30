@@ -4,7 +4,7 @@
 
 #include <core/runtime/interpreter.hpp>
 #include <core/runtime/thread.hpp>
-#include <core/runtime/vm_context.hpp>
+#include <core/runtime/context.hpp>
 #include <core/runtime/dispatcher.hpp>
 #include <core/runtime/math.hpp>
 #include <core/runtime/jump.hpp>
@@ -533,79 +533,85 @@ namespace dvm {
 
                 OPCODE_IMPL(ret)
                 {
-                    OPCODE_RETURN();
+                    Dispatcher::method_return_void(thread);
+                    OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ret_object)
                 {
-                    OPCODE_RETURN();
+                    Dispatcher::method_return_object(thread);
+                    OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ret_i32)
                 {
-                    OPCODE_RETURN();
+                    Dispatcher::method_return<Int32>(thread);
+                    OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ret_i64)
                 {
-                    OPCODE_RETURN();
+                    Dispatcher::method_return<Int64>(thread);
+                    OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ret_f32)
                 {
-                    OPCODE_RETURN();
+                    Dispatcher::method_return<Float>(thread);
+                    OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ret_f64)
                 {
-                    OPCODE_RETURN();
+                    Dispatcher::method_return<Double>(thread);
+                    OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump)
                 {
-                    Dispatcher::jump0(thread, false);
+                    Dispatcher::jump0(thread);
                     OPCODE_NEXT(context);
                 }
 
-                OPCODE_IMPL(jump_ret)
+                OPCODE_IMPL(jump_w)
                 {
-                    Dispatcher::jump0(thread, true);
+                    Dispatcher::jump0_w(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_eq)
                 {
-                    Dispatcher::jump<JumpConditionEq>(thread, false);
+                    Dispatcher::jump<JumpConditionEq>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_ne)
                 {
-                    Dispatcher::jump<JumpConditionNe>(thread, false);
+                    Dispatcher::jump<JumpConditionNe>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_gt)
                 {
-                    Dispatcher::jump<JumpConditionGt>(thread, false);
+                    Dispatcher::jump<JumpConditionGt>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_ge)
                 {
-                    Dispatcher::jump<JumpConditionGe>(thread, false);
+                    Dispatcher::jump<JumpConditionGe>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_lt)
                 {
-                    Dispatcher::jump<JumpConditionLt>(thread, false);
+                    Dispatcher::jump<JumpConditionLt>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump_le)
                 {
-                    Dispatcher::jump<JumpConditionLe>(thread, false);
+                    Dispatcher::jump<JumpConditionLe>(thread);
                     OPCODE_NEXT(context);
                 }
 
@@ -723,6 +729,11 @@ namespace dvm {
                 OPCODE_IMPL(thr)
                 {
                     OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(halt)
+                {
+                    OPCODE_RETURN();
                 }
 
 

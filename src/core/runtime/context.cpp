@@ -2,7 +2,7 @@
 // Created by kiva on 2017/9/6.
 //
 
-#include <core/runtime/vm_context.hpp>
+#include <core/runtime/context.hpp>
 #include <core/runtime/thread.hpp>
 
 namespace dvm {

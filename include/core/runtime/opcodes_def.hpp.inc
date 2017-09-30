@@ -42,7 +42,7 @@ OPCODE(ret_object)
 TYPED_OPCODES_PREFIX(ret)
 
 OPCODE(jump)
-OPCODE(jump_ret)
+OPCODE(jump_w)
 OPCODE(jump_eq)
 OPCODE(jump_ne)
 OPCODE(jump_gt)
@@ -65,3 +65,4 @@ TYPED_OPCODES_PREFIX(pop)
 OPCODE(pop_object)
 
 OPCODE(thr)
+OPCODE(halt)

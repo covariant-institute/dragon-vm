@@ -4,7 +4,7 @@
 #pragma once
 
 #include <core/object/object.hpp>
-#include <core/runtime/vm_context.hpp>
+#include <core/runtime/context.hpp>
 #include <core/dcx/dcx_file_info.hpp>
 
 namespace dvm {
@@ -29,15 +29,15 @@ namespace dvm {
                 const Class *return_type;
                 Bool is_native_method;
                 Bool is_static_method;
-                UInt16 frame_size;
+                UInt16 locals_size;
+                UInt16 args_size;
 
             public:
                 Method(const Class *return_type,
                        const std::string &name,
                        const std::string &signature,
                        Bool is_static_method,
-                       Bool is_native_method,
-                       UInt16 frame_size);
+                       Bool is_native_method);
 
                 virtual ~Method() = default;
 
@@ -65,23 +65,24 @@ namespace dvm {
                     return method_name;
                 }
 
-                inline UInt16 get_frame_size() const {
-                    return frame_size;
+                inline UInt16 get_locals_size() const {
+                    return locals_size;
+                }
+
+                inline UInt16 get_args_size() const {
+                    return args_size;
                 }
 
                 virtual void invoke(runtime::Thread *thread) = 0;
+
+                virtual void dump() const;
 
                 static Method *resolve(runtime::VMContext *context,
                                        const std::string &name, const std::string &signature);
 
                 static void register_method(runtime::VMContext *context, const Class *return_type,
                                             const std::string &name, const std::string &signature,
-                                            Bool is_static_method, UInt16 frame_size, Byte *body, SizeT length,
-                                            dcx::DcxFileMethodEntryHandler *handlers, SizeT handler_count);
-
-                static void register_native_method(runtime::VMContext *context, const Class *return_type,
-                                                   const std::string &name, const std::string &signature,
-                                                   Bool is_static_method, UInt16 frame_size);
+                                            const dcx::DcxFileMethodEntry &entry);
 
                 static void dump_method_info(const Method *method);
             };

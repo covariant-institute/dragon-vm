@@ -2,7 +2,7 @@
 // Created by kiva on 2017/9/3.
 //
 
-#include <core/runtime/vm_register_visitor.hpp>
+#include <core/runtime/register_visitor.hpp>
 
 namespace dvm {
     namespace core {

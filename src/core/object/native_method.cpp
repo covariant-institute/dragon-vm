@@ -16,9 +16,8 @@ namespace dvm {
             }
 
             NativeMethod::NativeMethod(const Class *return_type, const std::string &name, const std::string &signature,
-                                       Bool is_static_method, Bool is_native_method, UInt16 frame_size)
-                    : Method(return_type, name, signature, is_static_method, is_native_method, frame_size) {
-
+                                       Bool is_static_method, Bool is_native_method)
+                    : Method(return_type, name, signature, is_static_method, is_native_method) {
             }
 
             void NativeMethod::invoke(runtime::Thread *thread) {
@@ -27,6 +26,11 @@ namespace dvm {
                 }
 
                 callable(thread);
+            }
+
+            void NativeMethod::dump() const {
+                printf("  Method Data:\n");
+                printf("    Native Callable:  %p\n", callable.callable);
             }
         }
     }

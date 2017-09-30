@@ -6,7 +6,7 @@
 #include <core/errorcodes.hpp>
 #include <core/object/class.hpp>
 #include <core/object/object.hpp>
-#include <core/runtime/vm_context.hpp>
+#include <core/runtime/context.hpp>
 #include <core/memory.hpp>
 #include <cstring>
 

@@ -9,10 +9,6 @@ namespace dvm {
         namespace runtime {
             class InvokeHelper {
             public:
-                static inline VMReturnAddr pc_to_return_address(VMOpcode *pc) {
-                    return reinterpret_cast<VMReturnAddr &&>(pc);
-                }
-
                 static inline object::Method *resolve_by_id(Thread *thread, UInt16 name_id, UInt16 signature_id) {
                     VMContext *context = thread->get_context();
                     const std::string &name = context->find_constant(name_id);
@@ -29,28 +25,29 @@ namespace dvm {
                         return;
                     }
 
-                    // allocate stack, we need one more sizeof(VMReturnAddr) bytes
-                    // to store return address
-                    UInt16 frame_size = method->get_frame_size() + sizeof(VMReturnAddr);
-                    thread->get_stack().new_frame(frame_size);
+                    UInt16 locals_size = method->get_locals_size();
+                    UInt16 args_size = method->get_args_size();
 
-                    // store return address
-                    thread->get_stack().push<VMReturnAddr>(pc_to_return_address(thread->pc));
+                    // share args_size bytes with current frame for argument passing
+                    Frame *frame = thread->get_stack().new_frame(locals_size, args_size);
 
-                    // finally, store caller
-                    thread->calling_stack.push(CallStackEntry(method));
+                    // return address
+                    frame->set_last_pc(thread->pc);
+                    frame->set_method(method);
                 }
 
-                static inline void after_invoke(Thread *thread, object::Method *method) {
-                    if (method == nullptr || thread == nullptr) {
+                static inline void return_dispose(Thread *thread) {
+                    auto method = thread->get_stack().current_frame()->get_method();
+                    thread->get_stack().remove_top_frame();
+
+                    if (method == nullptr) {
                         return;
                     }
 
-                    // clean stack memory
-                    thread->get_stack().remove_top_frame();
-
-                    // remove caller
-                    thread->calling_stack.pop();
+                    UInt16 args_size = method->get_args_size();
+                    if (args_size > 0) {
+                        thread->get_stack().pop(args_size);
+                    }
                 }
             };
         }

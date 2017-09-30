@@ -28,15 +28,17 @@ namespace dvm {
                     throw dvm::core::Exception(DVM_DCX_LINKING_INVALID_METHOD);
                 }
 
-                if (!entry.header.method_is_native
-                    && entry.header.method_handlers_count > 0
-                    && entry.handlers == nullptr) {
-                    throw dvm::core::Exception(DVM_DCX_LINKING_INVALID_METHOD);
-                }
+                if (entry.header.method_handlers_count > 0) {
+                    if (entry.header.method_is_native || entry.handlers == nullptr) {
+                        throw dvm::core::Exception(DVM_DCX_LINKING_INVALID_METHOD);
+                    }
 
-                if (entry.header.method_is_native
-                    && entry.header.method_handlers_count > 0) {
-                    throw dvm::core::Exception(DVM_DCX_LINKING_INVALID_METHOD);
+                    for (int i = 0; i < entry.header.method_handlers_count; ++i) {
+                        auto *handler = entry.handlers + i;
+                        if (handler->handler_offset >= entry.header.method_body_size) {
+                            throw dvm::core::Exception(DVM_DCX_LINKING_INVALID_METHOD);
+                        }
+                    }
                 }
             }
 
@@ -85,22 +87,7 @@ namespace dvm {
 
                                   auto *return_type_class = context->find_class_constant(
                                           entry.header.method_return_type_name_id);
-
-                                  if (entry.header.method_is_native) {
-                                      Method::register_native_method(context, return_type_class,
-                                                                     name, signature,
-                                                                     entry.header.method_is_static,
-                                                                     entry.header.method_frame_size);
-                                      return;
-                                  }
-
-                                  Method::register_method(context, return_type_class, name, signature,
-                                                          entry.header.method_is_static,
-                                                          entry.header.method_frame_size,
-                                                          entry.method_body,
-                                                          entry.header.method_body_size,
-                                                          entry.handlers,
-                                                          entry.header.method_handlers_count);
+                                  Method::register_method(context, return_type_class, name, signature, entry);
                               });
             }
 

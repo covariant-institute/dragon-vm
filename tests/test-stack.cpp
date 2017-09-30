@@ -5,7 +5,7 @@
 #include <core/stack.hpp>
 #include <core/config.hpp>
 #include <cassert>
-#include <core/runtime/vm_context.hpp>
+#include <core/runtime/context.hpp>
 
 int main() {
     using namespace dvm::core;
@@ -46,6 +46,47 @@ int main() {
     s.push<Int32>(10);
     assert(s.peek<Int32>() == 10);
     s.pop<Int32>(); // int32
+
+    s.remove_top_frame();
+
+    // test shared frame
+    // simulate invoking a method with argument Int32(52019) and a local Double variable
+
+    // this is the caller's frame
+    s.new_frame(sizeof(Int32));
+    // the argument
+    s.push<Int32>(52019);
+    // let's check if the argument is properly stored
+    auto i = s.peek<Int32>();
+    assert(i == 52019);
+
+    // create a frame for the callee,
+    // with sizeof(Int32) bytes shared, which is the argument.
+    s.new_frame(sizeof(Double), sizeof(Int32));
+
+    // get the argument
+    i = s.peek<Int32>();
+    assert(i == 52019);
+
+    // method local variables
+    s.push<Double>(111.111);
+
+    // can we access these variables properly?
+    assert(*s.at<Int32>(sizeof(Int32)) == 52019);
+    assert(*s.at<Double>(sizeof(Int32) + sizeof(Double)) == 111.111);
+
+    // prepare for return
+    s.pop<Double>();
+
+    // drop the argument and push our "return value"
+    s.pop<Int32>();
+    s.push<Int32>(52020);
+
+    // simulate returning from a method
+    s.remove_top_frame();
+
+    // get the "return value"
+    assert(s.peek<Int32>() == 52020);
 
     s.remove_top_frame();
     return 0;

@@ -110,7 +110,7 @@ struct DcxFileMethodEntry {
 * `method_return_type_name_id`: Class name of the return type, a constant string.
 * `method_handlers_count`: Length of `handlers`
 * `handlers`: Exception handlers
-* `method_frame_size`: Method frame size.
+* `method_locals_size`: Local variables' size.
 * `method_body_size`: Size of the `method_body`.
 * `method_body`: Method executable codes.
 * `method_is_native`: Is native method or not.
