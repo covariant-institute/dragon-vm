@@ -32,9 +32,16 @@ namespace dvm {
 
                 /* Outer interfaces to Interpreter */
 
+                static inline void method_return_void(Thread *thread) {
+                    // return void, just dispose frame and return!
+                    InvokeHelper::return_dispose(thread);
+                }
+
                 template <typename T>
                 static inline void method_return(Thread *thread) {
+                    T ret = thread->stack.pop<T>();
                     InvokeHelper::return_dispose(thread);
+                    thread->stack.push<T>(ret);
                 }
 
                 static inline void invoke_method(Thread *thread) {
