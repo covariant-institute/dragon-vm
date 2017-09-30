@@ -37,11 +37,17 @@ namespace dvm {
                     InvokeHelper::return_dispose(thread);
                 }
 
+                static inline void method_return_object(Thread *thread) {
+                    object::Object *ret = thread->stack.peek_object_pop();
+                    InvokeHelper::return_dispose(thread);
+                    thread->stack.push_object_ref(ret);
+                }
+
                 template <typename T>
                 static inline void method_return(Thread *thread) {
-                    T ret = thread->stack.pop<T>();
+                    T ret = thread->stack.peek_pop<T>();
                     InvokeHelper::return_dispose(thread);
-                    thread->stack.push<T>(ret);
+                    thread->stack.push<T>(std::forward<T>(ret));
                 }
 
                 static inline void invoke_method(Thread *thread) {

@@ -65,3 +65,4 @@ TYPED_OPCODES_PREFIX(pop)
 OPCODE(pop_object)
 
 OPCODE(thr)
+OPCODE(halt)

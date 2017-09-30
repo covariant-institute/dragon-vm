@@ -533,32 +533,38 @@ namespace dvm {
 
                 OPCODE_IMPL(ret)
                 {
-                    OPCODE_RETURN();
+                    Dispatcher::method_return_void(thread);
+                    OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ret_object)
                 {
-                    OPCODE_RETURN();
+                    Dispatcher::method_return_object(thread);
+                    OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ret_i32)
                 {
-                    OPCODE_RETURN();
+                    Dispatcher::method_return<Int32>(thread);
+                    OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ret_i64)
                 {
-                    OPCODE_RETURN();
+                    Dispatcher::method_return<Int64>(thread);
+                    OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ret_f32)
                 {
-                    OPCODE_RETURN();
+                    Dispatcher::method_return<Float>(thread);
+                    OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(ret_f64)
                 {
-                    OPCODE_RETURN();
+                    Dispatcher::method_return<Double>(thread);
+                    OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(jump)
@@ -723,6 +729,11 @@ namespace dvm {
                 OPCODE_IMPL(thr)
                 {
                     OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(halt)
+                {
+                    OPCODE_RETURN();
                 }
 
 

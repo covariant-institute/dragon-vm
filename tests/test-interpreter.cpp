@@ -8,7 +8,7 @@
 #define OPCODE(X) static_cast<dvm::core::runtime::VMOpcode>(dvm::core::runtime::VMOpcodes::X)
 
 /* see opcodes_def.hpp.inc */
-#define RET_CODE 0x49
+#define RET_CODE 0x6a
 
 #define T(code_name, condition_area, ...) \
     { \
@@ -470,7 +470,7 @@ int main() {
       OPCODE(ldc_i32), 0, 0, 0, 0,
       OPCODE(jump_eq), 0, 6,
       OPCODE(ldc_i32), 0, 0, 0, 1,            /* <- pc - 14 */
-      OPCODE(ret),
+      OPCODE(halt),
       OPCODE(ldc_i32), 0, 0, 0, 2,
       OPCODE(jump_gt), X.bits[1], X.bits[0]); /* <- pc */
 }
