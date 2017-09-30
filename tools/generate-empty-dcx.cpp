@@ -43,7 +43,7 @@ void write_class_entry(FILE *fp, UInt16 parent_class_name_id, UInt16 class_name_
 
 void
 write_method_entry(FILE *fp, UInt16 return_type_id, UInt16 method_name_id, UInt16 method_signature_id,
-                   Bool is_native, Bool is_static,
+                   Bool is_native, Bool is_static, UInt16 locals_size, UInt16 args_size,
                    Byte *body, SizeT length,
                    DcxFileMethodEntryHandler *handlers, UInt16 handlers_count) {
 
@@ -53,8 +53,8 @@ write_method_entry(FILE *fp, UInt16 return_type_id, UInt16 method_name_id, UInt1
     methodEntry.header.method_return_type_name_id = return_type_id;
     methodEntry.header.method_name_id = method_name_id;
     methodEntry.header.method_signature_id = method_signature_id;
-    methodEntry.header.method_locals_size = 12;
-    methodEntry.header.method_args_size = 8;
+    methodEntry.header.method_locals_size = locals_size;
+    methodEntry.header.method_args_size = args_size;
     methodEntry.header.method_handlers_count = static_cast<UInt16>(is_native ? 0 : handlers_count);
     methodEntry.header.method_body_size = is_native ? 0 : static_cast<UInt32>(length);
 
@@ -129,11 +129,11 @@ int main(int argc, const char **argv) {
     handlers[0].exception_class_name_id = class_name_id;
 
     write_method_entry(fp, return_type_id, method_name_id, method_signature_id,
-                       False, True, code, length,
+                       False, True, sizeof(Int32), 0, code, length,
                        handlers, sizeof(handlers) / sizeof(handlers[0]));
 
     // native method
-    write_method_entry(fp, return_type_id, method_name_id, method_signature_2_id,
+    write_method_entry(fp, return_type_id, method_name_id, method_signature_2_id, 4, 0,
                        True, True, nullptr, 0, nullptr, 0);
 
     fclose(fp);

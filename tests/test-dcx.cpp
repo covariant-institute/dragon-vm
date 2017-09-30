@@ -6,7 +6,7 @@
 #include <core/dcx/dcx_file.hpp>
 #include <core/dcx/dcx_linker.hpp>
 #include <core/object/method.hpp>
-#include <core/runtime/thread.hpp>
+#include <core/runtime/dispatcher.hpp>
 #include <cassert>
 
 using namespace dvm::core::dcx;
@@ -33,10 +33,18 @@ int main(int argc, const char **argv) {
     assert(method->is_native() == dvm::core::True);
     Method::dump_method_info(method);
     // Try invoke our native method
-    method->invoke(thread);
+    Dispatcher::invoke_method(thread, method);
 
     method = context->resolve_method("dvm_main", "(X)");
     assert(method->is_native() == dvm::core::False);
     Method::dump_method_info(method);
+
+    thread->get_stack().new_frame(sizeof(dvm::core::Int32));
+    Dispatcher::invoke_method(thread, method);
+    auto ret = thread->get_stack().peek_pop<dvm::core::Int32>();
+    printf("Method returned: %d\n", ret);
+    assert(ret == 1);
+    thread->get_stack().remove_top_frame();
+
     return 0;
 }

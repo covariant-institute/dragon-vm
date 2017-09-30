@@ -44,7 +44,10 @@ namespace dvm {
                         return;
                     }
 
-                    thread->get_stack().pop(method->get_args_size());
+                    UInt16 args_size = method->get_args_size();
+                    if (args_size > 0) {
+                        thread->get_stack().pop(args_size);
+                    }
                 }
             };
         }

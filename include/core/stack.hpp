@@ -12,6 +12,7 @@ namespace dvm {
     namespace core {
         namespace object {
             class Object;
+
             class Method;
         }
 
@@ -75,7 +76,7 @@ namespace dvm {
                 this->last_pc = last_pc;
             }
 
-            inline object::Method* get_method() const {
+            inline object::Method *get_method() const {
                 return method;
             }
 

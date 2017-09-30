@@ -13,6 +13,8 @@ namespace dvm {
         namespace runtime {
 
             class Dispatcher {
+                friend class Interpreter;
+
             public:
                 /* Utility functions */
 
@@ -20,16 +22,17 @@ namespace dvm {
                     thread->pc = new_pc;
                 }
 
+                static inline void jump_to_offset(Thread *thread, Int32 offset) {
+                    jump_to_exact(thread, thread->pc + offset);
+                }
+
                 static inline void invoke_method(Thread *thread, object::Method *method) {
                     InvokeHelper::before_invoke(thread, method);
                     method->invoke(thread);
                 }
 
-                static inline void jump_to_offset(Thread *thread, Int32 offset) {
-                    jump_to_exact(thread, thread->pc + offset);
-                }
 
-
+            private:
                 /* Outer interfaces to Interpreter */
 
                 static inline void method_return_void(Thread *thread) {
