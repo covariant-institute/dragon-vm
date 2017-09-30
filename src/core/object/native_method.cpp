@@ -27,6 +27,11 @@ namespace dvm {
 
                 callable(thread);
             }
+
+            void NativeMethod::dump() const {
+                printf("  Method Data:\n");
+                printf("    Native Callable:  %p\n", callable.callable);
+            }
         }
     }
 }

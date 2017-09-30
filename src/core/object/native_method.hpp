@@ -34,6 +34,8 @@ namespace dvm {
                 ~NativeMethod() override = default;
 
                 void invoke(runtime::Thread *thread) override;
+
+                void dump() const override;
             };
         }
     }

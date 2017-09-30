@@ -26,6 +26,8 @@ namespace dvm {
                 ~DvmMethod() override = default;
 
                 void invoke(runtime::Thread *thread) override;
+
+                void dump() const override;
             };
         }
     }

@@ -75,6 +75,8 @@ namespace dvm {
 
                 virtual void invoke(runtime::Thread *thread) = 0;
 
+                virtual void dump() const;
+
                 static Method *resolve(runtime::VMContext *context,
                                        const std::string &name, const std::string &signature);
 

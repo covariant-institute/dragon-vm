@@ -7,6 +7,7 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
+#include "../experimental-tests/calc-compiler/libdvm.h"
 
 using namespace dvm::core;
 using namespace dvm::core::dcx;
@@ -115,16 +116,20 @@ int main(int argc, const char **argv) {
     write_class_entry(fp, parent_class_name_id, class_name_id, 0, 1);
 
     // Write method "dvm_main"
-    SizeT length = 128;
-    auto *body = (Byte *) malloc(sizeof(Byte) * length);
-    bzero(reinterpret_cast<void *>(body), length);
+    Byte code[] = {
+            VMOpcodes::ldc_i32, 0, 0, 0, 1,
+            VMOpcodes::ret_i32,
+            VMOpcodes::halt,  // <- exception handler #0, offset = 6
+    };
+    SizeT length = sizeof(code) / sizeof(code[0]);
 
     // dvm method
     DcxFileMethodEntryHandler handlers[1];
-    handlers[0].handler_offset = 110;
+    handlers[0].handler_offset = 6;
     handlers[0].exception_class_name_id = class_name_id;
+
     write_method_entry(fp, return_type_id, method_name_id, method_signature_id,
-                       False, True, body, length,
+                       False, True, code, length,
                        handlers, sizeof(handlers) / sizeof(handlers[0]));
 
     // native method

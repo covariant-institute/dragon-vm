@@ -21,6 +21,12 @@ namespace dvm {
                 thread->set_runnable(method_body);
                 thread->run();
             }
+
+            void DvmMethod::dump() const {
+                printf("  Method Data:\n");
+                printf("    Body size:  %llu\n", method_length);
+                printf("    Body start: %p\n", static_cast<void *>(method_body));
+            }
         }
     }
 }
