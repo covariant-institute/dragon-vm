@@ -37,10 +37,10 @@ namespace dvm {
 
                 static inline void invoke_simple(Thread *thread, object::Method *method,
                                                  SizeT locals_size) {
-                    // shutdown code, avoid segfault
+                    // ensure that we can exit successfully.
                     Byte exit_code = static_cast<Byte>(VMOpcodes::halt);
 
-                    // set current pc exit_code, so that when the method returns,
+                    // set current pc to exit_code, so that when the method returns,
                     // the program ends.
                     thread->pc = &exit_code;
 
