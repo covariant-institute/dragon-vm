@@ -18,64 +18,40 @@ namespace dvm {
             public:
                 /* Utility functions */
 
+                /**
+                 * Jump to absolute address which is presenting an instruction.
+                 *
+                 * @param thread Executing thread
+                 * @param new_pc The absolute address of the next instruction
+                 */
                 static inline void jump_to_exact(Thread *thread, Byte *new_pc) {
                     thread->pc = new_pc;
                 }
 
+                /**
+                 * Jump to relative address which is presenting an instruction.
+                 *
+                 * @param thread Executing thread
+                 * @param offset Offset to current pc, positive or negative
+                 */
                 static inline void jump_to_offset(Thread *thread, Int32 offset) {
                     jump_to_exact(thread, thread->pc + offset);
                 }
-
-                static inline void invoke_method(Thread *thread, object::Method *method) {
-                    InvokeHelper::before_invoke(thread, method);
-
-                    // Method::invoke() only sets thread->pc to its body start
-                    // or just invoked a native function
-                    method->invoke(thread);
-                }
-
-
-                static inline void invoke_simple(Thread *thread, object::Method *method,
-                                                 SizeT locals_size) {
-                    // ensure that we can exit successfully.
-                    Byte exit_code = static_cast<Byte>(VMOpcodes::halt);
-
-                    // set current pc to exit_code, so that when the method returns,
-                    // the program ends.
-                    thread->pc = &exit_code;
-
-                    // Create initial frame, just as a data holder.
-                    thread->stack.new_frame(locals_size);
-
-                    invoke_method(thread, method);
-
-                    // start interpreting
-                    thread->run();
-
-                    // In order to let our's caller be accessible to the return value,
-                    // do not call remove_top_frame()
-                }
-
 
             private:
                 /* Outer interfaces to Interpreter */
 
                 static inline void method_return_void(Thread *thread) {
-                    // return void, just dispose frame and return!
-                    InvokeHelper::return_dispose(thread);
+                    Invocation::return_void(thread);
                 }
 
                 static inline void method_return_object(Thread *thread) {
-                    object::Object *ret = thread->stack.peek_object_pop();
-                    InvokeHelper::return_dispose(thread);
-                    thread->stack.push_object_ref(ret);
+                    Invocation::return_stack_top<object::Object *>(thread);
                 }
 
                 template <typename T>
                 static inline void method_return(Thread *thread) {
-                    T ret = thread->stack.peek_pop<T>();
-                    InvokeHelper::return_dispose(thread);
-                    thread->stack.push<T>(std::forward<T>(ret));
+                    Invocation::return_stack_top<T>(thread);
                 }
 
                 static inline void invoke_method(Thread *thread) {
@@ -84,8 +60,8 @@ namespace dvm {
                     UInt16 signature_id = thread->const_u16();
 
                     object::Method *method =
-                            InvokeHelper::resolve_by_id(thread, name_id, signature_id);
-                    Dispatcher::invoke_method(thread, method);
+                            Invocation::resolve_by_id(thread, name_id, signature_id);
+                    Invocation::invoke_method(thread, method);
                 }
 
                 static inline void new_instance(Thread *thread) {

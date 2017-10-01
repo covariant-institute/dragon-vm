@@ -22,7 +22,7 @@ namespace dvm {
 
                 friend class Dispatcher;
 
-                friend class InvokeHelper;
+                friend class Invocation;
 
                 friend class VMContext;
 

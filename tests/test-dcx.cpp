@@ -41,7 +41,7 @@ int main(int argc, const char **argv) {
     assert(method->is_native() == dvm::core::False);
     Method::dump_method_info(method);
 
-    Dispatcher::invoke_simple(thread, method, sizeof(dvm::core::Int32));
+    Invocation::invoke_simple(thread, method, sizeof(dvm::core::Int32));
     auto ret = thread->get_stack().peek_pop<dvm::core::Int32>();
     printf("Method returned: %d\n", ret);
     assert(ret == 19);
