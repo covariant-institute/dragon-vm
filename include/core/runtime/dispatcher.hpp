@@ -28,7 +28,32 @@ namespace dvm {
 
                 static inline void invoke_method(Thread *thread, object::Method *method) {
                     InvokeHelper::before_invoke(thread, method);
+
+                    // Method::invoke() only sets thread->pc to its body start
+                    // or just invoked a native function
                     method->invoke(thread);
+                }
+
+
+                static inline void invoke_simple(Thread *thread, object::Method *method,
+                                                 SizeT locals_size) {
+                    // shutdown code, avoid segfault
+                    Byte exit_code = static_cast<Byte>(VMOpcodes::halt);
+
+                    // set current pc exit_code, so that when the method returns,
+                    // the program ends.
+                    thread->pc = &exit_code;
+
+                    // Create initial frame, just as a data holder.
+                    thread->stack.new_frame(locals_size);
+
+                    invoke_method(thread, method);
+
+                    // start interpreting
+                    thread->run();
+
+                    // In order to let our's caller be accessible to the return value,
+                    // do not call remove_top_frame()
                 }
 
 
@@ -104,7 +129,7 @@ namespace dvm {
                     RhsType &&rhs = thread->stack.peek_pop<RhsType>();
 
                     ResultType &&result = Impl::get_result(std::forward<LhsType>(lhs),
-                                                        std::forward<RhsType>(rhs));
+                                                           std::forward<RhsType>(rhs));
                     thread->stack.push<ResultType>(std::forward<ResultType>(result));
                 }
 

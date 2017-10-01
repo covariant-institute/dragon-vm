@@ -101,7 +101,7 @@ enum VMOpcodes {
     ret_f32,
     ret_f64,
     jump,
-    jump_ret,
+    jump_w,
     jump_eq,
     jump_ne,
     jump_gt,

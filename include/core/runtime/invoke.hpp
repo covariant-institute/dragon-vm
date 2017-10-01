@@ -37,16 +37,23 @@ namespace dvm {
                 }
 
                 static inline void return_dispose(Thread *thread) {
-                    auto method = thread->get_stack().current_frame()->get_method();
-                    thread->get_stack().remove_top_frame();
-
-                    if (method == nullptr) {
+                    Frame *frame = thread->get_stack().current_frame();
+                    if (frame == nullptr) {
                         return;
                     }
 
-                    UInt16 args_size = method->get_args_size();
-                    if (args_size > 0) {
-                        thread->get_stack().pop(args_size);
+                    // restore return address
+                    thread->pc = frame->get_last_pc();
+
+                    auto method = frame->get_method();
+                    thread->get_stack().remove_top_frame();
+
+                    // Clear args
+                    if (method != nullptr) {
+                        UInt16 args_size = method->get_args_size();
+                        if (args_size > 0) {
+                            thread->get_stack().pop(args_size);
+                        }
                     }
                 }
             };

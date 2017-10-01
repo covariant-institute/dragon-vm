@@ -109,6 +109,7 @@ namespace dvm {
 
                 OPCODE_IMPL(invoke_method)
                 {
+                    Dispatcher::invoke_method(thread);
                     OPCODE_NEXT(context);
                 }
 

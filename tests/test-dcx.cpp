@@ -29,21 +29,22 @@ int main(int argc, const char **argv) {
     auto obj = context->find_class("Main")->new_instance();
     assert(obj != nullptr);
 
-    auto method = context->resolve_method("dvm_main", "(N)");
+    auto method = context->resolve_method("add_two_int32", "(II)");
+    assert(method->is_native() == dvm::core::False);
+    Method::dump_method_info(method);
+
+    method = context->resolve_method("dvm_main", "(N)");
     assert(method->is_native() == dvm::core::True);
     Method::dump_method_info(method);
-    // Try invoke our native method
-    Dispatcher::invoke_method(thread, method);
 
     method = context->resolve_method("dvm_main", "(X)");
     assert(method->is_native() == dvm::core::False);
     Method::dump_method_info(method);
 
-    thread->get_stack().new_frame(sizeof(dvm::core::Int32));
-    Dispatcher::invoke_method(thread, method);
+    Dispatcher::invoke_simple(thread, method, sizeof(dvm::core::Int32));
     auto ret = thread->get_stack().peek_pop<dvm::core::Int32>();
     printf("Method returned: %d\n", ret);
-    assert(ret == 1);
+    assert(ret == 19);
     thread->get_stack().remove_top_frame();
 
     return 0;

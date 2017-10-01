@@ -23,7 +23,8 @@ UInt16 write_string_constant(FILE *fp, const char *str, bool is_class) {
     constantEntry.header.constant_type = is_class ? CONSTANT_CLASS : CONSTANT_STRING;
     constantEntry.constant_data = (Byte *) str;
 
-    fwrite(reinterpret_cast<void *>(&constantEntry.header), sizeof(constantEntry.header), 1, fp);
+    fwrite(reinterpret_cast<void *>(&constantEntry.header),
+           sizeof(constantEntry.header), 1, fp);
     fwrite(reinterpret_cast<void *>(constantEntry.constant_data), sizeof(Byte),
            constantEntry.header.constant_data_size, fp);
 
@@ -84,13 +85,13 @@ int main(int argc, const char **argv) {
     }
 
     DcxFileConstantPoolHeader constantPoolHeader = { };
-    constantPoolHeader.constant_entries = 7;
+    constantPoolHeader.constant_entries = 9;
 
     DcxFileClassPoolHeader classPoolHeader = { };
     classPoolHeader.class_entries = 1;
 
     DcxFileMethodPoolHeader methodPoolHeader = { };
-    methodPoolHeader.method_entries = 2;
+    methodPoolHeader.method_entries = 3;
 
     DcxFileHeader header = { };
     header.version_id = make_version_id();
@@ -107,34 +108,54 @@ int main(int argc, const char **argv) {
     write_string_constant(fp, "hello_world", false);
     UInt16 class_name_id = write_string_constant(fp, "Main", true);
     UInt16 parent_class_name_id = write_string_constant(fp, "Object", true);
-    UInt16 return_type_id = write_string_constant(fp, "Int32", true);
+    UInt16 int32_class_name_id = write_string_constant(fp, "Int32", true);
     UInt16 method_name_id = write_string_constant(fp, "dvm_main", false);
     UInt16 method_signature_id = write_string_constant(fp, "(X)", false);
     UInt16 method_signature_2_id = write_string_constant(fp, "(N)", false);
 
-    // Write class "Main"
+    UInt16 target_method_name_id = write_string_constant(fp, "add_two_int32", false);
+    UInt16 target_method_signature_id = write_string_constant(fp, "(II)", false);
+
+    // Write class "Main" extends "Object"
     write_class_entry(fp, parent_class_name_id, class_name_id, 0, 1);
 
-    // Write method "dvm_main"
-    Byte code[] = {
+    // "dvm_main" body
+    Byte dvm_main_code[] = {
+            VMOpcodes::ldc_i32, 0, 0, 0, 18,
             VMOpcodes::ldc_i32, 0, 0, 0, 1,
+            VMOpcodes::invoke_method, 0, static_cast<Byte>(target_method_name_id), 0, static_cast<Byte>(target_method_signature_id),
             VMOpcodes::ret_i32,
-            VMOpcodes::halt,  // <- exception handler #0, offset = 6
+            VMOpcodes::halt,  // <- exception handler #0, offset = length - 1
     };
-    SizeT length = sizeof(code) / sizeof(code[0]);
+    SizeT dvm_main_length = sizeof(dvm_main_code) / sizeof(dvm_main_code[0]);
 
-    // dvm method
+    // dvm_main(X)
     DcxFileMethodEntryHandler handlers[1];
-    handlers[0].handler_offset = 6;
+    handlers[0].handler_offset = static_cast<UInt16>(dvm_main_length - 1);
     handlers[0].exception_class_name_id = class_name_id;
 
-    write_method_entry(fp, return_type_id, method_name_id, method_signature_id,
-                       False, True, sizeof(Int32), 0, code, length,
+    write_method_entry(fp, int32_class_name_id, method_name_id, method_signature_id,
+                       False, True, sizeof(Int32) * 2, 0, dvm_main_code, dvm_main_length,
                        handlers, sizeof(handlers) / sizeof(handlers[0]));
 
-    // native method
-    write_method_entry(fp, return_type_id, method_name_id, method_signature_2_id, 4, 0,
+    // dvm_main(N)
+    write_method_entry(fp, int32_class_name_id, method_name_id, method_signature_2_id, 4, 0,
                        True, True, nullptr, 0, nullptr, 0);
+
+    // "add_two_int32" body
+    Byte add_two_int32[] = {
+            VMOpcodes::add_i32,
+            VMOpcodes::ret_i32,
+    };
+    SizeT add_two_int32_length = sizeof(add_two_int32) / sizeof(add_two_int32[0]);
+
+    // add_two_int32(II)
+    write_method_entry(fp, int32_class_name_id,
+                       target_method_name_id, target_method_signature_id,
+                       False, True,
+                       sizeof(Int32), sizeof(Int32) * 2,
+                       add_two_int32, add_two_int32_length,
+                       nullptr, 0);
 
     fclose(fp);
     printf("OK\n");
