@@ -38,8 +38,27 @@ namespace dvm {
                     jump_to_exact(thread, thread->pc + offset);
                 }
 
+                /**
+                 * Throw an exception
+                 *
+                 * @param thread Executing thread
+                 * @param ex Exception
+                 */
+                static inline void throw_exception(Thread *thread, object::Object *ex) {
+                    // TODO: Abort when ex == nullptr
+                    if (ex != nullptr) {
+                        thread->exception = ex;
+                    }
+                }
+
             private:
                 /* Outer interfaces to Interpreter */
+
+                static inline void throw_exception(Thread *thread) {
+                    auto *ex = thread->get_stack().peek_object_pop();
+                    Dispatcher::throw_exception(thread, ex);
+
+                }
 
                 static inline void method_return_void(Thread *thread) {
                     Invocation::return_void(thread);

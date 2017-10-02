@@ -729,6 +729,7 @@ namespace dvm {
 
                 OPCODE_IMPL(thr)
                 {
+                    Dispatcher::throw_exception(thread);
                     OPCODE_NEXT(context);
                 }
 

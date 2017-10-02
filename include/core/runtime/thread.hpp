@@ -36,6 +36,8 @@ namespace dvm {
                 VMContext *context;
                 VMOpcode *pc;
 
+                object::Object *exception;
+
                 explicit Thread(VMContext *context);
 
                 /* Utility functions for pc */
@@ -106,6 +108,20 @@ namespace dvm {
 
                 inline VMRegisterHolder &get_registers() {
                     return regs;
+                }
+
+                inline bool exception_occurred() const {
+                    return exception != nullptr;
+                }
+
+                inline object::Object* get_exception() {
+                    if (exception_occurred()) {
+                        auto ex = exception;
+                        exception = nullptr;
+                        return ex;
+                    }
+
+                    return nullptr;
                 }
             };
         }
