@@ -737,6 +737,106 @@ namespace dvm {
                 {
                     OPCODE_RETURN();
                 }
+                
+                OPCODE_IMPL(set_slot_i32)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(set_slot_i64)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(set_slot_f32)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(set_slot_f64)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(set_slot_object)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(set_class_slot_i32)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(set_class_slot_i64)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(set_class_slot_f32)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(set_class_slot_f64)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(set_class_slot_object)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(get_slot_i32)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(get_slot_i64)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(get_slot_f32)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(get_slot_f64)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(get_slot_object)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(get_class_slot_i32)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(get_class_slot_i64)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(get_class_slot_f32)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(get_class_slot_f64)
+                {
+                    OPCODE_NEXT(context);
+                }
+
+                OPCODE_IMPL(get_class_slot_object)
+                {
+                    OPCODE_NEXT(context);
+                }
 
 
 #ifdef DVM_INTERPRETATION_THREADED
