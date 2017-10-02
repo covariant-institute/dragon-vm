@@ -94,7 +94,8 @@ struct DcxFileMethodEntryHeader {
     UInt16 method_signature_id;
     UInt16 method_return_type_name_id;
     UInt16 method_handlers_count;
-    UInt16 method_frame_size;
+    UInt16 method_locals_size;
+    UInt16 method_args_size;
     UInt32 method_body_size;
     Bool method_is_native;
     Bool method_is_static;
@@ -109,9 +110,10 @@ struct DcxFileMethodEntry {
 * `method_signature_id`: Method signature, a constant string.
 * `method_return_type_name_id`: Class name of the return type, a constant string.
 * `method_handlers_count`: Length of `handlers`
-* `handlers`: Exception handlers
 * `method_locals_size`: Local variables' size.
+* `method_args_size`: Arguments size.
 * `method_body_size`: Size of the `method_body`.
-* `method_body`: Method executable codes.
 * `method_is_native`: Is native method or not.
 * `method_is_static`: Is static method or not.
+* `handlers`: Exception handlers
+* `method_body`: Method executable codes.
