@@ -10,8 +10,6 @@ namespace dvm {
         namespace runtime {
 
             Byte *ThrowHelper::find_handler(Thread *thread, object::Object *ex) {
-                thread->exception = ex;
-
                 // jump to handler if there's a method in frame
                 auto *frame = thread->get_stack().current_frame();
                 auto *method = frame->get_method();

@@ -51,16 +51,30 @@ namespace dvm {
                         return;
                     }
 
-                    Byte *handler = ThrowHelper::find_handler(thread, ex);
+                    Byte *handler = nullptr;
+                    while (!thread->get_stack().empty()) {
+                        handler = ThrowHelper::find_handler(thread, ex);
+
+                        if (handler != nullptr) {
+                            break;
+                        }
+
+                        // find handlers in up-level caller
+                        thread->get_stack().remove_top_frame();
+                    }
+
 
                     // handler not found
-                    if (handler == nullptr) {
-                        // TODO abort VM when handler not found.
+                    if (handler != nullptr) {
+                        // update thread state
+                        thread->exception = ex;
+
+                        // jump to handler
+                        Dispatcher::jump_to_exact(thread, handler);
                         return;
                     }
 
-                    // jump to handler
-                    Dispatcher::jump_to_exact(thread, handler);
+                    // TODO abort VM when handler not found.
                 }
 
             private:
