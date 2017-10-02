@@ -74,6 +74,7 @@ set(DVM_CORE_SOURCE
         include/core/runtime/jump.hpp
         include/core/runtime/dvm.hpp
         include/core/runtime/invoke.hpp
+        include/core/runtime/throw.hpp
 
         include/core/object/method.hpp
         include/core/object/class.hpp
@@ -102,6 +103,7 @@ set(DVM_CORE_SOURCE
         src/core/runtime/context.cpp
         src/core/runtime/thread.cpp
         src/core/runtime/dvm.cpp
+        src/core/runtime/throw.cpp
 
         src/core/object/class.cpp
         src/core/object/object.cpp
@@ -115,7 +117,7 @@ set(DVM_CORE_SOURCE
         src/core/dcx/dcx_file.cpp
         src/core/dcx/dcx_linker.cpp
 
-        ${DVM_PLATFORM_SRC} include/core/runtime/throw.hpp src/core/runtime/throw.cpp)
+        ${DVM_PLATFORM_SRC})
 
 # Dragon VM Core
 add_library(dvm-core SHARED ${DVM_CORE_SOURCE})
