@@ -115,7 +115,7 @@ set(DVM_CORE_SOURCE
         src/core/dcx/dcx_file.cpp
         src/core/dcx/dcx_linker.cpp
 
-        ${DVM_PLATFORM_SRC})
+        ${DVM_PLATFORM_SRC} include/core/runtime/throw.hpp src/core/runtime/throw.cpp)
 
 # Dragon VM Core
 add_library(dvm-core SHARED ${DVM_CORE_SOURCE})

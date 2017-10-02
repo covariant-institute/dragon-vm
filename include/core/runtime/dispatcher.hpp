@@ -7,6 +7,7 @@
 #include <core/runtime/thread.hpp>
 #include <core/runtime/register.hpp>
 #include <core/runtime/invoke.hpp>
+#include <core/runtime/throw.hpp>
 
 namespace dvm {
     namespace core {
@@ -46,9 +47,20 @@ namespace dvm {
                  */
                 static inline void throw_exception(Thread *thread, object::Object *ex) {
                     // TODO: Abort when ex == nullptr
-                    if (ex != nullptr) {
-                        thread->exception = ex;
+                    if (ex == nullptr) {
+                        return;
                     }
+
+                    Byte *handler = ThrowHelper::find_handler(thread, ex);
+
+                    // handler not found
+                    if (handler == nullptr) {
+                        // TODO abort VM when handler not found.
+                        return;
+                    }
+
+                    // jump to handler
+                    Dispatcher::jump_to_exact(thread, handler);
                 }
 
             private:
@@ -57,7 +69,6 @@ namespace dvm {
                 static inline void throw_exception(Thread *thread) {
                     auto *ex = thread->get_stack().peek_object_pop();
                     Dispatcher::throw_exception(thread, ex);
-
                 }
 
                 static inline void method_return_void(Thread *thread) {

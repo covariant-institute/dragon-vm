@@ -28,6 +28,10 @@ namespace dvm {
                 void invoke(runtime::Thread *thread) override;
 
                 void dump() const override;
+
+                inline Byte *get_body() const {
+                    return method_body;
+                }
             };
         }
     }
