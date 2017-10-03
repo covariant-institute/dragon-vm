@@ -12,10 +12,10 @@
   e.g. a method named `hello` accepting  two `Int32` 
   and returns a `Float` -> `hello_Object_Int32_Int32`
   
-### Native Method
+### Native Method Name
 
 Native method's name should follow these rules:
-* **Starts with** `Dragon`, **followed** by the `method signature`.
+* **Starts with** `Dragon`, **followed** by `method name` and `method signature`.
 * There's only a single parameter `dvm::core::runtime::Thread *`
 * Each unit is separated by `_`.
 
