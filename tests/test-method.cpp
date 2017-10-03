@@ -31,11 +31,8 @@ int main() {
                             "dvm_native_hello", "Double", methodEntry);
 
     auto method = context->resolve_method("dvm_native_hello", "Double");
-    Invocation::invoke_simple(thread, method, sizeof(Double));
-    auto ret = thread->get_stack().peek_pop<Double>();
-    printf("Native method returned: %lf\n", ret);
+    auto ret = Invocation::invoke_get_result<Double>(thread, method);
     assert(ret == 3.14159);
-    thread->get_stack().remove_top_frame();
     return 0;
 }
 

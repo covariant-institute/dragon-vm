@@ -31,7 +31,7 @@ namespace dvm {
                  * @param thread Executing thread
                  * @param method Method to be executed
                  */
-                static inline void invoke_method(Thread *thread, object::Method *method) {
+                static inline void invoke_method_raw(Thread *thread, object::Method *method) {
                     Invocation::before_invoke(thread, method);
 
                     // Method::invoke() only sets thread->pc to its body start
@@ -60,13 +60,41 @@ namespace dvm {
                     // do not call remove_top_frame(), let the caller do that!
                     thread->stack.new_frame(return_size);
 
-                    invoke_method(thread, method);
+                    invoke_method_raw(thread, method);
 
                     // start interpreting
                     thread->run();
 
                     // clear pc
                     thread->pc = nullptr;
+                }
+
+                /**
+                 * Invoke a method and get the return value.
+                 *
+                 * @tparam T Type of return value.
+                 * @param thread Executing thread.
+                 * @param method Method to be executed.
+                 * @return
+                 */
+                template <typename T>
+                static inline T invoke_get_result(Thread *thread, object::Method *method) {
+                    SizeT args_size = sizeof(T);
+                    Invocation::invoke_simple(thread, method, args_size);
+                    T ret = thread->get_stack().peek_pop<T>();
+                    thread->get_stack().remove_top_frame();
+                    return ret;
+                }
+
+                /**
+                 * Invoke a method which returns void.
+                 *
+                 * @param thread Executing thread.
+                 * @param method Method to be executed.
+                 */
+                static inline void invoke_void(Thread *thread, object::Method *method) {
+                    Invocation::invoke_simple(thread, method, 0);
+                    thread->get_stack().remove_top_frame();
                 }
 
                 /**

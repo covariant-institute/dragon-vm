@@ -30,25 +30,19 @@ int main(int argc, const char **argv) {
     assert(obj != nullptr);
 
     auto method = context->resolve_method("dvm_main0", "Void");
-    assert(method->is_native() == dvm::core::True);
     Method::dump_method_info(method);
-    Invocation::invoke_simple(thread, method, 0);
-    thread->get_stack().remove_top_frame();
+    Invocation::invoke_void(thread, method);
 
     method = context->resolve_method("add_two_int32", "Int32_Int32_Int32");
-    assert(method->is_native() == dvm::core::False);
     Method::dump_method_info(method);
 
     method = context->resolve_method("dvm_main", "Void");
-    assert(method->is_native() == dvm::core::False);
     Method::dump_method_info(method);
 
     // call dvm_main
-    Invocation::invoke_simple(thread, method, sizeof(dvm::core::Int32));
-    auto ret = thread->get_stack().peek_pop<dvm::core::Int32>();
+    auto ret = Invocation::invoke_get_result<dvm::core::Int32>(thread, method);
     printf("Method returned: %d\n", ret);
     assert(ret == 19);
-    thread->get_stack().remove_top_frame();
 
     return 0;
 }

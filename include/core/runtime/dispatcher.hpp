@@ -107,7 +107,7 @@ namespace dvm {
 
                     object::Method *method =
                             Invocation::resolve_by_id(thread, name_id, signature_id);
-                    Invocation::invoke_method(thread, method);
+                    Invocation::invoke_method_raw(thread, method);
                 }
 
                 static inline void new_instance(Thread *thread) {
