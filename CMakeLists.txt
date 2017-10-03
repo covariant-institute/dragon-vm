@@ -117,7 +117,7 @@ set(DVM_CORE_SOURCE
         src/core/dcx/dcx_file.cpp
         src/core/dcx/dcx_linker.cpp
 
-        ${DVM_PLATFORM_SRC} include/abi/resolve.hpp include/abi/name.hpp)
+        ${DVM_PLATFORM_SRC} include/abi/resolve.hpp include/abi/name.hpp src/abi/name.cpp)
 
 # Dragon VM Core
 add_library(dvm-core SHARED ${DVM_CORE_SOURCE})
