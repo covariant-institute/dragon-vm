@@ -51,11 +51,11 @@ namespace dvm {
                     // ensure that we can exit successfully.
                     auto exit_code = static_cast<Byte>(VMOpcodes::halt);
 
-                    // set current pc to exit_code, so that when the method returns,
+                    // set current pc to exit_code, so when the method returns,
                     // the program ends.
                     thread->pc = &exit_code;
 
-                    // Create initial frame, just as a data holder.
+                    // create initial frame, just as a data holder.
                     // In order to let our's caller be accessible to the return value,
                     // do not call remove_top_frame(), let the caller do that!
                     thread->stack.new_frame(return_size);
