@@ -7,7 +7,7 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
-#include "../experimental-tests/calc-compiler/libdvm.h"
+#include "../experimental/calc-compiler/libdvm.h"
 
 using namespace dvm::core;
 using namespace dvm::core::dcx;
