@@ -73,6 +73,8 @@ set(DVM_CORE_SOURCE
         include/core/runtime/math.hpp
         include/core/runtime/jump.hpp
         include/core/runtime/dvm.hpp
+        include/core/runtime/invoke.hpp
+        include/core/runtime/throw.hpp
 
         include/core/object/method.hpp
         include/core/object/class.hpp
@@ -101,6 +103,7 @@ set(DVM_CORE_SOURCE
         src/core/runtime/context.cpp
         src/core/runtime/thread.cpp
         src/core/runtime/dvm.cpp
+        src/core/runtime/throw.cpp
 
         src/core/object/class.cpp
         src/core/object/object.cpp
@@ -114,7 +117,7 @@ set(DVM_CORE_SOURCE
         src/core/dcx/dcx_file.cpp
         src/core/dcx/dcx_linker.cpp
 
-        ${DVM_PLATFORM_SRC} include/core/runtime/invoke.hpp)
+        ${DVM_PLATFORM_SRC} include/abi/resolve.hpp src/abi/resolve.cpp src/abi/resolve.cpp)
 
 # Dragon VM Core
 add_library(dvm-core SHARED ${DVM_CORE_SOURCE})
@@ -163,21 +166,21 @@ target_link_libraries(dvm-exec dvm-core-static)
 
 # Experimental test cases
 add_executable(exp-threaded-interpreter
-        experimental-tests/threaded-interpretation/opcodes.h
-        experimental-tests/threaded-interpretation/threaded-interpreter.h
-        experimental-tests/threaded-interpretation/threaded-interpreter.c
-        experimental-tests/threaded-interpretation/benchmark_main.c
-        experimental-tests/threaded-interpretation/decode-dispatch-interpreter.c
-        experimental-tests/threaded-interpretation/decode-dispatch-interpreter.h)
+        experimental/threaded-interpretation/opcodes.h
+        experimental/threaded-interpretation/threaded-interpreter.h
+        experimental/threaded-interpretation/threaded-interpreter.c
+        experimental/threaded-interpretation/benchmark_main.c
+        experimental/threaded-interpretation/decode-dispatch-interpreter.c
+        experimental/threaded-interpretation/decode-dispatch-interpreter.h)
 
 add_executable(exp-universal-memory
-        experimental-tests/universal-memory/test.cpp)
+        experimental/universal-memory/test.cpp)
 
 add_executable(exp-calc-compiler
-        experimental-tests/calc-compiler/y.tab.c
-        experimental-tests/calc-compiler/y.tab.h
-        experimental-tests/calc-compiler/lex.yy.c
-        experimental-tests/calc-compiler/main.c)
+        experimental/calc-compiler/y.tab.c
+        experimental/calc-compiler/y.tab.h
+        experimental/calc-compiler/lex.yy.c
+        experimental/calc-compiler/main.c)
 
 if (WIN32)
 elseif (UNIX)

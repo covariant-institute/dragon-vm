@@ -2,6 +2,7 @@
 // Created by kiva on 2017/9/13.
 //
 #include "native_method.hpp"
+#include <abi/resolve.hpp>
 #include <core/platform/dl.hpp>
 
 namespace dvm {
@@ -11,7 +12,11 @@ namespace dvm {
             namespace resolver {
                 NativeMethodCallable::Type resolve_native(const std::string &name, const std::string &signature) {
                     // TODO Convert method name and signature name to symbol name
-                    return (NativeMethodCallable::Type) dl::DLInterface().find_symbol(name);
+                    const std::string &native_name = abi::native_method_lookup_name(name,
+                                                                                    signature);
+
+                    return (NativeMethodCallable::Type)
+                            dl::DLInterface().find_symbol(native_name);
                 }
             }
 

@@ -156,7 +156,7 @@ namespace dvm {
             std::vector<Frame *> frames;
 
             inline void ensure_has_frame() const {
-                if (frames.empty()) {
+                if (empty()) {
                     throw dvm::core::Exception(DVM_MEMORY_STACK_EMPTY);
                 }
             }
@@ -177,6 +177,10 @@ namespace dvm {
             inline Frame *current_frame() const {
                 ensure_has_frame();
                 return frames[frames.size() - 1];
+            }
+
+            inline bool empty() const {
+                return frames.empty();
             }
 
             template <typename T>

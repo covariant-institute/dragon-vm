@@ -5,13 +5,14 @@
 #include <core/object/method.hpp>
 #include <core/runtime/dispatcher.hpp>
 #include <core/dcx/dcx_file_info.hpp>
+#include <cassert>
 
+using namespace dvm::core;
 using namespace dvm::core::object;
 using namespace dvm::core::runtime;
 
-extern "C" void dvm_native_hello(Thread *thread) {
-    printf("In dvm_native_hello(): Hello, Dragon VM\n");
-    thread->get_stack().push<dvm::core::Double>(3.1415926);
+extern "C" void Dragon_dvm_native_hello_Double(Thread *thread) {
+    Invocation::return_from_method<Double>(thread, 3.14159);
 }
 
 int main() {
@@ -19,18 +20,19 @@ int main() {
     Thread *thread = vm.current_thread();
     VMContext *context = thread->get_context();
 
-    dvm::core::dcx::DcxFileMethodEntry methodEntry{ };
-    methodEntry.header.method_is_static = dvm::core::True;
-    methodEntry.header.method_is_native = dvm::core::True;
+    dcx::DcxFileMethodEntry methodEntry{ };
+    methodEntry.header.method_is_static = True;
+    methodEntry.header.method_is_native = True;
     methodEntry.header.method_handlers_count = 0;
-    methodEntry.header.method_locals_size = sizeof(dvm::core::Double);
+    methodEntry.header.method_locals_size = sizeof(Double);
     methodEntry.header.method_args_size = 0;
 
     Method::register_method(context, context->find_class("Double"),
-                            "dvm_native_hello", "()", methodEntry);
+                            "dvm_native_hello", "Double", methodEntry);
 
-    auto method = context->resolve_method("dvm_native_hello", "()");
-    Dispatcher::invoke_method(thread, method);
+    auto method = context->resolve_method("dvm_native_hello", "Double");
+    auto ret = Invocation::invoke_get_result<Double>(thread, method);
+    assert(ret == 3.14159);
     return 0;
 }
 

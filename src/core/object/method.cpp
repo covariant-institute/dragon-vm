@@ -75,6 +75,7 @@ namespace dvm {
                 }
 
                 method->dump();
+                printf("\n");
             }
 
             void Method::dump() const {

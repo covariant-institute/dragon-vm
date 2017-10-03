@@ -7,6 +7,7 @@
 #include <core/runtime/thread.hpp>
 #include <core/runtime/register.hpp>
 #include <core/runtime/invoke.hpp>
+#include <core/runtime/throw.hpp>
 
 namespace dvm {
     namespace core {
@@ -18,39 +19,85 @@ namespace dvm {
             public:
                 /* Utility functions */
 
+                /**
+                 * Jump to absolute address which is presenting an instruction.
+                 *
+                 * @param thread Executing thread
+                 * @param new_pc The absolute address of the next instruction
+                 */
                 static inline void jump_to_exact(Thread *thread, Byte *new_pc) {
                     thread->pc = new_pc;
                 }
 
+                /**
+                 * Jump to relative address which is presenting an instruction.
+                 *
+                 * @param thread Executing thread
+                 * @param offset Offset to current pc, positive or negative
+                 */
                 static inline void jump_to_offset(Thread *thread, Int32 offset) {
                     jump_to_exact(thread, thread->pc + offset);
                 }
 
-                static inline void invoke_method(Thread *thread, object::Method *method) {
-                    InvokeHelper::before_invoke(thread, method);
-                    method->invoke(thread);
-                }
+                /**
+                 * Throw an exception
+                 *
+                 * @param thread Executing thread
+                 * @param ex Exception
+                 */
+                static inline void throw_exception(Thread *thread, object::Object *ex) {
+                    // TODO: Abort when ex == nullptr
+                    if (ex == nullptr) {
+                        return;
+                    }
 
+                    Byte *handler = nullptr;
+                    while (!thread->get_stack().empty()) {
+                        handler = ThrowHelper::find_handler(thread, ex);
+
+                        if (handler != nullptr) {
+                            break;
+                        }
+
+                        // find handlers in up-level caller
+                        thread->get_stack().remove_top_frame();
+                    }
+
+
+                    // handler not found
+                    if (handler != nullptr) {
+                        // update thread state
+                        thread->exception = ex;
+
+                        // jump to handler
+                        Dispatcher::jump_to_exact(thread, handler);
+                        return;
+                    }
+
+                    // TODO abort VM when handler not found.
+                }
 
             private:
                 /* Outer interfaces to Interpreter */
 
+                static inline void throw_exception(Thread *thread) {
+                    auto *ex = thread->get_stack().peek_object_pop();
+                    Dispatcher::throw_exception(thread, ex);
+                }
+
                 static inline void method_return_void(Thread *thread) {
-                    // return void, just dispose frame and return!
-                    InvokeHelper::return_dispose(thread);
+                    Invocation::return_void(thread);
                 }
 
                 static inline void method_return_object(Thread *thread) {
-                    object::Object *ret = thread->stack.peek_object_pop();
-                    InvokeHelper::return_dispose(thread);
-                    thread->stack.push_object_ref(ret);
+                    object::Object *ret = thread->get_stack().peek_object_pop();
+                    Invocation::return_from_method<object::Object *>(thread, ret);
                 }
 
                 template <typename T>
                 static inline void method_return(Thread *thread) {
-                    T ret = thread->stack.peek_pop<T>();
-                    InvokeHelper::return_dispose(thread);
-                    thread->stack.push<T>(std::forward<T>(ret));
+                    T &&ret = thread->get_stack().peek_pop<T>();
+                    Invocation::return_from_method<T>(thread, std::forward<T>(ret));
                 }
 
                 static inline void invoke_method(Thread *thread) {
@@ -59,8 +106,8 @@ namespace dvm {
                     UInt16 signature_id = thread->const_u16();
 
                     object::Method *method =
-                            InvokeHelper::resolve_by_id(thread, name_id, signature_id);
-                    Dispatcher::invoke_method(thread, method);
+                            Invocation::resolve_by_id(thread, name_id, signature_id);
+                    Invocation::invoke_method_raw(thread, method);
                 }
 
                 static inline void new_instance(Thread *thread) {
@@ -104,7 +151,7 @@ namespace dvm {
                     RhsType &&rhs = thread->stack.peek_pop<RhsType>();
 
                     ResultType &&result = Impl::get_result(std::forward<LhsType>(lhs),
-                                                        std::forward<RhsType>(rhs));
+                                                           std::forward<RhsType>(rhs));
                     thread->stack.push<ResultType>(std::forward<ResultType>(result));
                 }
 

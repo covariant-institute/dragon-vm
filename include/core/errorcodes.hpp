@@ -21,9 +21,8 @@
 #define DVM_RUNTIME_METHOD_NOT_FOUND "Method not found."
 #define DVM_RUNTIME_CONSTANT_NOT_FOUND "Constant not found."
 #define DVM_RUNTIME_INVALID_CODE "Invalid bytecode"
-#define DVM_RUNTIME_INVALID_ENV "Invalid execution enviroment."
+#define DVM_RUNTIME_INVALID_ENV "Invalid execution environment."
 #define DVM_RUNTIME_DIVIDE_BY_ZERO "Divide by zero"
 
 #define DVM_DL_NOT_OPEN "Cannot open library."
-
 #define DVM_DL_NOT_FOUND "Symbol not found."

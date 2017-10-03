@@ -66,3 +66,16 @@ OPCODE(pop_object)
 
 OPCODE(thr)
 OPCODE(halt)
+
+/* oop instructions */
+TYPED_OPCODES_PREFIX(set_slot)
+OPCODE(set_slot_object)
+
+TYPED_OPCODES_PREFIX(set_class_slot)
+OPCODE(set_class_slot_object)
+
+TYPED_OPCODES_PREFIX(get_slot)
+OPCODE(get_slot_object)
+
+TYPED_OPCODES_PREFIX(get_class_slot)
+OPCODE(get_class_slot_object)

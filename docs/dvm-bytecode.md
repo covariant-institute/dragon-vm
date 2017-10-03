@@ -110,3 +110,23 @@
 | pop_object             |   68   |   0110 1000   |        | object → | discard the top of stack |
 | thr                    |   69   |   0110 1001   |        | object → | throw an exception object |
 | halt                   |   6a   |   0110 1010   |        | [No Change] | halt VM |
+| set_slot_i32           |   6b   |   0110 1011   |        | → | desc |
+| set_slot_i64           |   6c   |   0110 1100   |        | → | desc |
+| set_slot_f32           |   6d   |   0110 1101   |        | → | desc |
+| set_slot_f64           |   6e   |   0110 1110   |        | → | desc |
+| set_slot_object        |   6f   |   0110 1111   |        | → | desc |
+| set_class_slot_i32     |   70   |   0111 0000   |        | → | desc |
+| set_class_slot_i64     |   71   |   0111 0001   |        | → | desc |
+| set_class_slot_f32     |   72   |   0111 0010   |        | → | desc |
+| set_class_slot_f64     |   73   |   0111 0011   |        | → | desc |
+| set_class_slot_object  |   74   |   0111 0100   |        | → | desc |
+| get_slot_i32           |   75   |   0111 0101   |        | → | desc |
+| get_slot_i64           |   76   |   0111 0110   |        | → | desc |
+| get_slot_f32           |   77   |   0111 0111   |        | → | desc |
+| get_slot_f64           |   78   |   0111 1000   |        | → | desc |
+| get_slot_object        |   79   |   0111 1001   |        | → | desc |
+| get_class_slot_i32     |   7a   |   0111 1010   |        | → | desc |
+| get_class_slot_i64     |   7b   |   0111 1011   |        | → | desc |
+| get_class_slot_f32     |   7c   |   0111 1100   |        | → | desc |
+| get_class_slot_f64     |   7d   |   0111 1101   |        | → | desc |
+| get_class_slot_object  |   7e   |   0111 1110   |        | → | desc |
