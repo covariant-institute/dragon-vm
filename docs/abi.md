@@ -9,8 +9,8 @@
   `Double[]` -> `ADouble`.
 * Object types are named `Object`, e.g. `SomeClass` -> `Object`.
 * Constructed with `MethodName_ReturnType_ArgumentTypes`, 
-  e.g. a method named `hello` accepting  two `Int32` 
-  and returns a `Float` -> `hello_Object_Int32_Int32`
+  e.g. a method named `hello` accepting two `Int32` 
+  and returns a `Float` -> `hello_Float_Int32_Int32`
   
 ### Native Method Name
 
