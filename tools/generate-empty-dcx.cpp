@@ -110,11 +110,10 @@ int main(int argc, const char **argv) {
     UInt16 parent_class_name_id = write_string_constant(fp, "Object", true);
     UInt16 int32_class_name_id = write_string_constant(fp, "Int32", true);
     UInt16 method_name_id = write_string_constant(fp, "dvm_main", false);
-    UInt16 method_signature_id = write_string_constant(fp, "(X)", false);
-    UInt16 method_signature_2_id = write_string_constant(fp, "(N)", false);
-
+    UInt16 method_signature_id = write_string_constant(fp, "Void", false);
+    UInt16 method_name_2_id = write_string_constant(fp, "dvm_main0", false);
     UInt16 target_method_name_id = write_string_constant(fp, "add_two_int32", false);
-    UInt16 target_method_signature_id = write_string_constant(fp, "(II)", false);
+    UInt16 target_method_signature_id = write_string_constant(fp, "Int32_Int32_Int32", false);
 
     // Write class "Main" extends "Object"
     write_class_entry(fp, parent_class_name_id, class_name_id, 0, 1);
@@ -123,24 +122,28 @@ int main(int argc, const char **argv) {
     Byte dvm_main_code[] = {
             VMOpcodes::ldc_i32, 0, 0, 0, 18,
             VMOpcodes::ldc_i32, 0, 0, 0, 1,
-            VMOpcodes::invoke_method, 0, static_cast<Byte>(target_method_name_id), 0, static_cast<Byte>(target_method_signature_id),
+            VMOpcodes::invoke_method, 0, static_cast<Byte>(target_method_name_id), 0,
+            static_cast<Byte>(target_method_signature_id),
             VMOpcodes::ret_i32,
             VMOpcodes::halt,  // <- exception handler #0, offset = length - 1
     };
     SizeT dvm_main_length = sizeof(dvm_main_code) / sizeof(dvm_main_code[0]);
 
-    // dvm_main(X)
+    // dvm_main
     DcxFileMethodEntryHandler handlers[1];
     handlers[0].handler_offset = static_cast<UInt16>(dvm_main_length - 1);
     handlers[0].exception_class_name_id = class_name_id;
 
     write_method_entry(fp, int32_class_name_id, method_name_id, method_signature_id,
-                       False, True, sizeof(Int32) * 2, 0, dvm_main_code, dvm_main_length,
+                       False, True, sizeof(Int32) * 2, 0,
+                       dvm_main_code, dvm_main_length,
                        handlers, sizeof(handlers) / sizeof(handlers[0]));
 
-    // dvm_main(N)
-    write_method_entry(fp, int32_class_name_id, method_name_id, method_signature_2_id, 4, 0,
-                       True, True, nullptr, 0, nullptr, 0);
+    // dvm_main0
+    write_method_entry(fp, int32_class_name_id, method_name_2_id, method_signature_id,
+                       True, False, sizeof(Int32), 0,
+                       nullptr, 0,
+                       nullptr, 0);
 
     // "add_two_int32" body
     Byte add_two_int32[] = {

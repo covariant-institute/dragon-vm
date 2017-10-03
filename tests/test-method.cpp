@@ -11,10 +11,8 @@ using namespace dvm::core;
 using namespace dvm::core::object;
 using namespace dvm::core::runtime;
 
-extern "C" void dvm_native_hello(Thread *thread) {
-    printf("In dvm_native_hello(): Hello, Dragon VM\n");
-    thread->get_stack().push<Double>(3.14159);
-    Invocation::return_stack_top<Double>(thread);
+extern "C" void Dragon_dvm_native_hello_Double(Thread *thread) {
+    Invocation::return_from_method<Double>(thread, 3.14159);
 }
 
 int main() {
@@ -30,9 +28,9 @@ int main() {
     methodEntry.header.method_args_size = 0;
 
     Method::register_method(context, context->find_class("Double"),
-                            "dvm_native_hello", "()", methodEntry);
+                            "dvm_native_hello", "Double", methodEntry);
 
-    auto method = context->resolve_method("dvm_native_hello", "()");
+    auto method = context->resolve_method("dvm_native_hello", "Double");
     Invocation::invoke_simple(thread, method, sizeof(Double));
     auto ret = thread->get_stack().peek_pop<Double>();
     printf("Native method returned: %lf\n", ret);

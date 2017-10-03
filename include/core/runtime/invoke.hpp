@@ -49,7 +49,7 @@ namespace dvm {
                 static inline void invoke_simple(Thread *thread, object::Method *method,
                                                  SizeT return_size) {
                     // ensure that we can exit successfully.
-                    Byte exit_code = static_cast<Byte>(VMOpcodes::halt);
+                    auto exit_code = static_cast<Byte>(VMOpcodes::halt);
 
                     // set current pc to exit_code, so that when the method returns,
                     // the program ends.
@@ -64,17 +64,20 @@ namespace dvm {
 
                     // start interpreting
                     thread->run();
+
+                    // clear pc
+                    thread->pc = nullptr;
                 }
 
                 /**
-                 * Return stack top value from a method.
+                 * Return a value from a method.
                  *
                  * @tparam T Type of return value
                  * @param thread Executing thread
+                 * @param ret Return value
                  */
                 template <typename T>
-                static inline void return_stack_top(Thread *thread) {
-                    T ret = thread->stack.peek_pop<T>();
+                static inline void return_from_method(Thread *thread, T ret) {
                     Invocation::return_dispose(thread);
                     thread->stack.push<T>(std::forward<T>(ret));
                 }

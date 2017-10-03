@@ -90,12 +90,14 @@ namespace dvm {
                 }
 
                 static inline void method_return_object(Thread *thread) {
-                    Invocation::return_stack_top<object::Object *>(thread);
+                    object::Object *ret = thread->get_stack().peek_object_pop();
+                    Invocation::return_from_method<object::Object *>(thread, ret);
                 }
 
                 template <typename T>
                 static inline void method_return(Thread *thread) {
-                    Invocation::return_stack_top<T>(thread);
+                    T &&ret = thread->get_stack().peek_pop<T>();
+                    Invocation::return_from_method<T>(thread, std::forward<T>(ret));
                 }
 
                 static inline void invoke_method(Thread *thread) {

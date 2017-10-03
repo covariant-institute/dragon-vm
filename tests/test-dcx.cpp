@@ -13,7 +13,7 @@ using namespace dvm::core::dcx;
 using namespace dvm::core::runtime;
 using namespace dvm::core::object;
 
-extern "C" void dvm_main(VMContext &context) {
+extern "C" void Dragon_dvm_main0_Void(Thread *thread) {
     printf("In dvm_main(): Hello, Dragon VM\n");
 }
 
@@ -29,18 +29,21 @@ int main(int argc, const char **argv) {
     auto obj = context->find_class("Main")->new_instance();
     assert(obj != nullptr);
 
-    auto method = context->resolve_method("add_two_int32", "(II)");
-    assert(method->is_native() == dvm::core::False);
-    Method::dump_method_info(method);
-
-    method = context->resolve_method("dvm_main", "(N)");
+    auto method = context->resolve_method("dvm_main0", "Void");
     assert(method->is_native() == dvm::core::True);
     Method::dump_method_info(method);
+    Invocation::invoke_simple(thread, method, 0);
+    thread->get_stack().remove_top_frame();
 
-    method = context->resolve_method("dvm_main", "(X)");
+    method = context->resolve_method("add_two_int32", "Int32_Int32_Int32");
     assert(method->is_native() == dvm::core::False);
     Method::dump_method_info(method);
 
+    method = context->resolve_method("dvm_main", "Void");
+    assert(method->is_native() == dvm::core::False);
+    Method::dump_method_info(method);
+
+    // call dvm_main
     Invocation::invoke_simple(thread, method, sizeof(dvm::core::Int32));
     auto ret = thread->get_stack().peek_pop<dvm::core::Int32>();
     printf("Method returned: %d\n", ret);
