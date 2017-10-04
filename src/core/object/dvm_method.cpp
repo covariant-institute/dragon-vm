@@ -17,7 +17,7 @@ namespace dvm {
 
             }
 
-            void DvmMethod::invoke(runtime::Thread *thread) {
+            void DvmMethod::prepare(runtime::Thread *thread) {
                 thread->set_runnable(method_body);
             }
 

@@ -13,7 +13,8 @@ namespace dvm {
             Method::Method(const Class *return_type, const std::string &name, const std::string &signature,
                            Bool is_static_method, Bool is_native_method)
                     : return_type(return_type), method_name(name), method_signature(signature),
-                      is_static_method(is_static_method), is_native_method(is_native_method) {
+                      is_static_method(is_static_method), is_native_method(is_native_method),
+                      invoked_times(0) {
             }
 
             Method *Method::resolve(runtime::VMContext *context, const std::string &name,
@@ -31,14 +32,14 @@ namespace dvm {
                     method = native_method;
                 } else {
                     auto dvm_method = new DvmMethod(return_type, name, signature,
-                                                registry.is_static, False);
+                                                    registry.is_static, False);
                     dvm_method->method_body = registry.body;
                     dvm_method->method_length = registry.body_size;
 
                     method = dvm_method;
                 }
 
-                method->handler.handlers = std::move(registry.handlers);
+                method->handler.handlers = registry.handlers;
                 method->args_size = registry.args_size;
                 method->locals_size = registry.locals_size;
 
@@ -75,6 +76,11 @@ namespace dvm {
 
             void Method::dump() const {
                 // do nothing
+            }
+
+            void Method::invoke(runtime::Thread *thread) {
+                ++invoked_times;
+                this->prepare(thread);
             }
         }
     }

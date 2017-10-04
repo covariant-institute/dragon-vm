@@ -40,7 +40,7 @@ namespace dvm {
                 }
 
                 /**
-                 * Invoke a method as an entrance of program
+                 * Safe and quick Method::invoke() wrapper function.
                  *
                  * @param thread Executing thread
                  * @param method Method to be executed

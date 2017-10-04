@@ -43,6 +43,17 @@ namespace dvm {
                 UInt16 locals_size;
                 UInt16 args_size;
 
+                // for optimizing, we count how many times a method has been invoked.
+                UInt16 invoked_times;
+
+            protected:
+                /**
+                 * Called when a method is being executed.
+                 *
+                 * @param thread Executing thread.
+                 */
+                virtual void prepare(runtime::Thread *thread) = 0;
+
             public:
                 Method(const Class *return_type,
                        const std::string &name,
@@ -51,6 +62,10 @@ namespace dvm {
                        Bool is_native_method);
 
                 virtual ~Method() = default;
+
+                virtual void dump() const;
+
+                void invoke(runtime::Thread *thread);
 
                 inline const ExceptionHandler &get_handlers() const {
                     return handler;
@@ -83,10 +98,6 @@ namespace dvm {
                 inline UInt16 get_args_size() const {
                     return args_size;
                 }
-
-                virtual void invoke(runtime::Thread *thread) = 0;
-
-                virtual void dump() const;
 
                 static Method *resolve(runtime::VMContext *context,
                                        const std::string &name, const std::string &signature);
