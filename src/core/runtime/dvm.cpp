@@ -84,7 +84,7 @@ namespace dvm {
                 }
             }
 
-            const object::Class *DragonVM::find_class_constant(UInt16 constant_id) {
+            object::Class *DragonVM::find_class_constant(UInt16 constant_id) {
                 try {
                     return constant_class_map.at(constant_id);
 

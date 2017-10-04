@@ -182,6 +182,12 @@ namespace dvm {
                 static inline Int32 get_result(object::Object *lhs, object::Object *rhs) {
                     object::ensure_object_valid(lhs);
                     object::ensure_object_valid(rhs);
+
+                    // If they are both null
+                    if (lhs->is_null() && rhs->is_null()) {
+                        return CompareResult::RESULT_OK;
+                    }
+
                     return lhs == rhs ? CompareResult::RESULT_OK : CompareResult::RESULT_NOT;
                 };
             };

@@ -737,104 +737,124 @@ namespace dvm {
                 {
                     OPCODE_RETURN();
                 }
-                
+
                 OPCODE_IMPL(set_slot_i32)
                 {
+                    Dispatcher::set_slot<Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(set_slot_i64)
                 {
+                    Dispatcher::set_slot<Int64>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(set_slot_f32)
                 {
+                    Dispatcher::set_slot<Float>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(set_slot_f64)
                 {
+                    Dispatcher::set_slot<Double>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(set_slot_object)
                 {
+                    Dispatcher::set_slot<object::Object *>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(set_class_slot_i32)
                 {
+                    Dispatcher::set_class_slot<Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(set_class_slot_i64)
                 {
+                    Dispatcher::set_class_slot<Int64>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(set_class_slot_f32)
                 {
+                    Dispatcher::set_class_slot<Float>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(set_class_slot_f64)
                 {
+                    Dispatcher::set_class_slot<Double>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(set_class_slot_object)
                 {
+                    Dispatcher::set_class_slot<object::Object *>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(get_slot_i32)
                 {
+                    Dispatcher::get_slot<Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(get_slot_i64)
                 {
+                    Dispatcher::get_slot<Int64>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(get_slot_f32)
                 {
+                    Dispatcher::get_slot<Float>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(get_slot_f64)
                 {
+                    Dispatcher::get_slot<Double>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(get_slot_object)
                 {
+                    Dispatcher::get_slot<object::Object *>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(get_class_slot_i32)
                 {
+                    Dispatcher::get_class_slot<Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(get_class_slot_i64)
                 {
+                    Dispatcher::get_class_slot<Int64>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(get_class_slot_f32)
                 {
+                    Dispatcher::get_class_slot<Float>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(get_class_slot_f64)
                 {
+                    Dispatcher::get_class_slot<Double>(thread);
                     OPCODE_NEXT(context);
                 }
 
                 OPCODE_IMPL(get_class_slot_object)
                 {
+                    Dispatcher::get_class_slot<object::Object *>(thread);
                     OPCODE_NEXT(context);
                 }
 
