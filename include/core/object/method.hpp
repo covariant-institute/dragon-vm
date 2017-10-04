@@ -11,6 +11,17 @@ namespace dvm {
     namespace core {
         namespace object {
 
+            struct MethodRegistry {
+                std::unordered_map<const Class *, UInt16> handlers;
+
+                UInt16 locals_size;
+                UInt16 args_size;
+                UInt32 body_size;
+                Bool is_native;
+                Bool is_static;
+                Byte *body;
+            };
+
             class ExceptionHandler {
             public:
                 // ExceptionType -> Handler's code_base offset
@@ -82,7 +93,7 @@ namespace dvm {
 
                 static void register_method(runtime::VMContext *context, const Class *return_type,
                                             const std::string &name, const std::string &signature,
-                                            const dcx::DcxFileMethodEntry &entry);
+                                            const MethodRegistry &registry);
 
                 static void dump_method_info(const Method *method);
             };

@@ -6,6 +6,7 @@
 #include <core/type.hpp>
 #include <core/runtime/dvm.hpp>
 #include <core/runtime/thread.hpp>
+#include <core/dcx/dcx_file_info.hpp>
 
 int main(int argc, char **argv) {
     using namespace dvm::core;
@@ -27,6 +28,8 @@ int main(int argc, char **argv) {
 
     DragonVM dragonVM;
     Thread *thread = dragonVM.current_thread();
+
+
     thread->get_stack().new_frame(256);
     thread->set_runnable(bytes);
     thread->run();
