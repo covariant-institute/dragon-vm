@@ -79,8 +79,8 @@ namespace dvm {
                  */
                 template <typename T>
                 static inline T invoke_get_result(Thread *thread, object::Method *method) {
-                    SizeT args_size = sizeof(T);
-                    Invocation::invoke_simple(thread, method, args_size);
+                    Invocation::invoke_simple(thread, method, sizeof(T));
+
                     T ret = thread->get_stack().peek_pop<T>();
                     thread->get_stack().remove_top_frame();
                     return ret;
