@@ -6,10 +6,12 @@
 #include <core/type.hpp>
 #include <core/runtime/dvm.hpp>
 #include <core/runtime/thread.hpp>
-#include <core/dcx/dcx_file_info.hpp>
+#include <core/object/method.hpp>
+#include <core/runtime/invoke.hpp>
 
 int main(int argc, char **argv) {
     using namespace dvm::core;
+    using namespace dvm::core::object;
     using namespace dvm::core::runtime;
 
     if (argc == 1) {
@@ -28,12 +30,19 @@ int main(int argc, char **argv) {
 
     DragonVM dragonVM;
     Thread *thread = dragonVM.current_thread();
+    VMContext *context = thread->get_context();
 
+    MethodRegistry registry;
+    registry.is_native = False;
+    registry.is_static = True;
+    registry.body_size = static_cast<UInt32>(size);
+    registry.body = bytes;
+    registry.locals_size = 256;
+    registry.args_size = 0;
+    Method::register_method(context, context->find_class("Void"), "main", "Void", registry);
 
-    thread->get_stack().new_frame(256);
-    thread->set_runnable(bytes);
-    thread->run();
-    thread->get_stack().remove_top_frame();
+    Method *method = context->resolve_method("main", "Void");
+    Invocation::invoke_void(thread, method);
 
     dvm_free(bytes);
     return 0;
