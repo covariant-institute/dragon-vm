@@ -14,7 +14,7 @@ namespace dvm {
         namespace object {
             struct Object;
 
-            struct Slot {
+            struct Slot final {
             private:
                 TypeIdentifier slot_type;
 

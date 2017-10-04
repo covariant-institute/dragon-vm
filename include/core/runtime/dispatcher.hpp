@@ -3,6 +3,7 @@
 //
 #pragma once
 
+#include <core/runtime/slot_detector.hpp>
 #include <core/runtime/interpreter.hpp>
 #include <core/runtime/thread.hpp>
 #include <core/runtime/register.hpp>
@@ -75,6 +76,16 @@ namespace dvm {
                     }
 
                     // TODO abort VM when handler not found.
+                }
+
+                template <typename P, typename T>
+                static inline void set_slot(P target, UInt16 slot, T value) {
+                    if (!SlotDetector<P>::has_slot()) {
+                        // TODO throw an exception
+                        return;
+                    }
+
+                    target->slots[slot].set<T>(value);
                 }
 
             private:
