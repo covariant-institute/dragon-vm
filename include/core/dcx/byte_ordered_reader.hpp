@@ -9,55 +9,25 @@
 namespace dvm {
     namespace core {
         namespace dcx {
-#ifndef DVM_LITTLE_ENDIAN
-
-            template <typename T>
-            struct little_endian {
-                static T get_value(T value) {
-                    return 0;
-                }
-
-                static bool is_available() {
-                    return false;
-                }
-            };
-
-            template <>
-            struct little_endian<Int32> {
-                static Int32 get_value(Int32 value) {
-                    return ((value & 0x000000FF) << 24) |
-                           ((value & 0x0000FF00) << 8) |
-                           ((value & 0x00FF0000) >> 8) |
-                           ((value & 0xFF000000) >> 24);
-                }
-
-                static bool is_available() {
-                    return true;
-                }
-            };
-
-            template <>
-            struct little_endian<UInt32> {
-                static Int32 get_value(UInt32 value) {
-                    return little_endian<Int32>::get_value(static_cast<Int32>(value));
-                }
-
-                static bool is_available() {
-                    return true;
-                }
-            };
-#endif
 
             struct ByteOrderedReader {
+
+                static Byte *to_little_endian(Byte *bytes, SizeT size) {
+#ifndef DVM_LITTLE_ENDIAN
+
+                    for (int i = 0; i < size / 2; ++i) {
+                        std::swap(bytes[i], bytes[size - i - 1]);
+                    }
+
+#endif
+                    return bytes;
+                }
+
                 template <typename T>
                 static inline bool read(FILE *file, T *destination) {
                     size_t r = fread(reinterpret_cast<void *>(destination), sizeof(T), 1, file);
+                    to_little_endian(destination, sizeof(T));
 
-#ifndef DVM_LITTLE_ENDIAN
-                    if (r == 1 && little_endian<T>::is_available()) {
-                        *destination = little_endian<T>::get_value(*destination);
-                    }
-#endif
                     return r == 1;
                 }
 
