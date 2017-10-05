@@ -483,4 +483,29 @@ int main() {
         assert(thread->get_stack().peek_object()->prototype == context->find_class("Int32"));
     },
       OPCODE(new_instance), 0, 0);
+
+    T("set_slot_i32", {
+        auto *i32 = thread->get_registers()[0]->get<object::Object *>();
+        assert(i32->prototype
+               == context->find_class("Int32"));
+        assert(i32->slots[1].get<Int32>() == 19);
+    },
+      OPCODE(new_instance), 0, 0,
+      OPCODE(st_object), 0,
+      OPCODE(pop_object),
+      OPCODE(ldc_i32), 0, 0, 0, 19,
+      OPCODE(ld_object), 0,
+      OPCODE(set_slot_i32), 1);
+
+    T("get_slot_i32", {
+        assert(thread->get_stack().peek<Int32>() == 19);
+    },
+      OPCODE(new_instance), 0, 0,
+      OPCODE(st_object), 0,
+      OPCODE(pop_object),
+      OPCODE(ldc_i32), 0, 0, 0, 19,
+      OPCODE(ld_object), 0,
+      OPCODE(set_slot_i32), 1,
+      OPCODE(ld_object), 0,
+      OPCODE(get_slot_i32), 1);
 }
