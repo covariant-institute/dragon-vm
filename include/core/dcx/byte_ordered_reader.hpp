@@ -26,7 +26,7 @@ namespace dvm {
                 template <typename T>
                 static inline bool read(FILE *file, T *destination) {
                     size_t r = fread(reinterpret_cast<void *>(destination), sizeof(T), 1, file);
-                    to_little_endian(destination, sizeof(T));
+                    to_little_endian(reinterpret_cast<Byte *>(destination), sizeof(T));
 
                     return r == 1;
                 }

@@ -160,6 +160,9 @@ target_link_libraries(test-dcx dvm-core-static)
 add_executable(test-interpreter tests/test-interpreter.cpp)
 target_link_libraries(test-interpreter dvm-core-static)
 
+add_executable(test-byte-reader tests/test-byte-reader.cpp)
+target_link_libraries(test-byte-reader dvm-core-static)
+
 # Build tools
 add_executable(generate-empty-dcx tools/generate-empty-dcx.cpp)
 add_executable(generate-opcode-table tools/generate-opcode-table.cpp)
