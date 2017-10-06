@@ -164,7 +164,7 @@ namespace dvm {
 
                 template <typename T>
                 static inline void get_class_slot(Thread *thread) {
-                    UInt8 &&class_id = thread->const_u8();
+                    UInt16 &&class_id = thread->const_u16();
                     dvm_memory_barrier();
                     UInt8 &&slot_id = thread->const_u8();
 
