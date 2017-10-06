@@ -4,18 +4,19 @@
 
 #include <core/runtime/context.hpp>
 #include <cassert>
+#include "../experimental/calc-compiler/libdvm.h"
 
 #define OPCODE(X) static_cast<dvm::core::runtime::VMOpcode>(dvm::core::runtime::VMOpcodes::X)
 
 /* see opcodes_def.hpp.inc */
-#define RET_CODE 0x6a
+#define HALT_CODE 0x6a
 
 #define T(code_name, condition_area, ...) \
     { \
         using namespace dvm::core; \
         using namespace dvm::core::runtime; \
         printf(":: Testing on %s\n", code_name); \
-        Byte _c[] = { __VA_ARGS__, RET_CODE }; \
+        Byte _c[] = { __VA_ARGS__, HALT_CODE }; \
         thread->get_stack().new_frame(64); \
         thread->set_runnable(_c); \
         thread->run(); \
@@ -473,4 +474,38 @@ int main() {
       OPCODE(halt),
       OPCODE(ldc_i32), 0, 0, 0, 2,
       OPCODE(jump_gt), X.bits[1], X.bits[0]); /* <- pc */
+
+
+    /* Test oop */
+    context->register_constant(0, context->find_class("Int32"));
+
+    T("new_instance", {
+        assert(thread->get_stack().peek_object()->prototype == context->find_class("Int32"));
+    },
+      OPCODE(new_instance), 0, 0);
+
+    T("set_slot_i32", {
+        auto *i32 = thread->get_registers()[0]->get<object::Object *>();
+        assert(i32->prototype
+               == context->find_class("Int32"));
+        assert(i32->slots[1].get<Int32>() == 19);
+    },
+      OPCODE(new_instance), 0, 0,
+      OPCODE(st_object), 0,
+      OPCODE(pop_object),
+      OPCODE(ldc_i32), 0, 0, 0, 19,
+      OPCODE(ld_object), 0,
+      OPCODE(set_slot_i32), 1);
+
+    T("get_slot_i32", {
+        assert(thread->get_stack().peek<Int32>() == 19);
+    },
+      OPCODE(new_instance), 0, 0,
+      OPCODE(st_object), 0,
+      OPCODE(pop_object),
+      OPCODE(ldc_i32), 0, 0, 0, 19,
+      OPCODE(ld_object), 0,
+      OPCODE(set_slot_i32), 1,
+      OPCODE(ld_object), 0,
+      OPCODE(get_slot_i32), 1);
 }

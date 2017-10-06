@@ -13,7 +13,8 @@ namespace dvm {
             Method::Method(const Class *return_type, const std::string &name, const std::string &signature,
                            Bool is_static_method, Bool is_native_method)
                     : return_type(return_type), method_name(name), method_signature(signature),
-                      is_static_method(is_static_method), is_native_method(is_native_method) {
+                      is_static_method(is_static_method), is_native_method(is_native_method),
+                      invoked_times(0) {
             }
 
             Method *Method::resolve(runtime::VMContext *context, const std::string &name,
@@ -23,29 +24,24 @@ namespace dvm {
 
             void Method::register_method(runtime::VMContext *context, const Class *return_type,
                                          const std::string &name, const std::string &signature,
-                                         const dcx::DcxFileMethodEntry &entry) {
+                                         const MethodRegistry &registry) {
                 object::Method *method = nullptr;
-                if (entry.header.method_is_native) {
+                if (registry.is_native) {
                     auto native_method = new NativeMethod(return_type, name, signature,
-                                                          entry.header.method_is_static, True);
+                                                          registry.is_static, True);
                     method = native_method;
                 } else {
                     auto dvm_method = new DvmMethod(return_type, name, signature,
-                                                entry.header.method_is_static, False);
-                    dvm_method->method_body = entry.method_body;
-                    dvm_method->method_length = entry.header.method_body_size;
+                                                    registry.is_static, False);
+                    dvm_method->method_body = registry.body;
+                    dvm_method->method_length = registry.body_size;
 
                     method = dvm_method;
                 }
 
-                for (int i = 0; i < entry.header.method_handlers_count; ++i) {
-                    auto *handler = entry.handlers + i;
-                    auto *exception_class = context->find_class_constant(handler->exception_class_name_id);
-                    method->handler.handlers[exception_class] = handler->handler_offset;
-                }
-
-                method->args_size = entry.header.method_args_size;
-                method->locals_size = entry.header.method_locals_size;
+                method->handler.handlers = registry.handlers;
+                method->args_size = registry.args_size;
+                method->locals_size = registry.locals_size;
 
                 context->register_method(name, signature, method);
             }
@@ -80,6 +76,11 @@ namespace dvm {
 
             void Method::dump() const {
                 // do nothing
+            }
+
+            void Method::invoke(runtime::Thread *thread) {
+                ++invoked_times;
+                this->prepare(thread);
             }
         }
     }

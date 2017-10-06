@@ -17,7 +17,7 @@ namespace dvm {
                 return (Class *) dvm_malloc(sizeof(Class) + sizeof(Slot) * class_slot_count);
             }
 
-            const Class *Class::find_class(runtime::VMContext *context, const std::string &name) {
+            Class *Class::find_class(runtime::VMContext *context, const std::string &name) {
                 return context->find_class(name);
             }
 
@@ -33,7 +33,7 @@ namespace dvm {
                 return clazz;
             }
 
-            const Class *Class::define_class(runtime::VMContext *context, const Class *parent, const std::string &name,
+            Class *Class::define_class(runtime::VMContext *context, const Class *parent, const std::string &name,
                                              UInt32 class_slot_count, UInt32 member_slot_count) {
                 const Class *parent_class = parent;
                 if (parent_class == nullptr) {

@@ -8,7 +8,7 @@
 * Array types has a `A` prefix, e.g. `Int32[]` -> `AInt32`,
   `Double[]` -> `ADouble`.
 * Object types are named `Object`, e.g. `SomeClass` -> `Object`.
-* Constructed with `MethodName_ReturnType_ArgumentTypes`, 
+* Constructed by `MethodName_ReturnType_ArgumentTypes`, 
   e.g. a method named `hello` accepting two `Int32` 
   and returns a `Float` -> `hello_Float_Int32_Int32`
   

@@ -25,7 +25,7 @@ namespace dvm {
                     : Method(return_type, name, signature, is_static_method, is_native_method) {
             }
 
-            void NativeMethod::invoke(runtime::Thread *thread) {
+            void NativeMethod::prepare(runtime::Thread *thread) {
                 if (callable.callable == nullptr) {
                     callable.callable = resolver::resolve_native(get_name(), get_signature());
                 }

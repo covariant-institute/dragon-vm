@@ -20,15 +20,14 @@ int main() {
     Thread *thread = vm.current_thread();
     VMContext *context = thread->get_context();
 
-    dcx::DcxFileMethodEntry methodEntry{ };
-    methodEntry.header.method_is_static = True;
-    methodEntry.header.method_is_native = True;
-    methodEntry.header.method_handlers_count = 0;
-    methodEntry.header.method_locals_size = sizeof(Double);
-    methodEntry.header.method_args_size = 0;
+    MethodRegistry registry;
+    registry.is_static = True;
+    registry.is_native = True;
+    registry.locals_size = sizeof(Double);
+    registry.args_size = 0;
 
     Method::register_method(context, context->find_class("Double"),
-                            "dvm_native_hello", "Double", methodEntry);
+                            "dvm_native_hello", "Double", registry);
 
     auto method = context->resolve_method("dvm_native_hello", "Double");
     auto ret = Invocation::invoke_get_result<Double>(thread, method);

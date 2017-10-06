@@ -87,7 +87,22 @@ namespace dvm {
 
                                   auto *return_type_class = context->find_class_constant(
                                           entry.header.method_return_type_name_id);
-                                  Method::register_method(context, return_type_class, name, signature, entry);
+
+                                  MethodRegistry registry;
+                                  registry.is_native = entry.header.method_is_native;
+                                  registry.is_static = entry.header.method_is_static;
+                                  registry.args_size = entry.header.method_args_size;
+                                  registry.locals_size = entry.header.method_locals_size;
+                                  registry.body_size = entry.header.method_body_size;
+                                  registry.body = entry.method_body;
+
+                                  for (int i = 0; i < entry.header.method_handlers_count; ++i) {
+                                      auto *handler = entry.handlers + i;
+                                      auto *ex = context->find_class_constant(handler->exception_class_name_id);
+                                      registry.handlers[ex] = handler->handler_offset;
+                                  }
+
+                                  Method::register_method(context, return_type_class, name, signature, registry);
                               });
             }
 

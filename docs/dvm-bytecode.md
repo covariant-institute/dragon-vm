@@ -4,7 +4,7 @@
 | Mnemonic | Opcode (in hex) | Opcode (in binary) | Other bytes ([count]: [operand labels]) | Stack ([before] → [after]) ([top], ..., [bottom]) | Description |
 |:--------:|:---------------:|:------------------:|:---------------------------------------:|:---------------------------:|:-----------:|
 | nop                    |   00   |   0000 0000   |        | [No Change] | do nothing |
-| new_instance           |   01   |   0000 0001   | 2: indexbyte1, indexbyte2 | → object | create an instance of a class, which is identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) in constant pool. |
+| new_instance           |   01   |   0000 0001   | 2: indexbyte1, indexbyte2 | → object | create an instance of a class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) in constant pool. |
 | invoke_method          |   02   |   0000 0010   | 4: nameindex1, nameindex2, sigindex1, sigindex2 | object, [arg1, arg2, ...] → [result] | invoke method on object and puts the result on the stack (might be void); the method is identified by nameindex(`nameindex1 << 8 + nameindex2`) and sigindex(`sigindex1 << 8 + sigindex2`) in constant pool. |
 | ldc_null               |   03   |   0000 0011   |        | → null | push a ***null*** object onto the stack |
 | ldc_i32                |   04   |   0000 0100   | 4: byte1, byte2, byte3, byte4 | → value | push an ***#int32***(`byte1 << 24 + byte2 << 16 + byte3 << 8 + byte4`) onto the stack |
@@ -76,7 +76,7 @@
 | f64_to_i64             |   46   |   0100 0110   |        | value → result | convert a double to int64 |
 | f64_to_f32             |   47   |   0100 0111   |        | value → result | convert a double to float |
 | f64_to_f64             |   48   |   0100 1000   |        | value → result | useless, should not appear in any class file |
-| ret                    |   49   |   0100 1001   |        | → | return void |
+| ret                    |   49   |   0100 1001   |        | → [Empty] | return void |
 | ret_object             |   4a   |   0100 1010   |        | object → [Empty] | return an object |
 | ret_i32                |   4b   |   0100 1011   |        | value → [Empty] | return an int32 |
 | ret_i64                |   4c   |   0100 1100   |        | value → [Empty] | return an int64 |
@@ -110,23 +110,25 @@
 | pop_object             |   68   |   0110 1000   |        | object → | discard the top of stack |
 | thr                    |   69   |   0110 1001   |        | object → | throw an exception object |
 | halt                   |   6a   |   0110 1010   |        | [No Change] | halt VM |
-| set_slot_i32           |   6b   |   0110 1011   |        | → | desc |
-| set_slot_i64           |   6c   |   0110 1100   |        | → | desc |
-| set_slot_f32           |   6d   |   0110 1101   |        | → | desc |
-| set_slot_f64           |   6e   |   0110 1110   |        | → | desc |
-| set_slot_object        |   6f   |   0110 1111   |        | → | desc |
-| set_class_slot_i32     |   70   |   0111 0000   |        | → | desc |
-| set_class_slot_i64     |   71   |   0111 0001   |        | → | desc |
-| set_class_slot_f32     |   72   |   0111 0010   |        | → | desc |
-| set_class_slot_f64     |   73   |   0111 0011   |        | → | desc |
-| set_class_slot_object  |   74   |   0111 0100   |        | → | desc |
-| get_slot_i32           |   75   |   0111 0101   |        | → | desc |
-| get_slot_i64           |   76   |   0111 0110   |        | → | desc |
-| get_slot_f32           |   77   |   0111 0111   |        | → | desc |
-| get_slot_f64           |   78   |   0111 1000   |        | → | desc |
-| get_slot_object        |   79   |   0111 1001   |        | → | desc |
-| get_class_slot_i32     |   7a   |   0111 1010   |        | → | desc |
-| get_class_slot_i64     |   7b   |   0111 1011   |        | → | desc |
-| get_class_slot_f32     |   7c   |   0111 1100   |        | → | desc |
-| get_class_slot_f64     |   7d   |   0111 1101   |        | → | desc |
-| get_class_slot_object  |   7e   |   0111 1110   |        | → | desc |
+| set_slot_i32           |   6b   |   0110 1011   | 1: index | object, value → | store an int32 to object slot ***#index*** |
+| set_slot_i64           |   6c   |   0110 1100   | 1: index | object, value → | store an int64 to object slot ***#index*** |
+| set_slot_f32           |   6d   |   0110 1101   | 1: index | object, value → | store a float to object slot ***#index*** |
+| set_slot_f64           |   6e   |   0110 1110   | 1: index | object, value → | store a double to object slot ***#index*** |
+| set_slot_object        |   6f   |   0110 1111   | 1: index | object, object → | store an object to object slot ***#index*** |
+| set_class_slot_i32     |   70   |   0111 0000   | 3: indexbyte1, indexbyte2, slotindex | value → | store an int32 to class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
+| set_class_slot_i64     |   71   |   0111 0001   | 3: indexbyte1, indexbyte2, slotindex | value → | store an int64 to class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
+| set_class_slot_f32     |   72   |   0111 0010   | 3: indexbyte1, indexbyte2, slotindex | value → | store a float to class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
+| set_class_slot_f64     |   73   |   0111 0011   | 3: indexbyte1, indexbyte2, slotindex | value → | store a double to class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
+| set_class_slot_object  |   74   |   0111 0100   | 3: indexbyte1, indexbyte2, slotindex | object → | store an object to class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
+| get_slot_i32           |   75   |   0111 0101   | 1: index | object → value | load an int32 from object slot ***#index*** |
+| get_slot_i64           |   76   |   0111 0110   | 1: index | object → value | load an int64 from object slot ***#index*** |
+| get_slot_f32           |   77   |   0111 0111   | 1: index | object → value | load a float from object slot ***#index*** |
+| get_slot_f64           |   78   |   0111 1000   | 1: index | object → value | load a double from object slot ***#index*** |
+| get_slot_object        |   79   |   0111 1001   | 1: index | object → object | load an object from object slot ***#index*** |
+| get_class_slot_i32     |   7a   |   0111 1010   | 3: indexbyte1, indexbyte2, slotindex | → value | load an int32 from class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
+| get_class_slot_i64     |   7b   |   0111 1011   | 3: indexbyte1, indexbyte2, slotindex | → value | load an int64 from class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
+| get_class_slot_f32     |   7c   |   0111 1100   | 3: indexbyte1, indexbyte2, slotindex | → value | load a float from class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
+| get_class_slot_f64     |   7d   |   0111 1101   | 3: indexbyte1, indexbyte2, slotindex | → value | load a double from class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
+| get_class_slot_object  |   7e   |   0111 1110   | 3: indexbyte1, indexbyte2, slotindex | → object | load an object from class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
+
+

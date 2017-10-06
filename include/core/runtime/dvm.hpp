@@ -50,7 +50,7 @@ namespace dvm {
 
                 const std::string &find_constant(UInt16 constant_id) const;
 
-                const object::Class *find_class_constant(UInt16 constant_id);
+                object::Class *find_class_constant(UInt16 constant_id);
 
             public:
                 DragonVM();

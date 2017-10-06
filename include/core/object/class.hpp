@@ -27,9 +27,9 @@ namespace dvm {
                 /* Keep it last */
                 Slot slots[0];
 
-                static const Class *find_class(runtime::VMContext *context, const std::string &name);
+                static Class *find_class(runtime::VMContext *context, const std::string &name);
 
-                static const Class *define_class(runtime::VMContext *context, const Class *parent,
+                static Class *define_class(runtime::VMContext *context, const Class *parent,
                                                  const std::string &name,
                                                  UInt32 class_slot_count, UInt32 member_slot_count);
 

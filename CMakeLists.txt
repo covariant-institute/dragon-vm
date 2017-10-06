@@ -48,7 +48,7 @@ endif()
 add_library(dvm-gc
         src/gc/pure_gc.cpp
         include/gc/pure_gc.hpp
-        include/gc/gc_provider.hpp)
+        )
 
 set(DVM_CORE_SOURCE
         include/core/debug.hpp
@@ -74,6 +74,7 @@ set(DVM_CORE_SOURCE
         include/core/runtime/jump.hpp
         include/core/runtime/dvm.hpp
         include/core/runtime/invoke.hpp
+        include/core/runtime/slot_detector.hpp
         include/core/runtime/throw.hpp
 
         include/core/object/method.hpp
@@ -89,6 +90,8 @@ set(DVM_CORE_SOURCE
 
         include/core/platform/dl_commom.hpp
         include/core/platform/dl.hpp
+
+        include/abi/resolve.hpp
 
         src/core/vm-main.cpp
         src/core/heap.cpp
@@ -117,7 +120,9 @@ set(DVM_CORE_SOURCE
         src/core/dcx/dcx_file.cpp
         src/core/dcx/dcx_linker.cpp
 
-        ${DVM_PLATFORM_SRC} include/abi/resolve.hpp src/abi/resolve.cpp src/abi/resolve.cpp)
+        src/abi/resolve.cpp
+
+        ${DVM_PLATFORM_SRC})
 
 # Dragon VM Core
 add_library(dvm-core SHARED ${DVM_CORE_SOURCE})
@@ -154,6 +159,9 @@ target_link_libraries(test-dcx dvm-core-static)
 
 add_executable(test-interpreter tests/test-interpreter.cpp)
 target_link_libraries(test-interpreter dvm-core-static)
+
+add_executable(test-byte-reader tests/test-byte-reader.cpp)
+target_link_libraries(test-byte-reader dvm-core-static)
 
 # Build tools
 add_executable(generate-empty-dcx tools/generate-empty-dcx.cpp)

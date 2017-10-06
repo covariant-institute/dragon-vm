@@ -11,6 +11,17 @@ namespace dvm {
     namespace core {
         namespace object {
 
+            struct MethodRegistry {
+                std::unordered_map<const Class *, UInt16> handlers;
+
+                UInt16 locals_size;
+                UInt16 args_size;
+                UInt32 body_size;
+                Bool is_native;
+                Bool is_static;
+                Byte *body;
+            };
+
             class ExceptionHandler {
             public:
                 // ExceptionType -> Handler's code_base offset
@@ -32,6 +43,17 @@ namespace dvm {
                 UInt16 locals_size;
                 UInt16 args_size;
 
+                // for optimizing, we count how many times a method has been invoked.
+                UInt16 invoked_times;
+
+            protected:
+                /**
+                 * Called when a method is being executed.
+                 *
+                 * @param thread Executing thread.
+                 */
+                virtual void prepare(runtime::Thread *thread) = 0;
+
             public:
                 Method(const Class *return_type,
                        const std::string &name,
@@ -40,6 +62,10 @@ namespace dvm {
                        Bool is_native_method);
 
                 virtual ~Method() = default;
+
+                virtual void dump() const;
+
+                void invoke(runtime::Thread *thread);
 
                 inline const ExceptionHandler &get_handlers() const {
                     return handler;
@@ -73,16 +99,12 @@ namespace dvm {
                     return args_size;
                 }
 
-                virtual void invoke(runtime::Thread *thread) = 0;
-
-                virtual void dump() const;
-
                 static Method *resolve(runtime::VMContext *context,
                                        const std::string &name, const std::string &signature);
 
                 static void register_method(runtime::VMContext *context, const Class *return_type,
                                             const std::string &name, const std::string &signature,
-                                            const dcx::DcxFileMethodEntry &entry);
+                                            const MethodRegistry &registry);
 
                 static void dump_method_info(const Method *method);
             };

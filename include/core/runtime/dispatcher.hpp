@@ -3,6 +3,7 @@
 //
 #pragma once
 
+#include <core/runtime/slot_detector.hpp>
 #include <core/runtime/interpreter.hpp>
 #include <core/runtime/thread.hpp>
 #include <core/runtime/register.hpp>
@@ -15,6 +16,30 @@ namespace dvm {
 
             class Dispatcher {
                 friend class Interpreter;
+
+            private:
+                static inline void ensure_index_in_bounds(Thread *thread, object::Object *target,
+                                                          UInt8 index) {
+                    object::ensure_object_valid(target);
+
+                    if (target->is_null()) {
+                        // TODO Throw npe
+                        return;
+                    }
+
+                    if (index >= target->prototype->member_slot_count) {
+                        // TODO Throw out of bounds
+                        return;
+                    }
+                }
+
+                static inline void ensure_index_in_bounds(Thread *thread, const object::Class *target,
+                                                          UInt8 index) {
+                    if (index >= target->class_slot_count) {
+                        // TODO Throw out of bounds
+                        return;
+                    }
+                }
 
             public:
                 /* Utility functions */
@@ -52,7 +77,7 @@ namespace dvm {
                     }
 
                     Byte *handler = nullptr;
-                    while (!thread->get_stack().empty()) {
+                    while (!thread->stack.empty()) {
                         handler = ThrowHelper::find_handler(thread, ex);
 
                         if (handler != nullptr) {
@@ -60,7 +85,7 @@ namespace dvm {
                         }
 
                         // find handlers in up-level caller
-                        thread->get_stack().remove_top_frame();
+                        thread->stack.remove_top_frame();
                     }
 
 
@@ -77,11 +102,80 @@ namespace dvm {
                     // TODO abort VM when handler not found.
                 }
 
+                template <typename T>
+                static inline void set_slot(Thread *thread, object::Object *target, UInt8 slot, T value) {
+                    ensure_index_in_bounds(thread, target, slot);
+                    target->slots[slot].set<T>(value);
+                }
+
+                template <typename T>
+                static inline void set_class_slot(Thread *thread, object::Class *target, UInt8 slot, T value) {
+                    ensure_index_in_bounds(thread, target, slot);
+                    target->slots[slot].set<T>(value);
+                }
+
+                template <typename T>
+                static inline T get_slot(Thread *thread, object::Object *target, UInt8 slot) {
+                    ensure_index_in_bounds(thread, target, slot);
+                    return target->slots[slot].get<T>();
+                }
+
+                template <typename T>
+                static inline T get_class_slot(Thread *thread, const object::Class *target, UInt8 slot) {
+                    ensure_index_in_bounds(thread, target, slot);
+                    return target->slots[slot].get<T>();
+                }
+
             private:
                 /* Outer interfaces to Interpreter */
 
+                template <typename T>
+                static inline void set_slot(Thread *thread) {
+                    UInt8 &&slot_id = thread->const_u8();
+
+                    object::Object *target = thread->stack.peek_object_pop();
+                    T &&value = thread->stack.peek_pop<T>();
+
+                    set_slot<T>(thread, target, slot_id, value);
+                }
+
+                template <typename T>
+                static inline void set_class_slot(Thread *thread) {
+                    UInt8 &&class_id = thread->const_u8();
+                    dvm_memory_barrier();
+                    UInt8 &&slot_id = thread->const_u8();
+
+                    T &&value = thread->stack.peek_pop<T>();
+
+                    auto *clazz = thread->get_context()->find_class_constant(class_id);
+                    set_class_slot<T>(thread, clazz,
+                                      slot_id, value);
+                }
+
+                template <typename T>
+                static inline void get_slot(Thread *thread) {
+                    UInt8 &&slot_id = thread->const_u8();
+
+                    object::Object *target = thread->stack.peek_object_pop();
+
+                    T &&value = get_slot<T>(thread, target, slot_id);
+                    thread->stack.push(std::forward<T>(value));
+                }
+
+                template <typename T>
+                static inline void get_class_slot(Thread *thread) {
+                    UInt8 &&class_id = thread->const_u8();
+                    dvm_memory_barrier();
+                    UInt8 &&slot_id = thread->const_u8();
+
+                    T &&value = get_class_slot<T>(thread,
+                                                  thread->get_context()->find_class_constant(class_id),
+                                                  slot_id);
+                    thread->stack.push(std::forward<T>(value));
+                }
+
                 static inline void throw_exception(Thread *thread) {
-                    auto *ex = thread->get_stack().peek_object_pop();
+                    auto *ex = thread->stack.peek_object_pop();
                     Dispatcher::throw_exception(thread, ex);
                 }
 
@@ -90,13 +184,13 @@ namespace dvm {
                 }
 
                 static inline void method_return_object(Thread *thread) {
-                    object::Object *ret = thread->get_stack().peek_object_pop();
+                    object::Object *ret = thread->stack.peek_object_pop();
                     Invocation::return_from_method<object::Object *>(thread, ret);
                 }
 
                 template <typename T>
                 static inline void method_return(Thread *thread) {
-                    T &&ret = thread->get_stack().peek_pop<T>();
+                    T &&ret = thread->stack.peek_pop<T>();
                     Invocation::return_from_method<T>(thread, std::forward<T>(ret));
                 }
 
