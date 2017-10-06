@@ -508,4 +508,21 @@ int main() {
       OPCODE(set_slot_i32), 1,
       OPCODE(ld_object), 0,
       OPCODE(get_slot_i32), 1);
+
+    object::Class::define_class(context, context->find_class("Object"), "Test", 1, 1);
+    context->register_constant(1, context->find_class("Test"));
+
+    T("set_class_slot_i32", {
+        auto *c = context->find_class("Test");
+        assert(c->slots[0].get<Int32>() == 19);
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 19,
+      OPCODE(set_class_slot_i32), 0, 1, 0);
+
+    T("get_class_slot_i32", {
+        assert(thread->get_stack().peek<Int32>() == 19);
+    },
+      OPCODE(ldc_i32), 0, 0, 0, 19,
+      OPCODE(set_class_slot_i32), 0, 1, 0,
+      OPCODE(get_class_slot_i32), 0, 1, 0);
 }
