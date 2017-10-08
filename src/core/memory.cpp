@@ -3,9 +3,10 @@
 //
 
 #include <core/memory.hpp>
-#include <cstdlib>
 #include <core/exceptions.hpp>
 #include <core/errorcodes.hpp>
+#include <cstring>
+#include <cstdlib>
 
 
 namespace dvm {
@@ -15,6 +16,7 @@ namespace dvm {
             if (memory == nullptr) {
                 throw dvm::core::Exception(DVM_BAD_ALLOC);
             }
+            memset(memory, '\0', size);
             return memory;
         }
 
