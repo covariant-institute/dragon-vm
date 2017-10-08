@@ -3,7 +3,6 @@
 //
 #pragma once
 
-#include <core/runtime/slot_detector.hpp>
 #include <core/runtime/interpreter.hpp>
 #include <core/runtime/thread.hpp>
 #include <core/runtime/register.hpp>

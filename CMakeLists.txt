@@ -74,7 +74,6 @@ set(DVM_CORE_SOURCE
         include/core/runtime/jump.hpp
         include/core/runtime/dvm.hpp
         include/core/runtime/invoke.hpp
-        include/core/runtime/slot_detector.hpp
         include/core/runtime/throw.hpp
 
         include/core/object/method.hpp
