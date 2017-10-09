@@ -51,7 +51,6 @@ add_library(dvm-gc
         )
 
 set(DVM_CORE_SOURCE
-        include/core/debug.hpp
         include/core/config.hpp
         include/core/memory.hpp
         include/core/stack.hpp
