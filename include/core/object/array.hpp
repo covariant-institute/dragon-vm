@@ -5,17 +5,15 @@
 #pragma once
 
 #include <core/type.hpp>
-#include <core/object/slot.hpp>
-#include <core/object/class.hpp>
+#include <core/object/object.hpp>
 
 namespace dvm {
     namespace core {
         namespace object {
             struct Array {
                 SizeT length;
-                TypeIdentifier array_type;
                 Class *element_type;
-                Slot elements[0];
+                Object *elements[0];
 
                 static Array *new_array(SizeT length, TypeIdentifier array_type);
 
