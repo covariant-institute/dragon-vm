@@ -6,6 +6,7 @@
 
 #include <core/type.hpp>
 #include <core/object/slot.hpp>
+#include <core/object/class.hpp>
 
 namespace dvm {
     namespace core {
@@ -13,6 +14,7 @@ namespace dvm {
             struct Array {
                 SizeT length;
                 TypeIdentifier array_type;
+                Class *element_type;
                 Slot elements[0];
 
                 static Array *new_array(SizeT length, TypeIdentifier array_type);
