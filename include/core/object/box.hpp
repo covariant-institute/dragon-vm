@@ -5,15 +5,30 @@
 #pragma once
 
 #include <core/object/object.hpp>
+#include <core/runtime/context.hpp>
 
 namespace dvm {
     namespace core {
         namespace object {
 
-            template <typename T>
-            object::Object *box(T &&value) {
-                // TODO auto box object
+#define BOXER_GENERATOR(T) \
+            object::Object *box(runtime::VMContext *context, T &&type) { \
+                return context->new_##T(std::forward<T>(type)); \
             }
+
+            BOXER_GENERATOR(Int32);
+
+            BOXER_GENERATOR(Int64);
+
+            BOXER_GENERATOR(UInt32);
+
+            BOXER_GENERATOR(UInt64);
+
+            BOXER_GENERATOR(Float);
+
+            BOXER_GENERATOR(Double);
+
+#undef BOXER_GENERATOR
 
             template <typename T>
             T unbox(object::Object *object) {

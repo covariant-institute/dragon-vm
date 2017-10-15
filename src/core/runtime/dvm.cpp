@@ -14,16 +14,16 @@ namespace dvm {
                 using namespace dvm::core::object;
                 Class *object = Class::define_bootstrap_class(context, "Object", 0, 1);
                 Class::define_class(context, object, "Void", 0, 1);
-                Class::define_class(context, object, "Int8", 0, 2);
-                Class::define_class(context, object, "Int16", 0, 2);
-                Class::define_class(context, object, "Int32", 0, 2);
-                Class::define_class(context, object, "Int64", 0, 2);
-                Class::define_class(context, object, "UInt8", 0, 2);
-                Class::define_class(context, object, "UInt16", 0, 2);
-                Class::define_class(context, object, "UInt32", 0, 2);
-                Class::define_class(context, object, "UInt64", 0, 2);
-                Class::define_class(context, object, "Float", 0, 2);
-                Class::define_class(context, object, "Double", 0, 2);
+                Class::define_class(context, object, "Int8", 0, 2)->type = TypeIdentifier::TYPE_ID_INT8;
+                Class::define_class(context, object, "Int16", 0, 2)->type = TypeIdentifier::TYPE_ID_INT16;
+                Class::define_class(context, object, "Int32", 0, 2)->type = TypeIdentifier::TYPE_ID_INT32;
+                Class::define_class(context, object, "Int64", 0, 2)->type = TypeIdentifier::TYPE_ID_INT64;
+                Class::define_class(context, object, "UInt8", 0, 2)->type = TypeIdentifier::TYPE_ID_UINT8;
+                Class::define_class(context, object, "UInt16", 0, 2)->type = TypeIdentifier::TYPE_ID_UINT16;
+                Class::define_class(context, object, "UInt32", 0, 2)->type = TypeIdentifier::TYPE_ID_UINT32;
+                Class::define_class(context, object, "UInt64", 0, 2)->type = TypeIdentifier::TYPE_ID_UINT64;
+                Class::define_class(context, object, "Float", 0, 2)->type = TypeIdentifier::TYPE_ID_FLOAT;
+                Class::define_class(context, object, "Double", 0, 2)->type = TypeIdentifier::TYPE_ID_DOUBLE;
             }
 
             DragonVM::DragonVM() {
@@ -53,12 +53,12 @@ namespace dvm {
             }
 
             void DragonVM::register_method(const std::string &method_name, const std::string &signature,
-                                            object::Method *method) {
+                                           object::Method *method) {
                 method_map[method_name][signature] = method;
             }
 
             object::Method *DragonVM::resolve_method(const std::string &method_name,
-                                                      const std::string &signature) const {
+                                                     const std::string &signature) const {
                 try {
                     return method_map.at(method_name).at(signature);
 
