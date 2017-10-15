@@ -15,9 +15,7 @@ namespace dvm {
                 Class *element_type;
                 Object *elements[0];
 
-                static Array *new_array(SizeT length, TypeIdentifier array_type);
-
-                static Array *new_array(SizeT length);
+                static Array *new_array(Class *element_type, SizeT length);
             };
         }
     }

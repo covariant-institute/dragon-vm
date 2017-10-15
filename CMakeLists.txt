@@ -120,7 +120,7 @@ set(DVM_CORE_SOURCE
 
         src/abi/resolve.cpp
 
-        ${DVM_PLATFORM_SRC} include/core/object/array.hpp)
+        ${DVM_PLATFORM_SRC} include/core/object/array.hpp include/core/object/box.hpp)
 
 # Dragon VM Core
 add_library(dvm-core SHARED ${DVM_CORE_SOURCE})

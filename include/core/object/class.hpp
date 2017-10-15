@@ -30,11 +30,16 @@ namespace dvm {
                 static Class *find_class(runtime::VMContext *context, const std::string &name);
 
                 static Class *define_class(runtime::VMContext *context, const Class *parent,
-                                                 const std::string &name,
-                                                 UInt32 class_slot_count, UInt32 member_slot_count);
+                                           const std::string &name,
+                                           UInt32 class_slot_count, UInt32 member_slot_count);
 
                 static Class *define_bootstrap_class(runtime::VMContext *context, const std::string &name,
                                                      UInt32 class_slot_count, UInt32 member_slot_count);
+
+                inline bool is_primitive() const {
+                    return type != TypeIdentifier::TYPE_ID_OBJECT
+                           && type != TypeIdentifier::TYPE_ID_UNSPECIFIC;
+                }
 
                 SizeT calculate_needed_size() const;
 

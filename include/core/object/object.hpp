@@ -33,6 +33,13 @@ namespace dvm {
                     throw dvm::core::Exception(DVM_INVALID_OBJECT_MEMORY);
                 }
             }
+
+            inline void ensure_object_available(Object *object) {
+                ensure_object_valid(object);
+                if (object->is_null()) {
+                    throw dvm::core::Exception(DVM_INVALID_OBJECT_MEMORY);
+                }
+            }
         }
     }
 }
