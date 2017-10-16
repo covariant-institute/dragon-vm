@@ -36,8 +36,6 @@ namespace dvm {
 
                 ~Object() = default;
 
-                bool is_array() const;
-
                 inline Slot* get_slot(SizeT index) {
                     return &this->slots[index];
                 }

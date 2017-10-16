@@ -79,6 +79,8 @@ set(DVM_CORE_SOURCE
         include/core/object/class.hpp
         include/core/object/slot.hpp
         include/core/object/type_id_converter.hpp
+        include/core/object/array.hpp
+        include/core/object/box.hpp
 
         include/core/dcx/dcx_file_info.hpp
         include/core/dcx/dcx_reader.hpp
@@ -113,6 +115,7 @@ set(DVM_CORE_SOURCE
         src/core/object/dvm_method.hpp
         src/core/object/native_method.hpp
         src/core/object/native_method.cpp
+        src/core/object/array.cpp
 
         src/core/dcx/dcx_reader.cpp
         src/core/dcx/dcx_file.cpp
@@ -120,7 +123,7 @@ set(DVM_CORE_SOURCE
 
         src/abi/resolve.cpp
 
-        ${DVM_PLATFORM_SRC} include/core/object/array.hpp include/core/object/box.hpp)
+        ${DVM_PLATFORM_SRC})
 
 # Dragon VM Core
 add_library(dvm-core SHARED ${DVM_CORE_SOURCE})
@@ -163,6 +166,9 @@ target_link_libraries(test-byte-reader dvm-core-static)
 
 add_executable(test-boxing tests/test-boxing.cpp)
 target_link_libraries(test-boxing dvm-core-static)
+
+add_executable(test-array tests/test-array.cpp)
+target_link_libraries(test-array dvm-core-static)
 
 # Build tools
 add_executable(generate-empty-dcx tools/generate-empty-dcx.cpp)

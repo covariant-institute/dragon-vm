@@ -17,10 +17,6 @@ namespace dvm {
                 return object;
             }
 
-            bool Object::is_array() const {
-                return false;
-            }
-
             Object::Object(const Class *prototype) : prototype(prototype) {
             }
 
