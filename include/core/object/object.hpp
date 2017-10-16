@@ -15,7 +15,7 @@ namespace dvm {
         namespace object {
             struct Object;
 
-            struct Object {
+            struct Object final {
             private:
                 friend class Class;
 
@@ -24,6 +24,9 @@ namespace dvm {
                 /* Keep it last */
                 Slot slots[0];
 
+            protected:
+                void init();
+
             public:
                 Object() = delete;
 
@@ -31,11 +34,9 @@ namespace dvm {
 
                 explicit Object(const Class *prototype);
 
-                virtual ~Object() = default;
+                ~Object() = default;
 
-                virtual void init();
-
-                virtual bool is_array() const;
+                bool is_array() const;
 
                 inline Slot* get_slot(SizeT index) {
                     return &this->slots[index];

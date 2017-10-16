@@ -10,7 +10,7 @@
 namespace dvm {
     namespace core {
         namespace object {
-            struct Array : public Object {
+            struct Array {
                 SizeT length;
 
                 static Array *new_array(Class *element_type, SizeT length);
