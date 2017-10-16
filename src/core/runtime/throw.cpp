@@ -19,7 +19,7 @@ namespace dvm {
                 }
 
                 auto &ex_handlers = method->get_handlers().handlers;
-                auto iter = ex_handlers.find(ex->prototype);
+                auto iter = ex_handlers.find(ex->get_prototype());
 
                 if (iter == ex_handlers.end()) {
                     return nullptr;

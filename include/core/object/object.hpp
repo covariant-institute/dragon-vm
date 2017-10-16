@@ -16,10 +16,34 @@ namespace dvm {
             struct Object;
 
             struct Object {
+            private:
+                friend class Class;
+
                 const Class *prototype;
 
                 /* Keep it last */
                 Slot slots[0];
+
+            public:
+                Object() = delete;
+
+                Object(const Object &) = delete;
+
+                explicit Object(const Class *prototype);
+
+                virtual ~Object() = default;
+
+                virtual void init();
+
+                virtual bool is_array() const;
+
+                inline Slot* get_slot(SizeT index) {
+                    return &this->slots[index];
+                }
+
+                inline const Class* get_prototype() const {
+                    return prototype;
+                }
 
                 inline bool is_null() const {
                     return prototype == nullptr;

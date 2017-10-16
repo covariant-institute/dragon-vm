@@ -59,19 +59,11 @@ namespace dvm {
             }
 
             Object *Class::new_instance(Object *uninitialized) const {
-                // Clear memory
+                // clear memory
                 memset(reinterpret_cast<void *>(uninitialized), '\0', calculate_needed_size());
 
-                // Copy prototype reference
-                uninitialized->prototype = this;
-
-                // Parent object instantiation
-                if (this->parent != nullptr) {
-                    uninitialized->slots[0].set(this->parent->new_instance());
-                } else {
-                    uninitialized->slots[0].set(uninitialized);
-                }
-
+                auto *target = new (uninitialized) Object(this);
+                target->init();
                 return uninitialized;
             }
         }

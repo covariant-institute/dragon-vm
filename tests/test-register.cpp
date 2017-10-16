@@ -19,7 +19,7 @@ int main() {
     VMRegisterHolder regs;
 
     auto i32 = context->find_class("Int32")->new_instance();
-    i32->slots[1].set(10086);
+    i32->get_slot(1)->set(10086);
 
     auto visitor = regs[0];
     visitor->set(10086);
@@ -34,6 +34,6 @@ int main() {
     s.push_object_ref(context->new_Double(3.14));
     visitor->set_unchecked(s.peek_pop<object::Object *>());
     auto obj = visitor->get<object::Object *>();
-    assert(obj->slots[1].get<Double>() == 3.14);
+    assert(obj->get_slot(1)->get<Double>() == 3.14);
     return 0;
 }

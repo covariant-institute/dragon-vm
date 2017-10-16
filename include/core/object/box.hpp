@@ -33,8 +33,8 @@ namespace dvm {
             template <typename T>
             T unbox(object::Object *object) {
                 ensure_object_available(object);
-                if (object->prototype->is_primitive()) {
-                    return object->slots[1].get<T>();
+                if (object->get_prototype()->is_primitive()) {
+                    return object->get_slot(1)->get<T>();
                 }
                 // TODO Abort
                 return T();

@@ -16,7 +16,7 @@ namespace dvm {
             CREATOR_SIGNATURE(T) { \
                 object::Object *object = this->find_class(#T)->new_instance(); \
                 object::ensure_object_valid(object); \
-                object->slots[1].set<T>(std::forward<T>(value)); \
+                object->get_slot(1)->set<T>(std::forward<T>(value)); \
                 return object; \
             }
 

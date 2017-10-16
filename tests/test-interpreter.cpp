@@ -480,15 +480,15 @@ int main() {
     context->register_constant(0, context->find_class("Int32"));
 
     T("new_instance", {
-        assert(thread->get_stack().peek_object()->prototype == context->find_class("Int32"));
+        assert(thread->get_stack().peek_object()->get_prototype() == context->find_class("Int32"));
     },
       OPCODE(new_instance), 0, 0);
 
     T("set_slot_i32", {
         auto *i32 = thread->get_registers()[0]->get<object::Object *>();
-        assert(i32->prototype
+        assert(i32->get_prototype()
                == context->find_class("Int32"));
-        assert(i32->slots[1].get<Int32>() == 19);
+        assert(i32->get_slot(1)->get<Int32>() == 19);
     },
       OPCODE(new_instance), 0, 0,
       OPCODE(st_object), 0,

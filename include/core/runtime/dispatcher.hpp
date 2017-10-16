@@ -26,7 +26,7 @@ namespace dvm {
                         return;
                     }
 
-                    if (index >= target->prototype->member_slot_count) {
+                    if (index >= target->get_prototype()->member_slot_count) {
                         // TODO Throw out of bounds
                         return;
                     }
@@ -104,7 +104,7 @@ namespace dvm {
                 template <typename T>
                 static inline void set_slot(Thread *thread, object::Object *target, UInt8 slot, T value) {
                     ensure_index_in_bounds(thread, target, slot);
-                    target->slots[slot].set<T>(value);
+                    target->get_slot(slot)->set<T>(value);
                 }
 
                 template <typename T>
@@ -116,7 +116,7 @@ namespace dvm {
                 template <typename T>
                 static inline T get_slot(Thread *thread, object::Object *target, UInt8 slot) {
                     ensure_index_in_bounds(thread, target, slot);
-                    return target->slots[slot].get<T>();
+                    return target->get_slot(slot)->get<T>();
                 }
 
                 template <typename T>
