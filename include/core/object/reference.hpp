@@ -2,6 +2,8 @@
 // Created by kiva on 2017/10/19.
 //
 
+#include <core/exceptions.hpp>
+#include <core/errorcodes.hpp>
 #include <core/object/object.hpp>
 #include <core/object/array.hpp>
 
@@ -10,7 +12,7 @@ namespace dvm {
         namespace object {
 
             enum class ReferenceType {
-                OBJECT, ARRAY,
+                OBJECT = 1, ARRAY,
             };
 
             struct Reference {
@@ -22,11 +24,21 @@ namespace dvm {
                 } refs;
 
             public:
+                ReferenceType get_type() const {
+                    return ref_type;
+                }
+
                 Object *as_object() {
+                    if (ref_type != ReferenceType::OBJECT) {
+                        throw dvm::core::Exception(DVM_OBJECT_UNSATISFIED_REF);
+                    }
                     return refs.ref_o;
                 }
 
                 Array *as_array() {
+                    if (ref_type != ReferenceType::ARRAY) {
+                        throw dvm::core::Exception(DVM_OBJECT_UNSATISFIED_REF);
+                    }
                     return refs.ref_a;
                 }
 

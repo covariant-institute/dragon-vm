@@ -170,7 +170,7 @@ target_link_libraries(test-boxing dvm-core-static)
 add_executable(test-array tests/test-array.cpp)
 target_link_libraries(test-array dvm-core-static)
 
-add_executable(test-reference tests/test-array.cpp)
+add_executable(test-reference tests/test-reference.cpp)
 target_link_libraries(test-reference dvm-core-static)
 
 # Build tools

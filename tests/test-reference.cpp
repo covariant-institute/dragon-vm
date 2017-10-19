@@ -21,4 +21,5 @@ int main() {
 
     Reference ref_a = Reference::make(array);
     assert(ref_a.as_array()->get_length() == 10);
+    assert(ref_a.get_type() == ReferenceType::ARRAY);
 }
