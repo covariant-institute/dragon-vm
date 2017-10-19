@@ -4,6 +4,7 @@
 
 #include <core/object/array.hpp>
 #include <core/memory.hpp>
+#include <cstring>
 
 namespace dvm {
     namespace core {
