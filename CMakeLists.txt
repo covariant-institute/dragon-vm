@@ -93,7 +93,7 @@ set(DVM_CORE_SOURCE
 
         include/abi/resolve.hpp
 
-        src/core/vm-main.cpp
+        src/core/vm_main.cpp
         src/core/heap.cpp
         src/core/stack.cpp
         src/core/memory.cpp
@@ -123,7 +123,7 @@ set(DVM_CORE_SOURCE
 
         src/abi/resolve.cpp
 
-        ${DVM_PLATFORM_SRC})
+        ${DVM_PLATFORM_SRC} include/core/object/reference.hpp)
 
 # Dragon VM Core
 add_library(dvm-core SHARED ${DVM_CORE_SOURCE})
@@ -169,6 +169,9 @@ target_link_libraries(test-boxing dvm-core-static)
 
 add_executable(test-array tests/test-array.cpp)
 target_link_libraries(test-array dvm-core-static)
+
+add_executable(test-reference tests/test-array.cpp)
+target_link_libraries(test-reference dvm-core-static)
 
 # Build tools
 add_executable(generate-empty-dcx tools/generate-empty-dcx.cpp)
