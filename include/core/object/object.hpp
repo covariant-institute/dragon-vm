@@ -15,11 +15,34 @@ namespace dvm {
         namespace object {
             struct Object;
 
-            struct Object {
+            struct Object final {
+            private:
+                friend class Class;
+
                 const Class *prototype;
 
                 /* Keep it last */
                 Slot slots[0];
+
+            protected:
+                void init();
+
+            public:
+                Object() = delete;
+
+                Object(const Object &) = delete;
+
+                explicit Object(const Class *prototype);
+
+                ~Object() = default;
+
+                inline Slot* get_slot(SizeT index) {
+                    return &this->slots[index];
+                }
+
+                inline const Class* get_prototype() const {
+                    return prototype;
+                }
 
                 inline bool is_null() const {
                     return prototype == nullptr;
@@ -30,6 +53,13 @@ namespace dvm {
 
             inline void ensure_object_valid(Object *object) {
                 if (object == nullptr) {
+                    throw dvm::core::Exception(DVM_INVALID_OBJECT_MEMORY);
+                }
+            }
+
+            inline void ensure_object_available(Object *object) {
+                ensure_object_valid(object);
+                if (object->is_null()) {
                     throw dvm::core::Exception(DVM_INVALID_OBJECT_MEMORY);
                 }
             }

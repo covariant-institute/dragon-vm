@@ -16,6 +16,20 @@ namespace dvm {
                 }
                 return object;
             }
+
+            Object::Object(const Class *prototype) : prototype(prototype) {
+            }
+
+            void Object::init() {
+                this->prototype = prototype;
+
+                // Parent object instantiation
+                if (prototype->parent != nullptr) {
+                    this->slots[0].set(prototype->parent->new_instance());
+                } else {
+                    this->slots[0].set(this);
+                }
+            }
         }
     }
 }

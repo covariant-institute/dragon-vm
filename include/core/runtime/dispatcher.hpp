@@ -3,7 +3,6 @@
 //
 #pragma once
 
-#include <core/runtime/slot_detector.hpp>
 #include <core/runtime/interpreter.hpp>
 #include <core/runtime/thread.hpp>
 #include <core/runtime/register.hpp>
@@ -27,7 +26,7 @@ namespace dvm {
                         return;
                     }
 
-                    if (index >= target->prototype->member_slot_count) {
+                    if (index >= target->get_prototype()->member_slot_count) {
                         // TODO Throw out of bounds
                         return;
                     }
@@ -105,7 +104,7 @@ namespace dvm {
                 template <typename T>
                 static inline void set_slot(Thread *thread, object::Object *target, UInt8 slot, T value) {
                     ensure_index_in_bounds(thread, target, slot);
-                    target->slots[slot].set<T>(value);
+                    target->get_slot(slot)->set<T>(value);
                 }
 
                 template <typename T>
@@ -117,7 +116,7 @@ namespace dvm {
                 template <typename T>
                 static inline T get_slot(Thread *thread, object::Object *target, UInt8 slot) {
                     ensure_index_in_bounds(thread, target, slot);
-                    return target->slots[slot].get<T>();
+                    return target->get_slot(slot)->get<T>();
                 }
 
                 template <typename T>
@@ -141,7 +140,7 @@ namespace dvm {
 
                 template <typename T>
                 static inline void set_class_slot(Thread *thread) {
-                    UInt8 &&class_id = thread->const_u8();
+                    UInt16 &&class_id = thread->const_u16();
                     dvm_memory_barrier();
                     UInt8 &&slot_id = thread->const_u8();
 
@@ -164,7 +163,7 @@ namespace dvm {
 
                 template <typename T>
                 static inline void get_class_slot(Thread *thread) {
-                    UInt8 &&class_id = thread->const_u8();
+                    UInt16 &&class_id = thread->const_u16();
                     dvm_memory_barrier();
                     UInt8 &&slot_id = thread->const_u8();
 

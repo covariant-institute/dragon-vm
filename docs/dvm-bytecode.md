@@ -130,5 +130,3 @@
 | get_class_slot_f32     |   7c   |   0111 1100   | 3: indexbyte1, indexbyte2, slotindex | → value | load a float from class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
 | get_class_slot_f64     |   7d   |   0111 1101   | 3: indexbyte1, indexbyte2, slotindex | → value | load a double from class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
 | get_class_slot_object  |   7e   |   0111 1110   | 3: indexbyte1, indexbyte2, slotindex | → object | load an object from class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
-
-

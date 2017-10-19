@@ -1,6 +1,6 @@
 #pragma once
 
-#include "type.hpp"
+#include <core/type.hpp>
 
 namespace dvm {
 	namespace core {

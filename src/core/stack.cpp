@@ -20,7 +20,6 @@ namespace dvm {
 
         Frame *Stack::new_frame(SizeT size, SizeT shared) {
             auto *bytes = static_cast<Byte *>(dvm_malloc(sizeof(Frame)));
-            memset(bytes, '\0', sizeof(Frame));
 
             auto *frame = new(bytes) Frame(sp, size, shared);
             frames.push_back(frame);

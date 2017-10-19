@@ -4,7 +4,6 @@
 
 #define DVM_DEBUG
 
-#include <core/debug.hpp>
 #include <core/heap.hpp>
 
 namespace dvm {

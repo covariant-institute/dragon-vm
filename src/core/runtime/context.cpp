@@ -9,14 +9,14 @@ namespace dvm {
     namespace core {
         namespace runtime {
 
-#define CREATOR_SIGNATURE(TYPE) \
-            object::Object* VMContext::new_##TYPE(TYPE value)
+#define CREATOR_SIGNATURE(T) \
+            object::Object* VMContext::new_##T(T &&value)
 
-#define CREATOR_COMMON_IMPLEMENT(TYPE) \
-            CREATOR_SIGNATURE(TYPE) { \
-                object::Object *object = this->find_class(#TYPE)->new_instance(); \
+#define CREATOR_COMMON_IMPLEMENT(T) \
+            CREATOR_SIGNATURE(T) { \
+                object::Object *object = this->find_class(#T)->new_instance(); \
                 object::ensure_object_valid(object); \
-                object->slots[1].set<TYPE>(value); \
+                object->get_slot(1)->set<T>(std::forward<T>(value)); \
                 return object; \
             }
 

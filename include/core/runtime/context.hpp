@@ -64,8 +64,8 @@ namespace dvm {
                     return dvm->find_class_constant(constant_id);
                 }
 
-#define CREATOR_SIGNATURE(TYPE) \
-            object::Object* new_##TYPE(TYPE value)
+#define CREATOR_SIGNATURE(T) \
+            object::Object* new_##T(T &&value)
 
                 CREATOR_SIGNATURE(Int32);
 
