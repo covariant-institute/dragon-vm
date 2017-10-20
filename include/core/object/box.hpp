@@ -12,7 +12,7 @@ namespace dvm {
         namespace object {
 
 #define BOXER_GENERATOR(T) \
-            object::Object *box(runtime::VMContext *context, T &&type) { \
+            object::Reference box(runtime::VMContext *context, T &&type) { \
                 return context->new_##T(std::forward<T>(type)); \
             }
 
@@ -31,10 +31,13 @@ namespace dvm {
 #undef BOXER_GENERATOR
 
             template <typename T>
-            T unbox(object::Object *object) {
-                ensure_object_available(object);
-                if (object->get_prototype()->is_primitive()) {
-                    return object->get_slot(1)->get<T>();
+            T unbox(object::Reference ref) {
+                if (ref.is_object()) {
+                    auto *object = ref.as_object();
+                    ensure_object_available(object);
+                    if (object->get_prototype()->is_primitive()) {
+                        return object->get_slot(1)->get<T>();
+                    }
                 }
                 // TODO Abort
                 return T();

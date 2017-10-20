@@ -115,7 +115,7 @@ namespace dvm {
 
                 OPCODE_IMPL(ldc_null)
                 {
-                    thread->stack.push_object_ref(context->null_object());
+                    thread->stack.push<object::Reference>(context->null_object());
                     OPCODE_NEXT(context);
                 }
 
@@ -176,9 +176,9 @@ namespace dvm {
                     OPCODE_NEXT(context);
                 }
 
-                OPCODE_IMPL(ld_object)
+                OPCODE_IMPL(ld_ref)
                 {
-                    Dispatcher::load_object_ref(thread);
+                    Dispatcher::load_object(thread);
                     OPCODE_NEXT(context);
                 }
 
@@ -206,9 +206,9 @@ namespace dvm {
                     OPCODE_NEXT(context);
                 }
 
-                OPCODE_IMPL(st_object)
+                OPCODE_IMPL(st_ref)
                 {
-                    Dispatcher::store_object_ref(thread);
+                    Dispatcher::store<object::Reference>(thread);
                     OPCODE_NEXT(context);
                 }
 
@@ -538,9 +538,9 @@ namespace dvm {
                     OPCODE_NEXT(context);
                 }
 
-                OPCODE_IMPL(ret_object)
+                OPCODE_IMPL(ret_ref)
                 {
-                    Dispatcher::method_return_object(thread);
+                    Dispatcher::method_return<object::Reference>(thread);
                     OPCODE_NEXT(context);
                 }
 
@@ -652,17 +652,17 @@ namespace dvm {
                     OPCODE_NEXT(context);
                 }
 
-                OPCODE_IMPL(cmp_object)
+                OPCODE_IMPL(cmp_ref)
                 {
-                    Dispatcher::math<object::Object *,
-                            MathCompare<object::Object *, object::Object *>,
-                            object::Object *, Int32>(thread);
+                    Dispatcher::math<object::Reference,
+                            MathCompare<object::Reference, object::Reference>,
+                            object::Reference, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
 
-                OPCODE_IMPL(cmp_nn_object)
+                OPCODE_IMPL(cmp_nn_ref)
                 {
-                    Dispatcher::math1<object::Object *,
+                    Dispatcher::math1<object::Reference,
                             MathCompareNotNull, Int32>(thread);
                     OPCODE_NEXT(context);
                 }
@@ -691,9 +691,9 @@ namespace dvm {
                     OPCODE_NEXT(context);
                 }
 
-                OPCODE_IMPL(stp_object)
+                OPCODE_IMPL(stp_ref)
                 {
-                    Dispatcher::store_object_ref_at(thread);
+                    Dispatcher::store_at<object::Reference>(thread);
                     OPCODE_NEXT(context);
                 }
 
@@ -721,9 +721,9 @@ namespace dvm {
                     OPCODE_NEXT(context);
                 }
 
-                OPCODE_IMPL(pop_object)
+                OPCODE_IMPL(pop_ref)
                 {
-                    Dispatcher::pop_object(thread);
+                    Dispatcher::pop<object::Reference>(thread);
                     OPCODE_NEXT(context);
                 }
 
@@ -762,9 +762,9 @@ namespace dvm {
                     OPCODE_NEXT(context);
                 }
 
-                OPCODE_IMPL(set_slot_object)
+                OPCODE_IMPL(set_slot_ref)
                 {
-                    Dispatcher::set_slot<object::Object *>(thread);
+                    Dispatcher::set_slot<object::Reference>(thread);
                     OPCODE_NEXT(context);
                 }
 
@@ -792,9 +792,9 @@ namespace dvm {
                     OPCODE_NEXT(context);
                 }
 
-                OPCODE_IMPL(set_class_slot_object)
+                OPCODE_IMPL(set_class_slot_ref)
                 {
-                    Dispatcher::set_class_slot<object::Object *>(thread);
+                    Dispatcher::set_class_slot<object::Reference>(thread);
                     OPCODE_NEXT(context);
                 }
 
@@ -822,9 +822,9 @@ namespace dvm {
                     OPCODE_NEXT(context);
                 }
 
-                OPCODE_IMPL(get_slot_object)
+                OPCODE_IMPL(get_slot_ref)
                 {
-                    Dispatcher::get_slot<object::Object *>(thread);
+                    Dispatcher::get_slot<object::Reference>(thread);
                     OPCODE_NEXT(context);
                 }
 
@@ -852,9 +852,9 @@ namespace dvm {
                     OPCODE_NEXT(context);
                 }
 
-                OPCODE_IMPL(get_class_slot_object)
+                OPCODE_IMPL(get_class_slot_ref)
                 {
-                    Dispatcher::get_class_slot<object::Object *>(thread);
+                    Dispatcher::get_class_slot<object::Reference>(thread);
                     OPCODE_NEXT(context);
                 }
 

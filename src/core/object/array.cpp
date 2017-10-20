@@ -3,8 +3,8 @@
 //
 
 #include <core/object/array.hpp>
+#include <core/object/object.hpp>
 #include <core/memory.hpp>
-#include <cstring>
 
 namespace dvm {
     namespace core {
@@ -15,10 +15,18 @@ namespace dvm {
                 memset(elements, '\0', sizeof(elements[0]) * length);
             }
 
-            Array *Array::new_array(Class *element_type, SizeT length) {
+            Reference Array::new_array(Class *element_type, SizeT length) {
                 auto *uninitialized = dvm_malloc(sizeof(Array) + sizeof(Object *) * length);
                 auto *array = new(uninitialized) Array(element_type, length);
-                return array;
+                return Reference::make_array(array);
+            }
+
+            void Array::set(SizeT index, Reference ref) {
+                if (ref.get_reference_prototype() != element_type) {
+                    // TODO throw cast exception
+                    return;
+                }
+                this->elements[index] = ref;
             }
         }
     }

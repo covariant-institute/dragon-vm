@@ -26,13 +26,13 @@ int main() {
     assert(i32->get_slot(1)->data.i32 == 100);
     assert(i32->get_slot(1)->get<Int32>() == 100);
 
-    Object *u64 = context->new_UInt64(0);
+    Object *u64 = context->new_UInt64(0).as_object();
     u64->get_slot(1)->set(UINT64_MAX);
     assert(u64->get_slot(1)->get_type() == TypeIdentifier::TYPE_ID_UINT64);
     assert(u64->get_slot(1)->data.i64 == UINT64_MAX);
     assert(u64->get_slot(1)->get<Int64>() == -1);
 
-    Object *boolean = context->new_Int32(False);
+    Object *boolean = context->new_Int32(False).as_object();
     assert(boolean->get_slot(1)->data.i32 == False);
     assert(boolean->get_slot(1)->get<Bool>() == False);
 }

@@ -42,6 +42,7 @@ namespace dvm {
             TYPE_ID_DOUBLE = 10,
 
             TYPE_ID_OBJECT = 11,
+            TYPE_ID_ARRAY = 12,
         };
 
         template <typename T>

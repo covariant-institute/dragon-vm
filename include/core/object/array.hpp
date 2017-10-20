@@ -5,16 +5,19 @@
 #pragma once
 
 #include <core/type.hpp>
-#include <core/object/object.hpp>
+#include <core/object/reference.hpp>
 
 namespace dvm {
     namespace core {
         namespace object {
+            struct Class;
+            struct Object;
+
             struct Array {
             private:
-                SizeT length;
                 const Class *element_type;
-                Object *elements[0];
+                SizeT length;
+                Reference elements[0];
 
                 explicit Array(const Class *element_type, SizeT length);
 
@@ -29,24 +32,28 @@ namespace dvm {
                     return length;
                 }
 
-                inline const Class *get_type() const {
+                inline const Class *get_array_type() const {
                     return element_type;
                 }
 
-                inline Object* get(SizeT index) {
+                inline Reference get(SizeT index) {
                     return this->elements[index];
                 }
 
-                inline void set(SizeT index, Object *object) {
-                    if (object->get_prototype() != element_type) {
-                        // TODO throw cast exception
-                        return;
-                    }
-                    this->elements[index] = object;
+                inline bool is_null() const {
+                    return element_type == nullptr;
                 }
 
-                static Array *new_array(Class *element_type, SizeT length);
+                void set(SizeT index, object::Reference ref);
+
+                static Reference new_array(Class *element_type, SizeT length);
             };
+
+            inline void ensure_array_valid(Array *array) {
+                if (array == nullptr) {
+                    throw dvm::core::Exception(DVM_INVALID_OBJECT_MEMORY);
+                }
+            }
         }
     }
 }

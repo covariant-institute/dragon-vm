@@ -16,5 +16,5 @@ int main() {
     assert(unbox<Int32>(i32) == 1008611);
 
     auto d = box(context, 3.3);
-    assert(d->get_prototype() == context->find_class("Double"));
+    assert(d.as_object()->get_prototype() == context->find_class("Double"));
 }

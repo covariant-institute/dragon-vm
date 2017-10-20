@@ -2,14 +2,17 @@
 // Created by kiva on 2017/10/19.
 //
 
+#pragma once
+
 #include <core/exceptions.hpp>
 #include <core/errorcodes.hpp>
-#include <core/object/object.hpp>
-#include <core/object/array.hpp>
 
 namespace dvm {
     namespace core {
         namespace object {
+            struct Object;
+            struct Array;
+            struct Class;
 
             enum class ReferenceType {
                 OBJECT = 1, ARRAY,
@@ -23,38 +26,32 @@ namespace dvm {
                     Array *ref_a;
                 } refs;
 
-            public:
-                ReferenceType get_type() const {
+                inline ReferenceType get_type() const {
                     return ref_type;
                 }
 
-                Object *as_object() {
-                    if (ref_type != ReferenceType::OBJECT) {
-                        throw dvm::core::Exception(DVM_OBJECT_UNSATISFIED_REF);
-                    }
-                    return refs.ref_o;
+            public:
+                inline bool is_array() const {
+                    return get_type() == ReferenceType::ARRAY;
                 }
 
-                Array *as_array() {
-                    if (ref_type != ReferenceType::ARRAY) {
-                        throw dvm::core::Exception(DVM_OBJECT_UNSATISFIED_REF);
-                    }
-                    return refs.ref_a;
+                inline bool is_object() const {
+                    return get_type() == ReferenceType::OBJECT;
                 }
 
-                static Reference make(Object *object) {
-                    Reference ref{ };
-                    ref.ref_type = ReferenceType::OBJECT;
-                    ref.refs.ref_o = object;
-                    return ref;
-                }
+                bool is_reference_null();
 
-                static Reference make(Array *array) {
-                    Reference ref{ };
-                    ref.ref_type = ReferenceType::ARRAY;
-                    ref.refs.ref_a = array;
-                    return ref;
-                }
+                bool operator==(const Reference &other) const;
+
+                Object *as_object();
+
+                Array *as_array();
+
+                const Class *get_reference_prototype() const;
+
+                static Reference make_object(Object *object);
+
+                static Reference make_array(Array *array);
             };
         }
     }

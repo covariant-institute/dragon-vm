@@ -31,9 +31,9 @@ int main() {
 
     Stack s(config::STACK_DEFAULT_SIZE);
     s.new_frame(256);
-    s.push_object_ref(context->new_Double(3.14));
-    visitor->set_unchecked(s.peek_pop<object::Object *>());
-    auto obj = visitor->get<object::Object *>();
+    s.push<object::Reference>(context->new_Double(3.14));
+    visitor->set_unchecked(s.peek_pop<object::Reference>());
+    auto obj = visitor->get<object::Object*>();
     assert(obj->get_slot(1)->get<Double>() == 3.14);
     return 0;
 }

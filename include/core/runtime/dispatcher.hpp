@@ -8,6 +8,7 @@
 #include <core/runtime/register.hpp>
 #include <core/runtime/invoke.hpp>
 #include <core/runtime/throw.hpp>
+#include <core/object/reference.hpp>
 
 namespace dvm {
     namespace core {
@@ -17,8 +18,8 @@ namespace dvm {
                 friend class Interpreter;
 
             private:
-                static inline void ensure_index_in_bounds(Thread *thread, object::Object *target,
-                                                          UInt8 index) {
+                static inline void ensure_slot_in_bounds(Thread *thread, object::Object *target,
+                                                         UInt8 index) {
                     object::ensure_object_valid(target);
 
                     if (target->is_null()) {
@@ -103,7 +104,7 @@ namespace dvm {
 
                 template <typename T>
                 static inline void set_slot(Thread *thread, object::Object *target, UInt8 slot, T value) {
-                    ensure_index_in_bounds(thread, target, slot);
+                    ensure_slot_in_bounds(thread, target, slot);
                     target->get_slot(slot)->set<T>(value);
                 }
 
@@ -115,7 +116,7 @@ namespace dvm {
 
                 template <typename T>
                 static inline T get_slot(Thread *thread, object::Object *target, UInt8 slot) {
-                    ensure_index_in_bounds(thread, target, slot);
+                    ensure_slot_in_bounds(thread, target, slot);
                     return target->get_slot(slot)->get<T>();
                 }
 
@@ -132,10 +133,12 @@ namespace dvm {
                 static inline void set_slot(Thread *thread) {
                     UInt8 &&slot_id = thread->const_u8();
 
-                    object::Object *target = thread->stack.peek_object_pop();
-                    T &&value = thread->stack.peek_pop<T>();
+                    auto ref = thread->stack.peek_pop<object::Reference>();
+                    if (ref.is_object()) {
+                        T &&value = thread->stack.peek_pop<T>();
 
-                    set_slot<T>(thread, target, slot_id, value);
+                        set_slot<T>(thread, ref.as_object(), slot_id, value);
+                    }
                 }
 
                 template <typename T>
@@ -155,10 +158,11 @@ namespace dvm {
                 static inline void get_slot(Thread *thread) {
                     UInt8 &&slot_id = thread->const_u8();
 
-                    object::Object *target = thread->stack.peek_object_pop();
-
-                    T &&value = get_slot<T>(thread, target, slot_id);
-                    thread->stack.push(std::forward<T>(value));
+                    auto ref = thread->stack.peek_pop<object::Reference>();
+                    if (ref.is_object()) {
+                        T &&value = get_slot<T>(thread, ref.as_object(), slot_id);
+                        thread->stack.push(std::forward<T>(value));
+                    }
                 }
 
                 template <typename T>
@@ -174,17 +178,15 @@ namespace dvm {
                 }
 
                 static inline void throw_exception(Thread *thread) {
-                    auto *ex = thread->stack.peek_object_pop();
-                    Dispatcher::throw_exception(thread, ex);
+                    auto ref = thread->stack.peek_pop<object::Reference>();
+                    if (ref.is_object()) {
+                        Dispatcher::throw_exception(thread, ref.as_object());
+                    }
+                    // TODO Invalid operations
                 }
 
                 static inline void method_return_void(Thread *thread) {
                     Invocation::return_void(thread);
-                }
-
-                static inline void method_return_object(Thread *thread) {
-                    object::Object *ret = thread->stack.peek_object_pop();
-                    Invocation::return_from_method<object::Object *>(thread, ret);
                 }
 
                 template <typename T>
@@ -207,7 +209,7 @@ namespace dvm {
                     UInt16 class_id = thread->const_u16();
                     auto prototype = thread->get_context()->find_class_constant(class_id);
                     auto object = prototype->new_instance();
-                    thread->stack.push_object_ref(object);
+                    thread->stack.push<object::Reference>(object::Reference::make_object(object));
                 }
 
                 template <typename Condition>
@@ -257,27 +259,12 @@ namespace dvm {
                 }
 
                 template <typename T>
-                static inline T load_reg(Thread *thread) {
-                    UInt8 &&reg = thread->const_u8();
-
-                    return thread->regs[reg]->get_unchecked<T>();
-                }
-
-                template <typename T>
                 static inline void store(Thread *thread) {
                     UInt8 &&reg = thread->const_u8();
 
                     // Do not use peek_pop()
                     // st_* instructions do not drop stack elements
                     thread->regs[reg]->set_unchecked(thread->stack.peek<T>());
-                }
-
-                static inline void store_object_ref(Thread *thread) {
-                    UInt8 &&reg = thread->const_u8();
-
-                    // Do not use peek_object_pop()
-                    // st_* instructions do not drop stack elements
-                    thread->regs[reg]->set_unchecked(thread->stack.peek_object());
                 }
 
                 template <typename T>
@@ -288,29 +275,29 @@ namespace dvm {
                     thread->regs[reg]->set_unchecked(*thread->stack.at<T>(offset));
                 }
 
-                static inline void store_object_ref_at(Thread *thread) {
-                    UInt16 &&offset = thread->const_u16();
-                    UInt8 &&reg = thread->const_u8();
-
-                    thread->regs[reg]->set_unchecked(*thread->stack.at_object(offset));
-                }
-
                 template <typename T>
                 static inline void load(Thread *thread) {
-                    thread->stack.push(load_reg<T>(thread));
+                    UInt8 &&reg = thread->const_u8();
+                    thread->stack.push(thread->regs[reg]->get_unchecked<T>());
                 }
 
-                static inline void load_object_ref(Thread *thread) {
-                    thread->stack.push_object_ref(load_reg<object::Object *>(thread));
+                static inline void load_object(Thread *thread) {
+                    UInt8 &&reg = thread->const_u8();
+                    thread->stack.push(object::Reference::make_object(
+                            thread->regs[reg]->get_unchecked<object::Object *>()
+                    ));
+                }
+
+                static inline void load_array(Thread *thread) {
+                    UInt8 &&reg = thread->const_u8();
+                    thread->stack.push(object::Reference::make_array(
+                            thread->regs[reg]->get_unchecked<object::Array *>()
+                    ));
                 }
 
                 template <typename T>
                 static inline void pop(Thread *thread) {
                     thread->stack.pop<T>();
-                }
-
-                static inline void pop_object(Thread *thread) {
-                    thread->stack.pop_object();
                 }
             };
         }

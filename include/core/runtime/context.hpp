@@ -65,7 +65,7 @@ namespace dvm {
                 }
 
 #define CREATOR_SIGNATURE(T) \
-            object::Object* new_##T(T &&value)
+            object::Reference new_##T(T &&value)
 
                 CREATOR_SIGNATURE(Int32);
 
@@ -79,7 +79,7 @@ namespace dvm {
 
                 CREATOR_SIGNATURE(Double);
 
-                object::Object *null_object();
+                object::Reference null_object();
 
 #undef CREATOR_SIGNATURE
             };

@@ -81,6 +81,7 @@ set(DVM_CORE_SOURCE
         include/core/object/type_id_converter.hpp
         include/core/object/array.hpp
         include/core/object/box.hpp
+        include/core/object/reference.hpp
 
         include/core/dcx/dcx_file_info.hpp
         include/core/dcx/dcx_reader.hpp
@@ -116,6 +117,7 @@ set(DVM_CORE_SOURCE
         src/core/object/native_method.hpp
         src/core/object/native_method.cpp
         src/core/object/array.cpp
+        src/core/object/reference.cpp
 
         src/core/dcx/dcx_reader.cpp
         src/core/dcx/dcx_file.cpp
@@ -123,7 +125,7 @@ set(DVM_CORE_SOURCE
 
         src/abi/resolve.cpp
 
-        ${DVM_PLATFORM_SRC} include/core/object/reference.hpp)
+        ${DVM_PLATFORM_SRC})
 
 # Dragon VM Core
 add_library(dvm-core SHARED ${DVM_CORE_SOURCE})

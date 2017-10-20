@@ -7,12 +7,14 @@
 #include <core/exceptions.hpp>
 #include <core/errorcodes.hpp>
 #include <core/object/type_id_converter.hpp>
+#include <core/object/reference.hpp>
 #include <core/utils.hpp>
 
 namespace dvm {
     namespace core {
         namespace object {
             struct Object;
+            struct Array;
 
             struct Slot final {
             private:
@@ -27,6 +29,7 @@ namespace dvm {
                     Double f64;
 
                     Object *object;
+                    Array *array;
                 } data;
 
                 inline TypeIdentifier get_type() const {
@@ -61,6 +64,16 @@ namespace dvm {
                 inline void set_unchecked(const T &t) {
                     slot_type = TypeIdentifier::TYPE_ID_UNSPECIFIC;
                     set<T>(t);
+                }
+
+                inline void set_unchecked(Reference ref) {
+                    if (ref.is_array()) {
+                        set_unchecked<Array *>(ref.as_array());
+                    } else if (ref.is_object()) {
+                        set_unchecked<Object *>(ref.as_object());
+                    } else {
+                        throw dvm::core::Exception(DVM_OBJECT_UNSATISFIED_REF);
+                    }
                 }
 
                 template <typename T>

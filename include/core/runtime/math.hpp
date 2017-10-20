@@ -178,24 +178,17 @@ namespace dvm {
             };
 
             template <>
-            struct MathCompare<object::Object *, object::Object *> {
-                static inline Int32 get_result(object::Object *lhs, object::Object *rhs) {
-                    object::ensure_object_valid(lhs);
-                    object::ensure_object_valid(rhs);
-
-                    // If they are both null
-                    if (lhs->is_null() && rhs->is_null()) {
-                        return CompareResult::RESULT_OK;
-                    }
-
+            struct MathCompare<object::Reference, object::Reference> {
+                static inline Int32 get_result(object::Reference lhs, object::Reference rhs) {
                     return lhs == rhs ? CompareResult::RESULT_OK : CompareResult::RESULT_NOT;
                 };
             };
 
             struct MathCompareNotNull {
-                static inline Int32 get_result(object::Object *lhs) {
-                    object::ensure_object_valid(lhs);
-                    return lhs->is_null() ? CompareResult::RESULT_NOT : CompareResult::RESULT_OK;
+                static inline Int32 get_result(object::Reference lhs) {
+                    return lhs.is_reference_null()
+                           ? CompareResult::RESULT_NOT
+                           : CompareResult::RESULT_OK;
                 }
             };
         }

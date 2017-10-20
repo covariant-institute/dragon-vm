@@ -11,11 +11,11 @@ OPCODE(sys)
 
 /* ld: register to stack */
 TYPED_OPCODES_PREFIX(ld)
-OPCODE(ld_object)
+OPCODE(ld_ref)
 
 /* st: stack to register */
 TYPED_OPCODES_PREFIX(st)
-OPCODE(st_object)
+OPCODE(st_ref)
 
 TYPED_OPCODES_PREFIX(add)
 TYPED_OPCODES_PREFIX(sub)
@@ -38,7 +38,7 @@ TYPED_OPCODES_PREFIX(f32_to)
 TYPED_OPCODES_PREFIX(f64_to)
 
 OPCODE(ret)
-OPCODE(ret_object)
+OPCODE(ret_ref)
 TYPED_OPCODES_PREFIX(ret)
 
 OPCODE(jump)
@@ -53,29 +53,29 @@ OPCODE(jump_le)
 INTS_OPCODES_PREFIX(cmp)
 FLOATS_OPCODES_PREFIX(cmp_lt)
 FLOATS_OPCODES_PREFIX(cmp_gt)
-OPCODE(cmp_object)
-OPCODE(cmp_nn_object)
+OPCODE(cmp_ref)
+OPCODE(cmp_nn_ref)
 
 /* stp: any stack to register */
 TYPED_OPCODES_PREFIX(stp)
-OPCODE(stp_object)
+OPCODE(stp_ref)
 
 /* pop: drop the top of stack */
 TYPED_OPCODES_PREFIX(pop)
-OPCODE(pop_object)
+OPCODE(pop_ref)
 
 OPCODE(thr)
 OPCODE(halt)
 
 /* oop instructions */
 TYPED_OPCODES_PREFIX(set_slot)
-OPCODE(set_slot_object)
+OPCODE(set_slot_ref)
 
 TYPED_OPCODES_PREFIX(set_class_slot)
-OPCODE(set_class_slot_object)
+OPCODE(set_class_slot_ref)
 
 TYPED_OPCODES_PREFIX(get_slot)
-OPCODE(get_slot_object)
+OPCODE(get_slot_ref)
 
 TYPED_OPCODES_PREFIX(get_class_slot)
-OPCODE(get_class_slot_object)
+OPCODE(get_class_slot_ref)

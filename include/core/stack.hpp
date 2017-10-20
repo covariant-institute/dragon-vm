@@ -120,28 +120,6 @@ namespace dvm {
                 pop<T>();
                 return ret;
             }
-
-            inline void pop_object() {
-                pop<object::Object *>();
-            }
-
-            inline object::Object *peek_object() const {
-                ensure_not_empty();
-                auto **ref = at<object::Object *>(sp);
-                return ref != nullptr ? *ref : nullptr;
-            }
-
-            inline object::Object *peek_object_pop() {
-                object::Object *ret = peek_object();
-                pop_object();
-                return ret;
-            }
-
-            inline void push_object_ref(object::Object *obj) {
-                // push the address of the object as a reference
-                Byte *ref = allocate(sizeof(object::Object *));
-                *at<object::Object *>(ref) = obj;
-            }
         };
 
         class Stack final {
@@ -188,10 +166,6 @@ namespace dvm {
                 return current_frame()->at<T>(offset);
             }
 
-            inline object::Object **at_object(UInt16 offset) {
-                return current_frame()->at<object::Object *>(offset);
-            }
-
             template <typename T>
             inline void pop() {
                 current_frame()->pop<T>();
@@ -214,22 +188,6 @@ namespace dvm {
             template <typename T>
             inline T peek_pop() {
                 return current_frame()->peek_pop<T>();
-            }
-
-            inline void pop_object() {
-                current_frame()->pop_object();
-            }
-
-            inline object::Object *peek_object() const {
-                return current_frame()->peek_object();
-            }
-
-            inline object::Object *peek_object_pop() {
-                return current_frame()->peek_object_pop();
-            }
-
-            inline void push_object_ref(object::Object *obj) {
-                current_frame()->push_object_ref(obj);
             }
         };
     }

@@ -53,7 +53,8 @@ int main() {
     Int64 i64 = (static_cast<Int64>(h) << 32) + l;
 
     T("ldc_null", {
-        assert(thread->get_stack().peek_object() == context->null_object());
+        assert(thread->get_stack().peek<object::Reference>()
+               == context->null_object());
     },
       OPCODE(ldc_null));
 
@@ -77,7 +78,8 @@ int main() {
 
     T("pop_i32", {
         // after dropping Int32, we have a null object
-        assert(thread->get_stack().peek_object() == context->null_object());
+        assert(thread->get_stack().peek<object::Reference>()
+               == context->null_object());
     },
       OPCODE(ldc_null),
       OPCODE(ldc_i32), 0, 0, 0, 0,
@@ -103,12 +105,12 @@ int main() {
       OPCODE(ldc_f32), f1.b[0], f1.b[1], f1.b[2], f1.b[3],
       OPCODE(st_f32), 0);
 
-    T("st_object", {
+    T("st_ref", {
         auto obj = thread->get_registers()[0]->get_unchecked<object::Object *>();
-        assert(obj == context->null_object());
+        assert(obj == context->null_object().as_object());
     },
       OPCODE(ldc_null),
-      OPCODE(st_object), 0);
+      OPCODE(st_ref), 0);
 
     T("ld_i32", {
         assert(thread->get_stack().peek<Int32>() == 1);
@@ -136,14 +138,14 @@ int main() {
       OPCODE(pop_f32),
       OPCODE(ld_f32), 0);
 
-    T("ld_object", {
-        auto obj = thread->get_stack().peek_object();
-        assert(obj == context->null_object());
+    T("ld_ref", {
+        auto obj = thread->get_stack().peek<object::Reference>().as_object();
+        assert(obj == context->null_object().as_object());
     },
       OPCODE(ldc_null),
-      OPCODE(st_object), 0,
-      OPCODE(pop_object),
-      OPCODE(ld_object), 0);
+      OPCODE(st_ref), 0,
+      OPCODE(pop_ref),
+      OPCODE(ld_ref), 0);
 
     // 1 + 2 + 3
     T("add_i32 @ 1 + 2 + 3", {
@@ -426,13 +428,13 @@ int main() {
     },
       OPCODE(ldc_null),
       OPCODE(ldc_null),
-      OPCODE(cmp_object));
+      OPCODE(cmp_ref));
 
     T("cmp_nn_obj", {
         assert(thread->get_stack().peek<Int32>() == 1);
     },
       OPCODE(ldc_null),
-      OPCODE(cmp_nn_object));
+      OPCODE(cmp_nn_ref));
 
     T("jump", {
         assert(thread->get_stack().peek<Int32>() == 2);
@@ -480,7 +482,7 @@ int main() {
     context->register_constant(0, context->find_class("Int32"));
 
     T("new_instance", {
-        assert(thread->get_stack().peek_object()->get_prototype() == context->find_class("Int32"));
+        assert(thread->get_stack().peek<object::Reference>().as_object()->get_prototype() == context->find_class("Int32"));
     },
       OPCODE(new_instance), 0, 0);
 
@@ -491,22 +493,22 @@ int main() {
         assert(i32->get_slot(1)->get<Int32>() == 19);
     },
       OPCODE(new_instance), 0, 0,
-      OPCODE(st_object), 0,
-      OPCODE(pop_object),
+      OPCODE(st_ref), 0,
+      OPCODE(pop_ref),
       OPCODE(ldc_i32), 0, 0, 0, 19,
-      OPCODE(ld_object), 0,
+      OPCODE(ld_ref), 0,
       OPCODE(set_slot_i32), 1);
 
     T("get_slot_i32", {
         assert(thread->get_stack().peek<Int32>() == 19);
     },
       OPCODE(new_instance), 0, 0,
-      OPCODE(st_object), 0,
-      OPCODE(pop_object),
+      OPCODE(st_ref), 0,
+      OPCODE(pop_ref),
       OPCODE(ldc_i32), 0, 0, 0, 19,
-      OPCODE(ld_object), 0,
+      OPCODE(ld_ref), 0,
       OPCODE(set_slot_i32), 1,
-      OPCODE(ld_object), 0,
+      OPCODE(ld_ref), 0,
       OPCODE(get_slot_i32), 1);
 
     object::Class::define_class(context, context->find_class("Object"), "Test", 1, 1);
