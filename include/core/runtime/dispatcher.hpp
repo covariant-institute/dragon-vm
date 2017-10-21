@@ -103,7 +103,7 @@ namespace dvm {
                 }
 
                 template <typename T>
-                static inline void set_slot(Thread *thread, object::Object *target, UInt8 slot, T value) {
+                static inline void set_object_slot(Thread *thread, object::Object *target, UInt8 slot, T value) {
                     ensure_slot_in_bounds(thread, target, slot);
                     target->get_slot(slot)->set<T>(value);
                 }
@@ -115,7 +115,7 @@ namespace dvm {
                 }
 
                 template <typename T>
-                static inline T get_slot(Thread *thread, object::Object *target, UInt8 slot) {
+                static inline T get_object_slot(Thread *thread, object::Object *target, UInt8 slot) {
                     ensure_slot_in_bounds(thread, target, slot);
                     return target->get_slot(slot)->get<T>();
                 }
@@ -137,7 +137,7 @@ namespace dvm {
                     if (ref.is_object()) {
                         T &&value = thread->stack.peek_pop<T>();
 
-                        set_slot<T>(thread, ref.as_object(), slot_id, value);
+                        set_object_slot<T>(thread, ref.as_object(), slot_id, value);
                     }
                 }
 
@@ -160,7 +160,7 @@ namespace dvm {
 
                     auto ref = thread->stack.peek_pop<object::Reference>();
                     if (ref.is_object()) {
-                        T &&value = get_slot<T>(thread, ref.as_object(), slot_id);
+                        T &&value = get_object_slot<T>(thread, ref.as_object(), slot_id);
                         thread->stack.push(std::forward<T>(value));
                     }
                 }
