@@ -4,9 +4,9 @@
 | Mnemonic | Opcode (in hex) | Opcode (in binary) | Other bytes ([count]: [operand labels]) | Stack ([before] → [after]) ([top], ..., [bottom]) | Description |
 |:--------:|:---------------:|:------------------:|:---------------------------------------:|:---------------------------:|:-----------:|
 | nop                    |   00   |   0000 0000   |        | [No Change] | do nothing |
-| new_instance           |   01   |   0000 0001   | 2: indexbyte1, indexbyte2 | → object | create an instance of a class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) in constant pool. |
-| invoke_method          |   02   |   0000 0010   | 4: nameindex1, nameindex2, sigindex1, sigindex2 | object, [arg1, arg2, ...] → [result] | invoke method on object and puts the result on the stack (might be void); the method is identified by nameindex(`nameindex1 << 8 + nameindex2`) and sigindex(`sigindex1 << 8 + sigindex2`) in constant pool. |
-| ldc_null               |   03   |   0000 0011   |        | → null | push a ***null*** object onto the stack |
+| new_instance           |   01   |   0000 0001   | 2: indexbyte1, indexbyte2 | → objectref | create an instance of a class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) in constant pool. |
+| invoke_method          |   02   |   0000 0010   | 4: nameindex1, nameindex2, sigindex1, sigindex2 | objectref, [arg1, arg2, ...] → [result] | invoke method on object and puts the result on the stack (might be void); the method is identified by nameindex(`nameindex1 << 8 + nameindex2`) and sigindex(`sigindex1 << 8 + sigindex2`) in constant pool. |
+| ldc_null               |   03   |   0000 0011   |        | → null | push a ***null*** objectref onto the stack |
 | ldc_i32                |   04   |   0000 0100   | 4: byte1, byte2, byte3, byte4 | → value | push an ***#int32***(`byte1 << 24 + byte2 << 16 + byte3 << 8 + byte4`) onto the stack |
 | ldc_i64                |   05   |   0000 0101   |        | int32h, int32l → value | push a ***#int64***(`int32h << 32 + int32l`) |
 | ldc_f32                |   06   |   0000 0110   | 4: byte1, byte2, byte3, byte4 | → value | push a ***#float***(`byte1 << 24 + byte2 << 16 + byte3 << 8 + byte4`) onto the stack |
@@ -16,12 +16,12 @@
 | ld_i64                 |   0a   |   0000 1010   | 1: index | → value | load an int64 from register ***#index***  |
 | ld_f32                 |   0b   |   0000 1011   | 1: index | → value | load a float from register ***#index***  |
 | ld_f64                 |   0c   |   0000 1100   | 1: index | → value | load a double from register ***#index***  |
-| ld_ref                 |   0d   |   0000 1101   | 1: index | → value | load an object from register ***#index***  |
+| ld_ref                 |   0d   |   0000 1101   | 1: index | → value | load a reference from register ***#index***  |
 | st_i32                 |   0e   |   0000 1110   | 1: index | [No Change] | store an int32 to register ***#index***  |
 | st_i64                 |   0f   |   0000 1111   | 1: index | [No Change] | store an int64 to register ***#index***  |
 | st_f32                 |   10   |   0001 0000   | 1: index | [No Change] | store a float to register ***#index***  |
 | st_f64                 |   11   |   0001 0001   | 1: index | [No Change] | store a double to register ***#index***  |
-| st_ref                 |   12   |   0001 0010   | 1: index | [No Change] | store an object to register ***#index***  |
+| st_ref                 |   12   |   0001 0010   | 1: index | [No Change] | store a reference to register ***#index***  |
 | add_i32                |   13   |   0001 0011   |        | value1, value2 → result | add two int32s |
 | add_i64                |   14   |   0001 0100   |        | value1, value2 → result | add two int64s |
 | add_f32                |   15   |   0001 0101   |        | value1, value2 → result | add two floats |
@@ -77,7 +77,7 @@
 | f64_to_f32             |   47   |   0100 0111   |        | value → result | convert a double to float |
 | f64_to_f64             |   48   |   0100 1000   |        | value → result | useless, should not appear in any class file |
 | ret                    |   49   |   0100 1001   |        | → [Empty] | return void |
-| ret_ref                |   4a   |   0100 1010   |        | object → [Empty] | return an object |
+| ret_ref                |   4a   |   0100 1010   |        | ref → [Empty] | return a reference |
 | ret_i32                |   4b   |   0100 1011   |        | value → [Empty] | return an int32 |
 | ret_i64                |   4c   |   0100 1100   |        | value → [Empty] | return an int64 |
 | ret_f32                |   4d   |   0100 1101   |        | value → [Empty] | return a float |
@@ -96,37 +96,37 @@
 | cmp_lt_f64             |   5a   |   0101 1010   |        | value1, value2 → result | compare two doubles, push 0 if value1 < value2, 1 otherwise |
 | cmp_gt_f32             |   5b   |   0101 1011   |        | value1, value2 → result | compare two floats, push 0 if value1 > value2, 1 otherwise |
 | cmp_gt_f64             |   5c   |   0101 1100   |        | value1, value2 → result | compare two doubles, push 0 if value1 > value2, 1 otherwise |
-| cmp_ref                |   5d   |   0101 1101   |        | object1, object2 → result | compare two objects, push 0 if object1 and object2 point to the same object, 1 otherwise |
-| cmp_nn_ref             |   5e   |   0101 1110   |        | object1 → result | push 0 if object1 is not null, 1 otherwise |
+| cmp_ref                |   5d   |   0101 1101   |        | ref1, ref2 → result | compare two references, push 0 if ref1 and ref2 point to the same reference, 1 otherwise |
+| cmp_nn_ref             |   5e   |   0101 1110   |        | ref1 → result | push 0 if ref1 is not null, 1 otherwise |
 | stp_i32                |   5f   |   0101 1111   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store an int32 from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
 | stp_i64                |   60   |   0110 0000   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store an int64 from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
 | stp_f32                |   61   |   0110 0001   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store a float from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
 | stp_f64                |   62   |   0110 0010   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store a double from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
-| stp_ref                |   63   |   0110 0011   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store an object from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
+| stp_ref                |   63   |   0110 0011   | 3: offsetbyte1, offsetbyte2, index | [No Change] | store a reference from stack `bp - offset`(signed short constructed from unsigned bytes `offsetbyte1 << 8 + offsetbyte2`)  to register ***#index*** |
 | pop_i32                |   64   |   0110 0100   |        | value → | discard the top of stack |
 | pop_i64                |   65   |   0110 0101   |        | value → | discard the top of stack |
 | pop_f32                |   66   |   0110 0110   |        | value → | discard the top of stack |
 | pop_f64                |   67   |   0110 0111   |        | value → | discard the top of stack |
-| pop_ref                |   68   |   0110 1000   |        | object → | discard the top of stack |
-| thr                    |   69   |   0110 1001   |        | object → | throw an exception object |
+| pop_ref                |   68   |   0110 1000   |        | ref → | discard the top of stack |
+| thr                    |   69   |   0110 1001   |        | objectref → | throw an exception objectref |
 | halt                   |   6a   |   0110 1010   |        | [No Change] | halt VM |
-| set_slot_i32           |   6b   |   0110 1011   | 1: index | object, value → | store an int32 to object slot ***#index*** |
-| set_slot_i64           |   6c   |   0110 1100   | 1: index | object, value → | store an int64 to object slot ***#index*** |
-| set_slot_f32           |   6d   |   0110 1101   | 1: index | object, value → | store a float to object slot ***#index*** |
-| set_slot_f64           |   6e   |   0110 1110   | 1: index | object, value → | store a double to object slot ***#index*** |
-| set_slot_ref           |   6f   |   0110 1111   | 1: index | object, object → | store an object to object slot ***#index*** |
+| set_slot_i32           |   6b   |   0110 1011   | 1: index | objectref, value → | store an int32 to objectref slot ***#index*** |
+| set_slot_i64           |   6c   |   0110 1100   | 1: index | objectref, value → | store an int64 to objectref slot ***#index*** |
+| set_slot_f32           |   6d   |   0110 1101   | 1: index | objectref, value → | store a float to objectref slot ***#index*** |
+| set_slot_f64           |   6e   |   0110 1110   | 1: index | objectref, value → | store a double to objectref slot ***#index*** |
+| set_slot_ref           |   6f   |   0110 1111   | 1: index | objectref, objectref → | store a reference to objectref slot ***#index*** |
 | set_class_slot_i32     |   70   |   0111 0000   | 3: indexbyte1, indexbyte2, slotindex | value → | store an int32 to class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
 | set_class_slot_i64     |   71   |   0111 0001   | 3: indexbyte1, indexbyte2, slotindex | value → | store an int64 to class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
 | set_class_slot_f32     |   72   |   0111 0010   | 3: indexbyte1, indexbyte2, slotindex | value → | store a float to class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
 | set_class_slot_f64     |   73   |   0111 0011   | 3: indexbyte1, indexbyte2, slotindex | value → | store a double to class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
-| set_class_slot_ref     |   74   |   0111 0100   | 3: indexbyte1, indexbyte2, slotindex | object → | store an object to class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
-| get_slot_i32           |   75   |   0111 0101   | 1: index | object → value | load an int32 from object slot ***#index*** |
-| get_slot_i64           |   76   |   0111 0110   | 1: index | object → value | load an int64 from object slot ***#index*** |
-| get_slot_f32           |   77   |   0111 0111   | 1: index | object → value | load a float from object slot ***#index*** |
-| get_slot_f64           |   78   |   0111 1000   | 1: index | object → value | load a double from object slot ***#index*** |
-| get_slot_ref           |   79   |   0111 1001   | 1: index | object → object | load an object from object slot ***#index*** |
+| set_class_slot_ref     |   74   |   0111 0100   | 3: indexbyte1, indexbyte2, slotindex | object → | store a reference to class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
+| get_slot_i32           |   75   |   0111 0101   | 1: index | objectref → value | load an int32 from objectref slot ***#index*** |
+| get_slot_i64           |   76   |   0111 0110   | 1: index | objectref → value | load an int64 from objectref slot ***#index*** |
+| get_slot_f32           |   77   |   0111 0111   | 1: index | objectref → value | load a float from objectref slot ***#index*** |
+| get_slot_f64           |   78   |   0111 1000   | 1: index | objectref → value | load a double from objectref slot ***#index*** |
+| get_slot_ref           |   79   |   0111 1001   | 1: index | objectref → object | load a reference from objectref slot ***#index*** |
 | get_class_slot_i32     |   7a   |   0111 1010   | 3: indexbyte1, indexbyte2, slotindex | → value | load an int32 from class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
 | get_class_slot_i64     |   7b   |   0111 1011   | 3: indexbyte1, indexbyte2, slotindex | → value | load an int64 from class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
 | get_class_slot_f32     |   7c   |   0111 1100   | 3: indexbyte1, indexbyte2, slotindex | → value | load a float from class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
 | get_class_slot_f64     |   7d   |   0111 1101   | 3: indexbyte1, indexbyte2, slotindex | → value | load a double from class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
-| get_class_slot_ref     |   7e   |   0111 1110   | 3: indexbyte1, indexbyte2, slotindex | → object | load an object from class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
+| get_class_slot_ref     |   7e   |   0111 1110   | 3: indexbyte1, indexbyte2, slotindex | → objectref | load a reference from class identified by ***#index***(`indexbyte1 << 8 + indexbyte2`) slot ***#index*** |
