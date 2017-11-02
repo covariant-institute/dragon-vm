@@ -127,6 +127,10 @@ set(DVM_CORE_SOURCE
 
         ${DVM_PLATFORM_SRC})
 
+set (DASM_COMPILER_SOURCE
+        include/dasm/lexer.hpp
+        src/dasm/lexer.cpp src/dasm/main.cpp)
+
 # Dragon VM Core
 add_library(dvm-core SHARED ${DVM_CORE_SOURCE})
 add_library(dvm-core-static ${DVM_CORE_SOURCE})
@@ -137,6 +141,9 @@ target_link_libraries(dvm-core-static dvm-gc)
 # Command line executable, for debug
 add_executable(dragon_vm_cmdline src/main.cpp)
 target_link_libraries(dragon_vm_cmdline dvm-core)
+
+# Dasm compiler
+add_executable(dasm ${DASM_COMPILER_SOURCE})
 
 # Test cases
 add_executable(test-stack tests/test-stack.cpp)
