@@ -209,6 +209,10 @@ add_executable(exp-calc-compiler
         experimental/calc-compiler/lex.yy.c
         experimental/calc-compiler/main.c)
 
+# Benchmarks
+add_executable(bench-vm-call-native benchmark/bench-vm-call-native.cpp)
+target_link_libraries(bench-vm-call-native dvm-core-static)
+
 if (WIN32)
 elseif (UNIX)
     target_link_libraries(dvm-core -ldl)
