@@ -23,6 +23,7 @@ namespace dvm {
             NativeMethod::NativeMethod(const Class *return_type, const std::string &name, const std::string &signature,
                                        Bool is_static_method, Bool is_native_method)
                     : Method(return_type, name, signature, is_static_method, is_native_method) {
+                callable.callable = nullptr;
             }
 
             void NativeMethod::prepare(runtime::Thread *thread) {
