@@ -27,7 +27,7 @@ extern "C" void Dragon_native_get_int_Int32(Thread *thread) {
 }
 
 extern "C" void Dragon_call_vm_get_int_Int32(Thread *thread) {
-    auto method = thread->get_context()->resolve_method("vm_get_int", "Int32");
+    static auto method = thread->get_context()->resolve_method("vm_get_int", "Int32");
     auto ret = Invocation::invoke_get_result<Int32>(thread, method);
     Invocation::return_from_method<Int32>(thread, ret);
 }
